@@ -1,0 +1,463 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab: Maturity lab | Digital Twin with Python</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Lexend:wght@500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"><style>:root{
+  --ink:#1B2A38; --paper:#F3F5F0; --panel:#FFFFFF; --steel:#56656F; --line:#D2DAD0; --grid:#E4EAE2;
+  --accent:#0E7A78; --ok:#2E8B57; --bad:#B53F2E; --band:rgba(14,122,120,.09);
+  --c1:#1F5F8B; --c2:#C98510; --c3:#2E8B57; --c4:#8B3F82; --c5:#B53F2E;
+  --sans:'Atkinson Hyperlegible',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --head:'Barlow Semi Condensed','Arial Narrow','Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root{
+  --ink:#E3EAEE; --paper:#0F171D; --panel:#16222A; --steel:#9DB0B9; --line:#2A3B45; --grid:#1B2A33;
+  --accent:#4FC2BE; --ok:#63C08E; --bad:#E58372; --band:rgba(79,194,190,.12);
+  --c1:#6FB0DA; --c2:#E6A83F; --c3:#63C08E; --c4:#CC8CC3; --c5:#E58372;
+}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.62 var(--sans)}
+a{color:var(--c1);text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:920px;margin:0 auto;padding:26px 20px 64px}
+header.top{border-bottom:2px solid var(--ink);padding-bottom:16px;margin-bottom:22px}
+header.top .course{margin:0;color:var(--steel);font-size:.93rem}
+header.top h1{font-family:var(--head);font-weight:600;font-size:clamp(1.8rem,4.2vw,2.7rem);line-height:1.08;margin:.3rem 0 .45rem;letter-spacing:.005em}
+header.top .who{margin:0;font-size:.9rem;color:var(--steel)}
+header.top nav{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px 16px}
+header.top nav a{font-size:.95rem}
+h2{font-family:var(--head);font-weight:600;font-size:1.7rem;line-height:1.15;margin:2rem 0 .55rem}
+h3{font-family:var(--head);font-weight:600;font-size:1.28rem;margin:1.4rem 0 .4rem}
+p,li{max-width:72ch}
+.small{font-size:.87rem;color:var(--steel)}
+code,pre{font-family:var(--mono);font-size:.86em}
+code{background:var(--band);padding:.08em .3em;border-radius:3px}
+pre{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--c1);padding:12px 14px;overflow-x:auto;border-radius:4px;line-height:1.45}
+pre code{background:none;padding:0}
+blockquote{margin:1.1rem 0;padding:.6rem 1rem;border-left:4px solid var(--c2);background:var(--panel);border-radius:0 4px 4px 0}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.93rem;background:var(--panel)}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--band)}
+.tablewrap{overflow-x:auto}
+img{max-width:100%;height:auto}
+figure{margin:1.3rem 0}
+figure img{border:1px solid var(--line);border-radius:4px;background:#fff}
+figcaption{font-size:.87rem;color:var(--steel);margin-top:.35rem}
+button,select,input{font:inherit}
+select{padding:.3rem .45rem;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink);max-width:100%}
+.btn{background:var(--ink);color:var(--paper);border:0;border-radius:4px;padding:.42rem .9rem;cursor:pointer}
+.btn:hover{background:var(--accent)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+.ctl{display:flex;flex-direction:column;gap:2px;min-width:170px;flex:1}
+.ctl label{font-size:.86rem;color:var(--steel)}
+.ctl output{font-family:var(--mono);font-size:.85rem;color:var(--ink)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.bench{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px;margin:12px 0}
+.paper{background-color:var(--panel);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:12px 12px;border:1px solid var(--line);border-radius:4px;display:block;width:100%;touch-action:none}
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:10px 0}
+.readout div{background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:6px 9px;font-size:.86rem}
+.readout b{display:block;font-family:var(--mono);font-size:1.05rem}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.84rem;color:var(--steel)}
+.legend i{display:inline-block;width:14px;height:4px;margin-right:5px;vertical-align:middle;border-radius:2px}
+.tabs{display:flex;gap:2px;border-bottom:2px solid var(--line);flex-wrap:wrap;margin-top:8px}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;padding:.5rem .85rem;cursor:pointer;color:var(--steel)}
+.tabs button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--accent);font-weight:700}
+.tabpanel[hidden]{display:none}
+.kc{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:0 6px 6px 0;padding:10px 14px;margin:1.2rem 0}
+.kc .q{font-weight:700;margin:0 0 6px}
+.kc label{display:block;padding:3px 0;cursor:pointer}
+.kc .fb{margin-top:6px;font-size:.93rem}
+.fb.ok{color:var(--ok)} .fb.bad{color:var(--bad)}
+.conf{display:flex;gap:10px;flex-wrap:wrap;font-size:.86rem;color:var(--steel);margin-top:4px}
+.anim{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px;margin:1.3rem 0}
+.anim h4{font-family:var(--head);font-size:1.12rem;margin:0 0 6px}
+.lec-tools{position:sticky;top:0;z-index:5;background:var(--paper);padding:6px 0;border-bottom:1px solid var(--line)}
+.lec-prog{display:flex;align-items:center;gap:10px;font-size:.84rem;color:var(--steel)}
+.lec-bar{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.lec-bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+.cite{cursor:pointer;color:var(--c1);border-bottom:1px dotted var(--c1)}
+.pop{position:absolute;z-index:20;max-width:420px;background:var(--panel);border:1px solid var(--line);box-shadow:0 6px 18px rgba(0,0,0,.18);padding:10px 12px;border-radius:6px;font-size:.86rem}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.card{min-height:110px;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px;cursor:pointer;font-size:.93rem}
+.card .b{display:none;color:var(--steel)} .card.flip .f{display:none} .card.flip .b{display:block}
+.pycorner{background:var(--panel);border:1px dashed var(--c1);border-radius:6px;padding:4px 16px 8px;margin:1.3rem 0}
+.disc td:first-child{white-space:nowrap;font-weight:700}
+footer.sig{margin-top:48px;border-top:2px solid var(--ink);padding-top:14px;font-size:.84rem;color:var(--steel)}
+footer.sig p{max-width:none}
+.weeks{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:14px 0}
+.wk{background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--c1);border-radius:4px;padding:10px 12px}
+.wk h3{margin:.1rem 0 .3rem;font-size:1.12rem}
+.wk .n{font-family:var(--head);color:var(--steel);font-size:.9rem}
+.wk .links{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.88rem;margin-top:6px}
+.wk .done{font-size:.8rem;color:var(--ok)}
+.hero{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;align-items:center}
+.hero canvas{width:100%;height:auto}
+@media (max-width:720px){.hero{grid-template-columns:1fr}.ctl{min-width:140px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{.lec-tools,.tabs,nav,.btn{display:none}}
+
+.callout{border-left:4px solid var(--accent);background:var(--panel);padding:10px 14px;margin:14px 0;border-radius:4px}
+.callout b.t{display:block;margin-bottom:4px;color:var(--accent)}
+.eq{overflow-x:auto;margin:10px 0;text-align:center}
+.anim{margin:16px 0}
+details.ans{margin:4px 0 14px}
+/* Colab call-to-action boxes inside the lecture */
+.colabbox{display:flex;gap:.8rem;align-items:center;border:1px solid var(--line,#d9dccf);border-left:5px solid #f9ab00;background:var(--panel,#fff);border-radius:10px;padding:.65rem .9rem;margin:1.1rem 0}
+.colabbox p{margin:0}
+.colabbox .colabbtn img{display:block;height:22px}
+.colabpart{margin:.8rem 0 0;font-size:.95rem}
+/* Theme layer of the Vel Tech courses, applied on top of style.css. */
+:root{
+  --ink:#1C2333; --paper:#F4F6FB; --panel:#FFFFFF; --steel:#5A6478; --line:#D5DAE7; --grid:#E7EAF3;
+  --ok:#23946B; --bad:#C9473B;
+  --c1:#2A5BD7; --c2:#D4870B; --c3:#23946B; --c4:#8E4BA8; --c5:#C9473B;
+  --sans:'Source Sans 3','Segoe UI',system-ui,-apple-system,Roboto,sans-serif;
+  --head:'Lexend','Segoe UI',system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root{
+  --ink:#E4E8F2; --paper:#11151F; --panel:#1A2030; --steel:#A3ACC2; --line:#2C3448; --grid:#1F2638;
+  --ok:#5CC796; --bad:#EE8A7E;
+  --c1:#7FA2F5; --c2:#F0B34A; --c3:#5CC796; --c4:#C79BDA; --c5:#EE8A7E;
+}}
+body{font-size:17.5px;line-height:1.6}
+header.top{border:1px solid var(--line);border-top:6px solid var(--accent);border-radius:12px;background:var(--panel);
+  padding:16px 20px 14px;margin-bottom:26px;box-shadow:0 1px 2px rgba(20,30,60,.05)}
+header.top h1{font-weight:600;letter-spacing:-.01em}
+header.top nav a{background:var(--band);padding:.12rem .55rem;border-radius:999px;text-decoration:none;color:var(--accent);font-weight:600;font-size:.9rem}
+header.top nav a:hover{background:var(--accent);color:var(--panel)}
+h2{font-weight:600;letter-spacing:-.005em}
+h2::after{content:"";display:block;width:46px;height:3px;border-radius:2px;background:var(--accent);margin-top:7px}
+h3{font-weight:600}
+a{color:var(--accent)}
+.btn{background:var(--accent);color:#fff;border-radius:8px}
+.btn:hover{background:var(--ink)}
+.btn.ghost{border-radius:8px}
+.bench,.kc,.card,pre,table,.readout div{border-radius:10px}
+.kc{border-radius:0 10px 10px 0}
+.readout div{background:var(--band)}
+.tabs button[aria-selected=true]{color:var(--accent)}
+th{background:var(--band)}
+blockquote{border-left-color:var(--accent);border-radius:0 10px 10px 0}
+/* Colab call-to-action boxes and links */
+.colabbox{display:flex;gap:.9rem;align-items:center;border:1px solid var(--line);border-left:5px solid #F9AB00;
+  background:var(--panel);border-radius:10px;padding:.7rem 1rem;margin:1.2rem 0}
+.colabbox p{margin:0}
+.colabbox .colabbtn{flex:0 0 auto;line-height:0}
+.colabbox .colabbtn img,.colabpart img{height:20px;width:auto;max-width:none;display:inline-block;vertical-align:middle}
+.colabpart{margin:.9rem 0 0;font-size:.95rem}
+.colabpart a{display:inline-flex;align-items:center;gap:.55rem;text-decoration:none;font-weight:600}
+:root{--accent:#0369A1;--band:rgba(3,105,161,.08)}@media (prefers-color-scheme:dark){:root{--accent:#7DD3FC;--band:rgba(125,211,252,.13)}}</style></head>
+<body><div class="wrap">
+<header class="top"><p class="course">Digital Twin with Python (VTR UGE 21), day 1 of 5</p><h1>Concept and Architecture</h1><p class="who">Prof. Dr. Utku Kose, Süleyman Demirel University</p><nav><a href="../../index.html">Course home</a><a href="https://github.com/utkukose/digital-twin-veltech-NB-lecture/tree/main/days/day-01">Day overview</a><a href="lecture.html">Lecture</a><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-01/NB01_concept_and_architecture.ipynb">Colab notebook</a><a href="Day01_Lecture_Notes.pdf">PDF notes</a></nav></header>
+<h2>Maturity lab</h2><p>Part A runs the pack and a virtual counterpart in the browser, with the maturity level and the sensor of your choice. Part B classifies six systems as models, shadows or twins. Part C assigns responsibilities to the parts of the reference architecture.</p>
+<div class="tabs" role="tablist"><button aria-selected="true">Explore</button><button aria-selected="false">Check yourself</button><button aria-selected="false">Reflect and export</button></div>
+<section class="tabpanel"><h3>Part A: The maturity bench</h3>
+<div class="bench">
+<p>Configure the virtual counterpart of the pack and the sensor that feeds it, then press <b>Run and add to scoreboard</b>.
+The plot shows the true temperature of the pack and what the counterpart believes. The twin may switch the fan; the model
+and the shadow only watch. Try a sensor bias of minus five degrees with the twin and compare the last two readouts.</p>
+<div class="row"><div class="ctl"><label for="w-mode">Maturity level</label><select id="w-mode">
+<option value="model">Digital model: no data flow</option><option value="shadow">Digital shadow: plant to model</option>
+<option value="twin" selected>Digital twin: both directions</option></select></div></div>
+<div class="row" id="w-sl"></div>
+<canvas class="paper" id="w-cv" aria-label="True and believed temperature"></canvas>
+<div class="legend" id="w-leg"></div><div id="w-ro"></div>
+<p><button class="btn" id="w-run" type="button">Run and add to scoreboard</button>
+<button class="btn ghost" id="w-clr" type="button">Clear scoreboard</button></p>
+<h3>Scoreboard</h3>
+<div class="tablewrap"><table><thead><tr><th>Run</th><th>Level</th><th>Sync</th><th>Bias</th><th>Noise</th><th>Loss</th>
+<th>Belief RMSE</th><th>Peak</th><th>Truly over 46 °C</th><th>Reported over 46 °C</th></tr></thead><tbody id="w-tb"></tbody></table></div>
+</div>
+<p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-01/NB01_concept_and_architecture.ipynb#scrollTo=sec-2" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 2: the same ladder with the full pack model.</a></p><h3>Part B: Model, shadow or twin?</h3><p>Classify each system by its data flows.</p><div id="pb"></div><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-01/NB01_concept_and_architecture.ipynb#scrollTo=sec-7" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 7: the three counterparts for your own asset.</a></p><h3>Part C: Who does what in the architecture?</h3><p>Each responsibility belongs to one of the five parts of the reference architecture.</p><div id="pc"></div><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-01/NB01_concept_and_architecture.ipynb#scrollTo=sec-5" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 5: the five classes of the architecture in code.</a></p></section>
+<section class="tabpanel" hidden><p>Answer each question, rate your confidence and check the answer. Results stay in this browser.</p><div id="quiz"></div></section>
+<section class="tabpanel" hidden><p>Write a short answer to each question. The text is saved in this browser and is included when you export the learning log.</p><div id="reflect"></div></section>
+<footer class="sig"><p><strong>Prof. Dr. Utku Kose</strong><br>Full Professor, Department of Computer Engineering, Süleyman Demirel University, Isparta, Türkiye<br>Founding Director, AI Application and Research Center (YAZEM), Süleyman Demirel University<br>Head of the Computer Science Division, Department of Computer Engineering, Süleyman Demirel University<br>Additional affiliations: University of North Dakota (USA), Universidad Panamericana (Mexico City, Mexico), Vel Tech University (Chennai, India)<br>IEEE Senior Member, ACM Professional Member<br><a href="https://orcid.org/0000-0002-9652-6415">ORCID 0000-0002-9652-6415</a> | <a href="https://www.utkukose.com">utkukose.com</a> | <a href="https://github.com/utkukose">github.com/utkukose</a><br><a href="mailto:utkukose@sdu.edu.tr">utkukose@sdu.edu.tr</a> | <a href="mailto:utku.kose@und.edu">utku.kose@und.edu</a> | <a href="mailto:ukose@up.edu.mx">ukose@up.edu.mx</a> | <a href="mailto:utkukose@gmail.com">utkukose@gmail.com</a></p><p>This course is updated in line with current developments in the field. Last update: October 2026. Course materials licensed under CC BY 4.0. Code licensed under MIT.</p></footer></div>
+<script>window.COURSE_PREFIX="vtdt";</script>
+<script>"use strict";
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+function h(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (k === "class") e.className = v;
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
+    else if (k === "html") e.innerHTML = v;
+    else e.setAttribute(k, v);
+  }
+  for (const k of kids.flat()) if (k != null) e.append(k.nodeType ? k : document.createTextNode(String(k)));
+  return e;
+}
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const COL = () => ({ink: cssv("--ink"), steel: cssv("--steel"), line: cssv("--line"), grid: cssv("--grid"),
+  panel: cssv("--panel"), accent: cssv("--accent"), ok: cssv("--ok"), bad: cssv("--bad"),
+  c: [cssv("--c1"), cssv("--c2"), cssv("--c3"), cssv("--c4"), cssv("--c5")]});
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+function RNG(seed) {
+  let s = seed >>> 0;
+  const r = () => { s += 0x6D2B79F5; let t = s; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  r.normal = () => { let u = 0, v = 0; while (u === 0) u = r(); while (v === 0) v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
+  r.int = n => Math.floor(r() * n);
+  r.uniform = (a, b) => a + (b - a) * r();
+  return r;
+}
+const store = {
+  key: k => (window.COURSE_PREFIX || "vt") + ":" + k,
+  get(k, d) { try { const v = localStorage.getItem(this.key(k)); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(this.key(k), JSON.stringify(v)); } catch (e) {} }
+};
+/* Canvas with device-pixel scaling. draw(ctx, w, h) is called on setup and on resize. */
+function stage(cv, aspect, draw) {
+  const ctx = cv.getContext("2d");
+  const fit = () => {
+    const w = cv.clientWidth || 600, hgt = Math.round(w * aspect), d = window.devicePixelRatio || 1;
+    cv.style.height = hgt + "px"; cv.width = Math.round(w * d); cv.height = Math.round(hgt * d);
+    ctx.setTransform(d, 0, 0, d, 0, 0); cv._w = w; cv._h = hgt; draw && draw(ctx, w, hgt);
+  };
+  new ResizeObserver(() => fit()).observe(cv);
+  fit();
+  return {ctx, redraw: () => draw && draw(ctx, cv._w, cv._h), size: () => [cv._w, cv._h]};
+}
+/* Axes frame: returns mapping helpers. */
+function frame(ctx, w, hgt, o) {
+  const C = COL(), p = Object.assign({l: 48, r: 12, t: 12, b: 34}, o.pad || {});
+  const X = x => p.l + (x - o.x0) / (o.x1 - o.x0) * (w - p.l - p.r);
+  const Y = y => hgt - p.b - (y - o.y0) / (o.y1 - o.y0) * (hgt - p.t - p.b);
+  ctx.save(); ctx.strokeStyle = C.line; ctx.fillStyle = C.steel; ctx.lineWidth = 1; ctx.font = "11px " + cssv("--sans");
+  const nt = o.ticks || 5;
+  for (let i = 0; i <= nt; i++) {
+    const xv = o.x0 + (o.x1 - o.x0) * i / nt, yv = o.y0 + (o.y1 - o.y0) * i / nt;
+    ctx.beginPath(); ctx.moveTo(X(xv), hgt - p.b); ctx.lineTo(X(xv), hgt - p.b + 4); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(p.l - 4, Y(yv)); ctx.lineTo(p.l, Y(yv)); ctx.stroke();
+    ctx.textAlign = "center"; ctx.fillText(fmt(xv), X(xv), hgt - p.b + 16);
+    ctx.textAlign = "right"; ctx.fillText(fmt(yv), p.l - 7, Y(yv) + 4);
+  }
+  ctx.strokeStyle = C.ink; ctx.beginPath(); ctx.moveTo(p.l, p.t); ctx.lineTo(p.l, hgt - p.b); ctx.lineTo(w - p.r, hgt - p.b); ctx.stroke();
+  ctx.fillStyle = C.ink; ctx.textAlign = "center";
+  if (o.xlabel) ctx.fillText(o.xlabel, (p.l + w - p.r) / 2, hgt - 4);
+  if (o.ylabel) { ctx.save(); ctx.translate(12, (p.t + hgt - p.b) / 2); ctx.rotate(-Math.PI / 2); ctx.fillText(o.ylabel, 0, 0); ctx.restore(); }
+  ctx.restore();
+  return {X, Y, p};
+}
+function fmt(v) { if (Math.abs(v - Math.round(v)) < 1e-9) return String(Math.round(v)); const a = Math.abs(v); if (a >= 1000) return v.toFixed(0); if (a >= 10) return v.toFixed(0); if (a >= 1) return v.toFixed(1); if (a === 0) return "0"; return v.toFixed(2); }
+function polyline(ctx, pts, color, width, dash) {
+  ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = width || 2; if (dash) ctx.setLineDash(dash);
+  ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.stroke(); ctx.restore();
+}
+function dot(ctx, x, y, r, color, stroke) {
+  ctx.beginPath(); ctx.arc(x, y, r, 0, 2 * Math.PI); ctx.fillStyle = color; ctx.fill();
+  if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 1; ctx.stroke(); }
+}
+/* Labelled slider bound to a value. */
+function slider(parent, o, on) {
+  const out = h("output", {}, o.fmt ? o.fmt(o.value) : o.value);
+  const inp = h("input", {type: "range", min: o.min, max: o.max, step: o.step || 1, value: o.value, "aria-label": o.label});
+  inp.addEventListener("input", () => { const v = parseFloat(inp.value); out.textContent = o.fmt ? o.fmt(v) : v; on && on(v); });
+  parent.append(h("div", {class: "ctl"}, h("label", {}, o.label, " ", out), inp));
+  return inp;
+}
+function readout(parent, names) {
+  const box = h("div", {class: "readout"}), cells = {};
+  names.forEach(n => { const b = h("b", {}, "-"); cells[n] = b; box.append(h("div", {}, n, b)); });
+  parent.append(box);
+  return (n, v) => { cells[n].textContent = v; };
+}
+function legend(parent, items) {
+  const C = COL();
+  parent.append(h("div", {class: "legend"}, items.map(([t, i]) => h("span", {}, h("i", {style: "background:" + (typeof i === "number" ? C.c[i] : i)}), t))));
+}
+/* Animation loop that pauses when off screen or when reduced motion is requested. */
+function loop(step, ms) {
+  let on = false, raf = 0, last = 0, acc = 0;
+  const f = t => { if (!on) return; const dt = Math.min(0.05, (t - (last || t)) / 1000); last = t; acc += dt * 1000; if (!ms || acc >= ms) { acc = 0; step(dt); } raf = requestAnimationFrame(f); };
+  return {start() { if (!on) { on = true; last = 0; raf = requestAnimationFrame(f); } }, stop() { on = false; cancelAnimationFrame(raf); }, get running() { return on; }};
+}
+const reduced = () => window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* Knowledge checks, citation popups, flashcards and reading progress on lecture pages. */
+function initLecture(day) {
+  const kcs = $$(".kc"), key = "d" + day + ":kc", st = store.get(key, {});
+  const bar = $(".lec-bar i"), txt = $(".lec-txt");
+  const upd = () => {
+    const n = kcs.length, d = Object.values(st).filter(Boolean).length;
+    if (bar) bar.style.width = (n ? 100 * d / n : 0) + "%";
+    if (txt) txt.textContent = n ? `Knowledge checks answered correctly: ${d} of ${n}` : "";
+    store.set(key, st); store.set("d" + day + ":progress", n ? d / n : 0);
+  };
+  kcs.forEach((k, i) => {
+    const ans = +k.dataset.answer, fb = $(".fb", k);
+    $(".btn", k).addEventListener("click", () => {
+      const sel = $("input:checked", k);
+      if (!sel) { fb.className = "fb bad"; fb.textContent = "Select an option first."; return; }
+      const ok = +sel.value === ans;
+      fb.className = "fb " + (ok ? "ok" : "bad");
+      fb.textContent = (ok ? "Correct. " : "Not quite. ") + k.dataset.why;
+      st[i] = ok || st[i] || false; upd();
+    });
+    if (st[i]) { const r = $$("input", k)[ans]; if (r) r.checked = true; }
+  });
+  upd();
+  const refs = JSON.parse(($("#refdata") || {textContent: "{}"}).textContent || "{}");
+  let pop = null;
+  document.addEventListener("click", e => {
+    const c = e.target.closest(".cite");
+    if (pop) { pop.remove(); pop = null; }
+    if (!c) return;
+    pop = h("div", {class: "pop", role: "note"});
+    c.dataset.refs.split(",").forEach(n => pop.append(h("p", {html: "[" + n + "] " + (refs[n] || "")})));
+    document.body.append(pop);
+    const r = c.getBoundingClientRect();
+    pop.style.left = Math.max(8, Math.min(window.scrollX + r.left, window.scrollX + document.documentElement.clientWidth - 440)) + "px";
+    pop.style.top = (window.scrollY + r.bottom + 6) + "px";
+  });
+  $$(".card").forEach(c => { const t = () => c.classList.toggle("flip"); c.addEventListener("click", t); c.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); t(); } }); });
+}
+
+/* Lab shell: tabs, self-assessment with confidence ratings, reflection and learning-log export. */
+function initLab(day, title, SELF, REFLECT) {
+  const tabs = $$(".tabs button"), panels = $$(".tabpanel");
+  tabs.forEach((b, i) => b.addEventListener("click", () => {
+    tabs.forEach((x, j) => { x.setAttribute("aria-selected", i === j); panels[j].hidden = i !== j; });
+    window.dispatchEvent(new Event("resize"));
+  }));
+  const qbox = $("#quiz"), res = store.get("d" + day + ":quiz", {});
+  SELF.forEach((q, i) => {
+    const fb = h("div", {class: "fb"}), name = "q" + i;
+    const opts = q.options.map((o, j) => h("label", {}, h("input", {type: "radio", name, value: j}), " ", o));
+    const conf = h("div", {class: "conf"}, "Confidence:", ["sure", "unsure", "guess"].map(c => h("label", {}, h("input", {type: "radio", name: name + "c", value: c}), " " + c)));
+    const btn = h("button", {class: "btn", type: "button"}, "Check answer");
+    const box = h("div", {class: "kc"}, h("p", {class: "q"}, (i + 1) + ". " + q.q), opts, conf, btn, fb);
+    btn.addEventListener("click", () => {
+      const sel = $(`input[name=${name}]:checked`, box), cf = $(`input[name=${name}c]:checked`, box);
+      if (!sel) { fb.className = "fb bad"; fb.textContent = "Select an option first."; return; }
+      const ok = +sel.value === q.answer, c = cf ? cf.value : "not rated";
+      res[i] = {ok, conf: c}; store.set("d" + day + ":quiz", res);
+      fb.className = "fb " + (ok ? "ok" : "bad");
+      fb.textContent = (ok ? "Correct. " : "Not quite. ") + q.why + (!ok && c === "sure" ? " A confident error marks a topic to revisit first." : "");
+      summary();
+    });
+    qbox.append(box);
+  });
+  const sum = h("p", {class: "small"}); qbox.append(sum);
+  function summary() {
+    const v = Object.values(res), ok = v.filter(r => r.ok).length, conf = v.filter(r => !r.ok && r.conf === "sure").length;
+    sum.textContent = `Answered: ${v.length} of ${SELF.length}. Correct: ${ok}. Confident errors: ${conf}.`;
+  }
+  summary();
+  const rbox = $("#reflect"), refl = store.get("d" + day + ":reflect", {});
+  REFLECT.forEach((p, i) => {
+    const ta = h("textarea", {rows: 4, style: "width:100%;font:inherit;padding:8px;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink)"});
+    ta.value = refl[i] || "";
+    ta.addEventListener("input", () => { refl[i] = ta.value; store.set("d" + day + ":reflect", refl); });
+    rbox.append(h("p", {}, h("b", {}, (i + 1) + ". "), p), ta);
+  });
+  const ex = h("button", {class: "btn", type: "button"}, "Export learning log");
+  ex.addEventListener("click", () => {
+    const lines = [`# Learning log, day ${day}: ${title}`, "", `Exported: ${new Date().toISOString()}`, "", "## Self-assessment", ""];
+    SELF.forEach((q, i) => { const r = res[i]; lines.push(`${i + 1}. ${q.q}`, `   Result: ${r ? (r.ok ? "correct" : "incorrect") + ", confidence " + r.conf : "not answered"}`); });
+    lines.push("", "## Reflection", "");
+    REFLECT.forEach((p, i) => lines.push(`**${i + 1}. ${p}**`, "", refl[i] || "(no answer)", ""));
+    const url = URL.createObjectURL(new Blob([lines.join("\n")], {type: "text/markdown"}));
+    const a = h("a", {href: url, download: `learning_log_day${String(day).padStart(2, "0")}.md`}); document.body.append(a); a.click(); a.remove();
+  });
+  rbox.append(h("p", {}, ex));
+}
+
+/* Course home: progress per day from local storage. */
+function initHome(n, nq) {
+  for (let d = 1; d <= n; d++) {
+    const el = $("#dy" + d + " .done"); if (!el) continue;
+    const p = store.get("d" + d + ":progress", 0), q = Object.values(store.get("d" + d + ":quiz", {})).filter(r => r.ok).length;
+    el.textContent = (p > 0 || q > 0) ? `Reading checks ${Math.round(100 * p)}%, self-assessment ${q} of ${nq || 8} correct` : "";
+  }
+}
+
+/* Opaque blend of a palette colour with a background colour, used for heat maps without seams. */
+function mix(c1, c2, a) {
+  const hx = c => { c = (c || "#ffffff").trim(); if (c[0] === "#") { if (c.length === 4) c = "#" + c[1] + c[1] + c[2] + c[2] + c[3] + c[3];
+    return [1, 3, 5].map(i => parseInt(c.substr(i, 2), 16)); } const m = c.match(/\d+/g); return m ? m.slice(0, 3).map(Number) : [255, 255, 255]; };
+  const A = hx(c1), B = hx(c2); return "rgb(" + A.map((v, i) => Math.round(a * v + (1 - a) * B[i])).join(",") + ")";
+}
+</script>
+<script>initLab(1,"Concept and Architecture",[{"q": "Which data flows define a digital twin?", "options": ["None", "Automatic from the asset to the model only", "Automatic in both directions", "Manual in both directions"], "answer": 2, "why": "A twin exchanges data automatically in both directions."}, {"q": "What does the arrow from the asset to the model buy in the experiment of the day?", "options": ["A cooler pack", "A much smaller error of the belief", "A longer service life", "Nothing"], "answer": 1, "why": "The shadow tracks the pack, but it does not change it."}, {"q": "Why does the twin extend the projected service life of the pack?", "options": ["It recalibrates the capacity", "It keeps the pack cooler, and ageing is thermally activated", "It reduces the current", "It charges the pack"], "answer": 1, "why": "Lower temperature slows the Arrhenius ageing law."}, {"q": "Why is the error of the shadow U-shaped in the synchronisation interval?", "options": ["Because of rounding", "Long intervals let the model drift, short ones import sensor error", "Because the sensor overheats", "Because of the network"], "answer": 1, "why": "The optimum balances model error against measurement error."}, {"q": "Which component of the reference architecture stores every reading and command?", "options": ["Physical entity", "Connection", "Data store", "Services"], "answer": 2, "why": "The data store keeps time-stamped records of everything that passes."}, {"q": "What is the main advantage of developing a twin against a simulated asset?", "options": ["It is always accurate", "The ground truth is known and failures can be staged safely", "No validation is needed later", "Simulators are free of assumptions"], "answer": 1, "why": "A simulator allows grading and fault injection without risk to hardware."}, {"q": "What does a sensor bias of minus five degrees do to the twin of the day?", "options": ["Nothing", "It makes the twin believe the pack is cooler, so it keeps the fan off while the pack overheats", "It switches the fan on permanently", "It stops the simulation"], "answer": 1, "why": "The twin trusts its sensor and acts on a belief that is five degrees too low."}, {"q": "Which statement about a twin validated only against a simulator is correct?", "options": ["It is fully validated", "It is validated against the assumptions of the simulator", "It needs no further tests", "It is a digital shadow"], "answer": 1, "why": "Validation against a simulator cannot test what the simulator leaves out."}],["Describe a system from your field that is called a digital twin but is a model or a shadow by the definition of the day.", "In the lab, which combination of sensor properties hurt the twin most, and what would you add to the architecture to detect it?", "Which of the two arrows would you deploy first in a safety-critical system, and why?"]);</script>
+<script>
+// Thermal model of the battery pack, the same equations as the notebook (explicit Euler, 5 s steps).
+function packRun(o){ const P={R0:0.045,mcp:9000,hA0:2.2,hA1:12}, B={R0:0.038,mcp:10200,hA0:2.9,hA1:12};
+  const Tamb=35, r=RNG(o.seed||7), dt=o.dt||5, N=Math.floor((o.T_end||7200)/dt);
+  let Tp=36, Tb=36, last=-1e9; const out={t:[],Tp:[],Tb:[],u:[],sync:[]};
+  for(let k=0;k<N;k++){ const t=k*dt, I=40+6*Math.sin(2*Math.PI*t/1800);
+    const u=(o.mode==='twin')? clamp((Tb-42)/6,0,1) : 0;
+    Tp+=dt*(I*I*P.R0-(P.hA0+P.hA1*u)*(Tp-Tamb))/P.mcp;
+    Tb+=dt*(I*I*B.R0-(B.hA0+B.hA1*u)*(Tb-Tamb))/B.mcp;
+    let s=false;
+    if(o.mode!=='model' && t-last>=o.sync){ last=t; if(r()>=(o.loss||0)){ Tb=Tp+(o.bias||0)+(o.noise||0)*r.normal(); s=true; } }
+    out.t.push(t); out.Tp.push(Tp); out.Tb.push(Tb); out.u.push(u); out.sync.push(s); }
+  return out; }
+function rmseOf(a,b){ let s=0; for(let i=0;i<a.length;i++) s+=(a[i]-b[i])**2; return Math.sqrt(s/a.length); }
+
+(function(){
+const S={sync:120,bias:0.2,noise:0.35,loss:0.0}; let res=null;
+const sl=$('#w-sl');
+slider(sl,{label:'Sync interval',min:10,max:1200,step:10,value:S.sync,fmt:v=>v+' s'},v=>{S.sync=v;run();});
+slider(sl,{label:'Sensor bias',min:-6,max:6,step:0.5,value:S.bias,fmt:v=>v.toFixed(1)+' °C'},v=>{S.bias=v;run();});
+slider(sl,{label:'Sensor noise',min:0,max:1.5,step:0.05,value:S.noise,fmt:v=>v.toFixed(2)+' °C'},v=>{S.noise=v;run();});
+slider(sl,{label:'Packet loss',min:0,max:0.9,step:0.05,value:S.loss,fmt:v=>(100*v).toFixed(0)+' %'},v=>{S.loss=v;run();});
+legend($('#w-leg'),[['true temperature',0],['belief of the counterpart',1],['fan duty (scaled)',2]]);
+const ro=readout($('#w-ro'),['belief RMSE','peak temperature','truly over 46 °C','reported over 46 °C']);
+const runs=store.get('d1:lab:runs',[]);
+function run(){ res=packRun({mode:$('#w-mode').value,sync:S.sync,bias:S.bias,noise:S.noise,loss:S.loss});
+  const over=res.Tp.filter(v=>v>46).length*5, rep=res.Tb.filter(v=>v>46).length*5;
+  res.sum={rmse:rmseOf(res.Tb,res.Tp),peak:Math.max(...res.Tp),over,rep};
+  ro('belief RMSE',res.sum.rmse.toFixed(2)+' °C'); ro('peak temperature',res.sum.peak.toFixed(1)+' °C');
+  ro('truly over 46 °C',over+' s'); ro('reported over 46 °C',rep+' s'); A.redraw(); }
+const A=stage($('#w-cv'),0.5,(ctx,w,hh)=>{ const C=COL(); ctx.clearRect(0,0,w,hh); if(!res) return;
+  const F=frame(ctx,w,hh,{x0:0,x1:120,y0:30,y1:66,xlabel:'time (min)',ylabel:'temperature (°C)'});
+  polyline(ctx,[[F.X(0),F.Y(46)],[F.X(120),F.Y(46)]],C.bad,1,[4,4]);
+  polyline(ctx,res.Tp.map((v,i)=>[F.X(res.t[i]/60),F.Y(v)]),C.c[0],2.4);
+  polyline(ctx,res.Tb.map((v,i)=>[F.X(res.t[i]/60),F.Y(v)]),C.c[1],1.4);
+  polyline(ctx,res.u.map((v,i)=>[F.X(res.t[i]/60),F.Y(30+10*v)]),C.c[2],1.2); });
+function table(){ const tb=$('#w-tb'); tb.innerHTML='';
+  runs.forEach((r,i)=>tb.append(h('tr',{},[i+1,r.mode,r.sync+' s',r.bias.toFixed(1),r.noise.toFixed(2),(100*r.loss).toFixed(0)+' %',
+    r.rmse.toFixed(2),r.peak.toFixed(1),r.over+' s',r.rep+' s'].map(x=>h('td',{},x))))); }
+$('#w-mode').addEventListener('change',run);
+$('#w-run').addEventListener('click',()=>{ runs.push(Object.assign({mode:$('#w-mode').value},S,res.sum)); store.set('d1:lab:runs',runs); table(); });
+$('#w-clr').addEventListener('click',()=>{ runs.length=0; store.set('d1:lab:runs',runs); table(); });
+run(); table();
+})();
+
+
+function partQuiz(id, spec){
+  const root=document.getElementById(id); if(!root) return; const saved=store.get(spec.key,{});
+  const tb=h('tbody',{}), t=h('table',{},[h('thead',{},h('tr',{},[h('th',{},spec.qhead||'Question'),h('th',{},spec.ahead||'Your answer'),h('th',{},'Feedback')])),tb]);
+  root.append(h('div',{class:'tablewrap'},t));
+  spec.items.forEach((it,i)=>{ const sel=h('select',{id:`${id}-s${i}`},[h('option',{value:''},'choose')].concat(it.options.map((o,k)=>h('option',{value:String(k)},o))));
+    if(saved[i]!==undefined) sel.value=saved[i];
+    sel.addEventListener('change',()=>{ const s=store.get(spec.key,{}); s[i]=sel.value; store.set(spec.key,s); });
+    tb.append(h('tr',{},[h('td',{},it.q),h('td',{},sel),h('td',{id:`${id}-f${i}`},'')])); });
+  const btn=h('button',{class:'btn',type:'button'},spec.button||'Check my answers'), sc=h('span',{class:'small'},'');
+  root.append(h('p',{},[btn,' ',sc]));
+  btn.addEventListener('click',()=>{ let ok=0;
+    spec.items.forEach((it,i)=>{ const v=document.getElementById(`${id}-s${i}`).value, f=document.getElementById(`${id}-f${i}`);
+      if(v===''){ f.textContent='Choose an answer.'; return; }
+      const right=+v===it.answer; if(right) ok++; f.textContent=(right?'Correct. ':'Not quite: '+it.options[it.answer]+'. ')+(it.why||''); });
+    sc.textContent=`${ok} of ${spec.items.length} correct.`; store.set(spec.key+':score',ok); });
+}
+function partNumbers(id, spec){
+  const root=document.getElementById(id); if(!root) return; const row=h('div',{class:'row'});
+  spec.fields.forEach((f,i)=>row.append(h('div',{class:'ctl',style:'min-width:230px'},[h('label',{for:`${id}-n${i}`},f.label),
+    h('input',{type:'number',step:'any',id:`${id}-n${i}`,style:'width:7rem'})])));
+  root.append(row);
+  const btn=h('button',{class:'btn',type:'button'},spec.button||'Check my values'), sc=h('span',{class:'small'},'');
+  root.append(h('p',{},[btn,' ',sc]));
+  btn.addEventListener('click',()=>{ let ok=0; const out=[];
+    spec.fields.forEach((f,i)=>{ const v=parseFloat(document.getElementById(`${id}-n${i}`).value), right=Math.abs(v-f.answer)<=f.tol;
+      if(right) ok++; out.push(`${f.short}: ${isNaN(v)?'missing':(right?'correct':'not yet')}`); });
+    sc.textContent=out.join(', ')+'. '+(spec.explain||''); store.set(spec.key+':score',ok); });
+}
+
+(function(){
+partQuiz('pb', {"key": "dt1:partB", "qhead": "Question", "ahead": "Level", "items": [{"q": "A computer-aided design (CAD) model of a pump, updated by an engineer once a year.", "options": ["digital model", "digital shadow", "digital twin"], "answer": 0, "why": "No data flow automatically."}, {"q": "A screen that shows live vibration of a wind turbine; a technician decides on maintenance.", "options": ["digital model", "digital shadow", "digital twin"], "answer": 1, "why": "Data flow from the asset only."}, {"q": "A building system that reads room temperatures and adjusts the heating valves by itself.", "options": ["digital model", "digital shadow", "digital twin"], "answer": 2, "why": "Data flow both ways automatically."}, {"q": "A simulation of a bridge under traffic, run with design values.", "options": ["digital model", "digital shadow", "digital twin"], "answer": 0, "why": "No live data."}, {"q": "A battery management system that estimates the charge from live currents and limits the power when the pack is hot.", "options": ["digital model", "digital shadow", "digital twin"], "answer": 2, "why": "It follows the pack and acts on it."}, {"q": "A patient monitor that records heart rate and alerts a nurse.", "options": ["digital model", "digital shadow", "digital twin"], "answer": 1, "why": "The data flow automatically, but a person acts."}]});
+partQuiz('pc', {"key": "dt1:partC", "qhead": "Question", "ahead": "Part", "items": [{"q": "Measures the cell temperature and runs the fan.", "options": ["physical entity", "connection", "virtual entity", "data store", "services"], "answer": 0, "why": ""}, {"q": "Carries readings to the model and commands back, and may lose packets.", "options": ["physical entity", "connection", "virtual entity", "data store", "services"], "answer": 1, "why": ""}, {"q": "Holds the parameters of this specific pack and its estimated state.", "options": ["physical entity", "connection", "virtual entity", "data store", "services"], "answer": 2, "why": ""}, {"q": "Keeps every reading, belief and command with a time stamp.", "options": ["physical entity", "connection", "virtual entity", "data store", "services"], "answer": 3, "why": ""}, {"q": "Raises an alarm and decides the fan duty.", "options": ["physical entity", "connection", "virtual entity", "data store", "services"], "answer": 4, "why": ""}, {"q": "Shows the operator a dashboard.", "options": ["physical entity", "connection", "virtual entity", "data store", "services"], "answer": 4, "why": ""}]});
+})();
+</script>
+</body></html>
