@@ -1,0 +1,853 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab: Operations lab | Digital Twin with Python</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Lexend:wght@500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"><style>:root{
+  --ink:#1B2A38; --paper:#F3F5F0; --panel:#FFFFFF; --steel:#56656F; --line:#D2DAD0; --grid:#E4EAE2;
+  --accent:#0E7A78; --ok:#2E8B57; --bad:#B53F2E; --band:rgba(14,122,120,.09);
+  --c1:#1F5F8B; --c2:#C98510; --c3:#2E8B57; --c4:#8B3F82; --c5:#B53F2E;
+  --sans:'Atkinson Hyperlegible',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --head:'Barlow Semi Condensed','Arial Narrow','Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root{
+  --ink:#E3EAEE; --paper:#0F171D; --panel:#16222A; --steel:#9DB0B9; --line:#2A3B45; --grid:#1B2A33;
+  --accent:#4FC2BE; --ok:#63C08E; --bad:#E58372; --band:rgba(79,194,190,.12);
+  --c1:#6FB0DA; --c2:#E6A83F; --c3:#63C08E; --c4:#CC8CC3; --c5:#E58372;
+}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.62 var(--sans)}
+a{color:var(--c1);text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:920px;margin:0 auto;padding:26px 20px 64px}
+header.top{border-bottom:2px solid var(--ink);padding-bottom:16px;margin-bottom:22px}
+header.top .course{margin:0;color:var(--steel);font-size:.93rem}
+header.top h1{font-family:var(--head);font-weight:600;font-size:clamp(1.8rem,4.2vw,2.7rem);line-height:1.08;margin:.3rem 0 .45rem;letter-spacing:.005em}
+header.top .who{margin:0;font-size:.9rem;color:var(--steel)}
+header.top nav{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px 16px}
+header.top nav a{font-size:.95rem}
+h2{font-family:var(--head);font-weight:600;font-size:1.7rem;line-height:1.15;margin:2rem 0 .55rem}
+h3{font-family:var(--head);font-weight:600;font-size:1.28rem;margin:1.4rem 0 .4rem}
+p,li{max-width:72ch}
+.small{font-size:.87rem;color:var(--steel)}
+code,pre{font-family:var(--mono);font-size:.86em}
+code{background:var(--band);padding:.08em .3em;border-radius:3px}
+p,li{overflow-wrap:break-word}
+p code,li code,td code,p.small a{overflow-wrap:anywhere}
+pre{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--c1);padding:12px 14px;overflow-x:auto;border-radius:4px;line-height:1.45}
+pre code{background:none;padding:0}
+blockquote{margin:1.1rem 0;padding:.6rem 1rem;border-left:4px solid var(--c2);background:var(--panel);border-radius:0 4px 4px 0}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.93rem;background:var(--panel)}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--band)}
+.tablewrap{overflow-x:auto}
+img{max-width:100%;height:auto}
+figure{margin:1.3rem 0}
+figure img{border:1px solid var(--line);border-radius:4px;background:#fff}
+figcaption{font-size:.87rem;color:var(--steel);margin-top:.35rem}
+button,select,input{font:inherit}
+select{padding:.3rem .45rem;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink);max-width:100%}
+.btn{background:var(--ink);color:var(--paper);border:0;border-radius:4px;padding:.42rem .9rem;cursor:pointer}
+.btn:hover{background:var(--accent)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+.ctl{display:flex;flex-direction:column;gap:2px;min-width:170px;flex:1}
+.ctl label{font-size:.86rem;color:var(--steel)}
+.ctl output{font-family:var(--mono);font-size:.85rem;color:var(--ink)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.bench{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px;margin:12px 0}
+.paper{background-color:var(--panel);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:12px 12px;border:1px solid var(--line);border-radius:4px;display:block;width:100%;touch-action:none}
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:10px 0}
+.readout div{background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:6px 9px;font-size:.86rem}
+.readout b{display:block;font-family:var(--mono);font-size:1.05rem}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.84rem;color:var(--steel)}
+.legend i{display:inline-block;width:14px;height:4px;margin-right:5px;vertical-align:middle;border-radius:2px}
+.tabs{display:flex;gap:2px;border-bottom:2px solid var(--line);flex-wrap:wrap;margin-top:8px}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;padding:.5rem .85rem;cursor:pointer;color:var(--steel)}
+.tabs button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--accent);font-weight:700}
+.tabpanel[hidden]{display:none}
+.kc{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:0 6px 6px 0;padding:10px 14px;margin:1.2rem 0}
+.kc .q{font-weight:700;margin:0 0 6px}
+.kc label{display:block;padding:3px 0;cursor:pointer}
+.kc .fb{margin-top:6px;font-size:.93rem}
+.fb.ok{color:var(--ok)} .fb.bad{color:var(--bad)}
+.conf{display:flex;gap:10px;flex-wrap:wrap;font-size:.86rem;color:var(--steel);margin-top:4px}
+.anim{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px;margin:1.3rem 0}
+.anim h4{font-family:var(--head);font-size:1.12rem;margin:0 0 6px}
+.lec-tools{position:sticky;top:0;z-index:5;background:var(--paper);padding:6px 0;border-bottom:1px solid var(--line)}
+.lec-prog{display:flex;align-items:center;gap:10px;font-size:.84rem;color:var(--steel)}
+.lec-bar{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.lec-bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+.cite{cursor:pointer;color:var(--c1);border-bottom:1px dotted var(--c1)}
+.pop{position:absolute;z-index:20;max-width:420px;background:var(--panel);border:1px solid var(--line);box-shadow:0 6px 18px rgba(0,0,0,.18);padding:10px 12px;border-radius:6px;font-size:.86rem}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.card{min-height:110px;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px;cursor:pointer;font-size:.93rem}
+.card .b{display:none;color:var(--steel)} .card.flip .f{display:none} .card.flip .b{display:block}
+.pycorner{background:var(--panel);border:1px dashed var(--c1);border-radius:6px;padding:4px 16px 8px;margin:1.3rem 0}
+.disc td:first-child{white-space:nowrap;font-weight:700}
+footer.sig{margin-top:48px;border-top:2px solid var(--ink);padding-top:14px;font-size:.84rem;color:var(--steel)}
+footer.sig p{max-width:none}
+.weeks{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:14px 0}
+.wk{background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--c1);border-radius:4px;padding:10px 12px}
+.wk h3{margin:.1rem 0 .3rem;font-size:1.12rem}
+.wk .n{font-family:var(--head);color:var(--steel);font-size:.9rem}
+.wk .links{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.88rem;margin-top:6px}
+.wk .done{font-size:.8rem;color:var(--ok)}
+.hero{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;align-items:center}
+.hero canvas{width:100%;height:auto}
+@media (max-width:720px){.hero{grid-template-columns:1fr}.ctl{min-width:140px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{.lec-tools,.tabs,nav,.btn{display:none}}
+
+.callout{border-left:4px solid var(--accent);background:var(--panel);padding:10px 14px;margin:14px 0;border-radius:4px}
+.callout b.t{display:block;margin-bottom:4px;color:var(--accent)}
+.eq{overflow-x:auto;margin:10px 0;text-align:center}
+.anim{margin:16px 0}
+details.ans{margin:4px 0 14px}
+/* Colab call-to-action boxes inside the lecture */
+.colabbox{display:flex;gap:.8rem;align-items:center;border:1px solid var(--line,#d9dccf);border-left:5px solid #f9ab00;background:var(--panel,#fff);border-radius:10px;padding:.65rem .9rem;margin:1.1rem 0}
+.colabbox p{margin:0}
+.colabbox .colabbtn img{display:block;height:22px}
+.colabpart{margin:.8rem 0 0;font-size:.95rem}
+/* Step-by-step calculators of the lab */
+.labpart{scroll-margin-top:10px}
+h3[id]{scroll-margin-top:10px}
+.stepcalc{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px;margin:12px 0;outline:none}
+.stepcalc .bench{margin:0 0 10px}
+.sc-presets{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0 0}
+.sc-presets .btn{font-size:.86rem;padding:.22rem .6rem}
+ol.sc-steps{list-style:none;margin:8px 0 0;padding:0}
+ol.sc-steps li{max-width:none;border:1px solid var(--line);border-left:4px solid var(--line);border-radius:0 6px 6px 0;padding:8px 12px;margin:8px 0;background:var(--paper)}
+ol.sc-steps li.cur{border-left-color:var(--accent);background:var(--panel);box-shadow:0 1px 8px rgba(0,0,0,.07)}
+ol.sc-steps li.new{animation:scin .35s ease}
+ol.sc-steps li.chg .sc-m{animation:scflash .9s ease}
+.sc-st{font-weight:700;font-size:.97rem}
+.sc-st .sc-n{display:inline-block;min-width:4.2em;color:var(--accent);font-family:var(--head);font-weight:600}
+.sc-x{font-size:.93rem;color:var(--steel);margin:3px 0;max-width:none}
+.sc-x p{margin:.2rem 0;max-width:none}
+.sc-m{overflow-x:auto;overflow-y:hidden;margin:4px 0;padding:2px 0;border-radius:4px;font-size:1.04em}
+.sc-m mjx-container[display="true"]{margin:.35em 0!important}
+.sc-q{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin-top:6px;font-size:.93rem}
+.sc-q label{font-weight:600}
+.sc-q input{width:7.5rem;padding:.25rem .4rem;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink)}
+.sc-ok{font-size:.86rem;color:var(--ok);font-weight:600}
+.sc-nav{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 4px;padding-top:10px;border-top:1px solid var(--line)}
+.sc-nav .sc-count{margin-left:auto;font-size:.88rem;color:var(--steel)}
+.sc-dots{display:flex;gap:4px;width:100%}
+.sc-dots i{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.sc-dots i.on{background:var(--accent)}
+.sc-score{margin:.2rem 0 0}
+code.tex{font-size:.8rem;white-space:pre-wrap;word-break:break-word}
+@keyframes scin{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@keyframes scflash{from{background:var(--band)}to{background:transparent}}
+/* Boxes in the lecture that open a part of the interactive lab */
+.labbox{display:flex;gap:.8rem;align-items:center;border:1px solid var(--line);border-left:5px solid var(--accent);background:var(--panel);border-radius:10px;padding:.65rem .9rem;margin:1.1rem 0}
+.labbox p{margin:0}
+.labbox a.btn{white-space:nowrap;text-decoration:none;font-size:.9rem}
+@media (max-width:560px){.labbox,.colabbox{flex-direction:column;align-items:flex-start}}
+/* Interactive scenes of the lecture pages: a small drawing, buttons and a line that tells what happened */
+.scene{background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--c2);border-radius:10px;padding:12px 14px;margin:1.4rem 0}
+.scene>p.small{margin:0 0 4px}
+.scene .sn-svg{display:block;width:100%;max-width:560px;height:auto;margin:6px auto 2px}
+.scene svg text{font-family:var(--sans);fill:var(--ink)}
+.scene svg .sn-t{transition:transform .28s ease}
+.sn-btns{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 4px;align-items:center}
+.sn-btns .btn{font-size:.9rem;padding:.34rem .75rem;min-height:2.15rem;line-height:1.25}
+.sn-btns .btn[aria-pressed=true]{box-shadow:inset 0 0 0 2px var(--ink)}
+.sn-btns .btn.ghost[aria-pressed=true]{background:var(--band);border-color:var(--accent);color:var(--ink)}
+.sn-lab{font-size:.84rem;color:var(--steel);margin-right:2px}
+.sn-say{min-height:3.3em;margin:6px 0 4px;padding:7px 11px;border-radius:8px;background:var(--band);font-size:.95rem;max-width:none}
+.sn-ro{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.86rem;color:var(--steel);margin:4px 0 0}
+.sn-ro b{font-family:var(--mono);color:var(--ink);font-weight:600;font-size:.84rem}
+.sn-pad{display:inline-grid;grid-template-columns:repeat(3,2.7rem);gap:4px;margin-right:10px}
+.sn-pad .btn{padding:.3rem 0;min-width:0}
+.sn-loop{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;font-size:.86rem;margin:6px 0 2px;color:var(--steel)}
+.sn-node{border:1px solid var(--line);border-radius:999px;padding:.08rem .6rem;background:var(--paper);color:var(--ink);transition:background .2s,border-color .2s}
+.sn-loop .on{border-color:var(--accent);background:var(--band)}
+.sn-loop b{font-family:var(--mono);color:var(--ink);font-weight:600}
+.scene .sn-pop{animation:snpop 1.1s ease forwards}
+@keyframes snpop{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-26px)}}
+.sn-box:focus{outline:none}
+.sn-box:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+.sn-note{border:1px solid var(--line);border-radius:8px;background:var(--paper);padding:6px 10px;margin:6px 0;font-family:var(--mono);font-size:.84rem}
+.sn-note-h{font-family:var(--sans);font-size:.84rem;color:var(--steel);margin-bottom:2px}
+.sn-note-l{overflow-wrap:anywhere}
+.sn-cards{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
+.sn-card{flex:1 1 180px;border:2px solid var(--line);border-radius:10px;padding:7px 10px;background:var(--paper);transition:border-color .2s,box-shadow .2s}
+.sn-card .sn-pos{display:block;font-size:.8rem;color:var(--steel)}
+.sn-card .sn-txt{font-family:var(--mono);font-size:.88rem;overflow-wrap:anywhere}
+.sn-card.win{border-color:var(--ok);box-shadow:inset 0 0 0 1px var(--ok)}
+.sn-card.tie{border-color:var(--c2)}
+.sn-table{width:100%;border-collapse:collapse;font-size:.84rem;margin:6px 0;background:var(--panel)}
+.sn-table th,.sn-table td{border:1px solid var(--line);padding:3px 6px;text-align:right}
+.sn-table th{background:var(--band);font-weight:600}
+.sn-table td.mv{background:var(--band);transition:background .3s}
+.sn-table td.ok{color:var(--ok);font-weight:700;text-align:center}
+.sn-table td.bad{color:var(--bad);font-weight:700;text-align:center}
+.sn-table td:first-child,.sn-table th:first-child{text-align:left}
+/* Theme layer of the Vel Tech courses, applied on top of style.css. */
+:root{
+  --ink:#1C2333; --paper:#F4F6FB; --panel:#FFFFFF; --steel:#5A6478; --line:#D5DAE7; --grid:#E7EAF3;
+  --ok:#23946B; --bad:#C9473B;
+  --c1:#2A5BD7; --c2:#D4870B; --c3:#23946B; --c4:#8E4BA8; --c5:#C9473B;
+  --sans:'Source Sans 3','Segoe UI',system-ui,-apple-system,Roboto,sans-serif;
+  --head:'Lexend','Segoe UI',system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root{
+  --ink:#E4E8F2; --paper:#11151F; --panel:#1A2030; --steel:#A3ACC2; --line:#2C3448; --grid:#1F2638;
+  --ok:#5CC796; --bad:#EE8A7E;
+  --c1:#7FA2F5; --c2:#F0B34A; --c3:#5CC796; --c4:#C79BDA; --c5:#EE8A7E;
+}}
+body{font-size:17.5px;line-height:1.6}
+header.top{border:1px solid var(--line);border-top:6px solid var(--accent);border-radius:12px;background:var(--panel);
+  padding:16px 20px 14px;margin-bottom:26px;box-shadow:0 1px 2px rgba(20,30,60,.05)}
+header.top h1{font-weight:600;letter-spacing:-.01em}
+header.top nav a{background:var(--band);padding:.12rem .55rem;border-radius:999px;text-decoration:none;color:var(--accent);font-weight:600;font-size:.9rem}
+header.top nav a:hover{background:var(--accent);color:var(--panel)}
+h2{font-weight:600;letter-spacing:-.005em}
+h2::after{content:"";display:block;width:46px;height:3px;border-radius:2px;background:var(--accent);margin-top:7px}
+h3{font-weight:600}
+a{color:var(--accent)}
+.btn{background:var(--accent);color:#fff;border-radius:8px}
+.btn:hover{background:var(--ink)}
+.btn.ghost{border-radius:8px}
+.bench,.kc,.card,pre,table,.readout div{border-radius:10px}
+.kc{border-radius:0 10px 10px 0}
+.readout div{background:var(--band)}
+.tabs button[aria-selected=true]{color:var(--accent)}
+th{background:var(--band)}
+blockquote{border-left-color:var(--accent);border-radius:0 10px 10px 0}
+/* Colab call-to-action boxes and links */
+.colabbox{display:flex;gap:.9rem;align-items:center;border:1px solid var(--line);border-left:5px solid #F9AB00;
+  background:var(--panel);border-radius:10px;padding:.7rem 1rem;margin:1.2rem 0}
+.colabbox p{margin:0}
+.colabbox .colabbtn{flex:0 0 auto;line-height:0}
+.colabbox .colabbtn img,.colabpart img{height:20px;width:auto;max-width:none;display:inline-block;vertical-align:middle}
+.colabpart{margin:.9rem 0 0;font-size:.95rem}
+.colabpart a{display:inline-flex;align-items:center;gap:.55rem;text-decoration:none;font-weight:600}
+/* Readable buttons: the accent of the dark scheme is light, so buttons on it carry dark text, and a ghost button
+   under the pointer gets a light tint instead of the ink colour */
+.btn.ghost:hover{background:var(--band)}
+@media (prefers-color-scheme:dark){.btn,.btn:hover{color:#111827}}
+:root{--accent:#0369A1;--band:rgba(3,105,161,.08)}@media (prefers-color-scheme:dark){:root{--accent:#7DD3FC;--band:rgba(125,211,252,.13)}}</style><script>window.MathJax={tex:{inlineMath:[["\\(","\\)"]]},svg:{fontCache:"local"}};</script><script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script></head>
+<body><div class="wrap">
+<header class="top"><p class="course">Digital Twin with Python (VTR UGE 21), day 5 of 5</p><h1>Visualization and Capstone Development</h1><p class="who">Prof. Dr. Utku Kose, Süleyman Demirel University</p><nav><a href="../../index.html">Course home</a><a href="https://github.com/utkukose/digital-twin-veltech-NB-lecture/tree/main/days/day-05">Day overview</a><a href="lecture.html">Lecture</a><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-05/NB05_visualization_and_capstone.ipynb">Colab notebook</a><a href="Day05_Lecture_Notes.pdf">PDF notes</a></nav></header>
+<h2>Operations lab</h2><p>Part A runs the assembled twin in an operations panel with faults you inject. Part B separates verification from validation. Part C estimates the model error behind a validation result. Parts D and E repeat two calculations of the lecture step by step, with sliders for their numbers: the trust loop of the twin over twelve readings and the noise floor of a validation. In these parts every intermediate value is rounded, and the next step continues with the rounded value, as in a calculation by hand.</p>
+<div class="tabs" role="tablist"><button aria-selected="true">Explore</button><button aria-selected="false">Check yourself</button><button aria-selected="false">Reflect and export</button></div>
+<section class="tabpanel"><h3 id="pa">Part A: The operations panel</h3>
+<div class="bench">
+<p>The panel runs the pack and its twin for two hours in the browser. Inject a fault at a chosen time and watch the twin:
+It compares every reading with its own physics prediction, a model temperature that no reading ever corrects. When the mean
+of their differences over the last five minutes exceeds 1 °C in either direction, the twin declares the loss of trust,
+switches the fan to its fail-safe setting, full speed, and reports the change in the event log. The log can be exported as
+JSON lines, one record per line in the JavaScript Object Notation, the format of the notebook.</p>
+<div class="row"><div class="ctl"><label for="x-fault">Fault</label><select id="x-fault"><option value="none">No fault</option>
+<option value="fan">Fan degradation (70 % less airflow)</option><option value="bias">Sensor bias of minus 4 °C</option>
+<option value="block">Coolant blockage (passive cooling halved)</option></select></div></div>
+<div class="row" id="x-sl"></div>
+<canvas class="paper" id="x-cv" aria-label="True temperature, belief and fan duty"></canvas>
+<div class="legend" id="x-leg"></div><div id="x-ro"></div>
+<p><button class="btn" id="x-dl" type="button">Export the event log</button></p>
+<pre id="x-log" style="max-height:220px;overflow:auto;font-size:.8rem"></pre>
+</div>
+<p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-05/NB05_visualization_and_capstone.ipynb#scrollTo=sec-7" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 7: the assembled twin on a healthy and a faulted pack.</a></p><h3>Part B: Verification or validation?</h3><p>Decide which question each check answers.</p><div id="pb"></div><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-05/NB05_visualization_and_capstone.ipynb#scrollTo=sec-5" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 5: verification by step halving and validation against noisy data.</a></p><h3>Part C: The model error behind a validation result</h3><p>The error between twin and sensor is measured by the root mean square error (RMSE). With a sensor noise of standard deviation sigma, the error of the model itself is estimated as the square root of RMSE squared minus sigma squared. All values are in °C.</p><div id="pc"></div><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-05/NB05_visualization_and_capstone.ipynb#scrollTo=sec-8" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 8: the scorecard of your own asset with a worn fan.</a></p><section class="labpart" id="pd"><h3>Part D: The observer and the cumulative sum, reading by reading</h3><p>The trust loop of the dashboard and of the assembled twin. The pack starts at 44.0 °C, and once per minute the model of the twin predicts a rise of 0.10 °C. A hidden fault, for example a weaker cooling, lets the true pack warm faster by an extra amount per minute. Each reading carries a little noise. The twin computes the residual, adds its size minus the allowance to the cumulative sum, moves its belief by the gain times the residual and sets the fan, with full cooling as the fail-safe action once the sum has passed the decision limit. The sliders set the fault, the gain, the allowance and the decision limit.</p><div class="stepcalc" id="pd-calc"></div></section><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-05/NB05_visualization_and_capstone.ipynb#scrollTo=sec-7" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 7: the assembled twin with the same trust loop on a whole trip.</a></p><section class="labpart" id="pe"><h3>Part E: The noise floor of a validation</h3><p>The validation of the lecture: an RMSE between twin and readings, a sensor noise \(\sigma\) and the number \(N\) of readings. The steps compute the implied model error, the scatter of the RMSE from one experiment to the next and whether the measured RMSE lies far enough above the floor to show a model error at all. The figure draws the implied model error as a function of the RMSE and shades the range in which the data cannot tell a model error from none.</p><div class="stepcalc" id="pe-calc"></div></section><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-05/NB05_visualization_and_capstone.ipynb#scrollTo=sec-5" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 5: five validation experiments and their noise floor.</a></p></section>
+<section class="tabpanel" hidden><p>Answer each question, rate your confidence and check the answer. Results stay in this browser.</p><div id="quiz"></div></section>
+<section class="tabpanel" hidden><p>Write a short answer to each question. The text is saved in this browser and is included when you export the learning log.</p><div id="reflect"></div></section>
+<footer class="sig"><p><strong>Prof. Dr. Utku Kose</strong><br>Full Professor, Department of Computer Engineering, Süleyman Demirel University, Isparta, Türkiye<br>Founding Director, AI Application and Research Center (YAZEM), Süleyman Demirel University<br>Head of the Computer Science Division, Department of Computer Engineering, Süleyman Demirel University<br>Additional affiliations: University of North Dakota (USA), Universidad Panamericana (Mexico City, Mexico), Vel Tech University (Chennai, India)<br>IEEE Senior Member, ACM Professional Member<br><a href="https://orcid.org/0000-0002-9652-6415">ORCID 0000-0002-9652-6415</a> | <a href="https://www.utkukose.com">utkukose.com</a> | <a href="https://github.com/utkukose">github.com/utkukose</a><br><a href="mailto:utkukose@sdu.edu.tr">utkukose@sdu.edu.tr</a> | <a href="mailto:utku.kose@und.edu">utku.kose@und.edu</a> | <a href="mailto:ukose@up.edu.mx">ukose@up.edu.mx</a> | <a href="mailto:utkukose@gmail.com">utkukose@gmail.com</a></p><p>This course is updated in line with current developments in the field. Last update: October 2026. Course materials licensed under CC BY 4.0. Code licensed under MIT.</p></footer></div>
+<script>window.COURSE_PREFIX="vtdt";</script>
+<script>"use strict";
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+function h(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (k === "class") e.className = v;
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
+    else if (k === "html") e.innerHTML = v;
+    else e.setAttribute(k, v);
+  }
+  for (const k of kids.flat()) if (k != null) e.append(k.nodeType ? k : document.createTextNode(String(k)));
+  return e;
+}
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const COL = () => ({ink: cssv("--ink"), steel: cssv("--steel"), line: cssv("--line"), grid: cssv("--grid"),
+  panel: cssv("--panel"), accent: cssv("--accent"), ok: cssv("--ok"), bad: cssv("--bad"),
+  c: [cssv("--c1"), cssv("--c2"), cssv("--c3"), cssv("--c4"), cssv("--c5")]});
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+function RNG(seed) {
+  let s = seed >>> 0;
+  const r = () => { s += 0x6D2B79F5; let t = s; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  r.normal = () => { let u = 0, v = 0; while (u === 0) u = r(); while (v === 0) v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
+  r.int = n => Math.floor(r() * n);
+  r.uniform = (a, b) => a + (b - a) * r();
+  return r;
+}
+const store = {
+  key: k => (window.COURSE_PREFIX || "vt") + ":" + k,
+  get(k, d) { try { const v = localStorage.getItem(this.key(k)); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(this.key(k), JSON.stringify(v)); } catch (e) {} }
+};
+/* Canvas with device-pixel scaling. draw(ctx, w, h) is called on setup and on resize. */
+function stage(cv, aspect, draw) {
+  const ctx = cv.getContext("2d");
+  const fit = () => {
+    const w = cv.clientWidth || 600, hgt = Math.round(w * aspect), d = window.devicePixelRatio || 1;
+    cv.style.height = hgt + "px"; cv.width = Math.round(w * d); cv.height = Math.round(hgt * d);
+    ctx.setTransform(d, 0, 0, d, 0, 0); cv._w = w; cv._h = hgt; draw && draw(ctx, w, hgt);
+  };
+  new ResizeObserver(() => fit()).observe(cv);
+  fit();
+  return {ctx, redraw: () => draw && draw(ctx, cv._w, cv._h), size: () => [cv._w, cv._h]};
+}
+/* Axes frame: returns mapping helpers. */
+function frame(ctx, w, hgt, o) {
+  const C = COL(), p = Object.assign({l: 48, r: 12, t: 12, b: 34}, o.pad || {});
+  const X = x => p.l + (x - o.x0) / (o.x1 - o.x0) * (w - p.l - p.r);
+  const Y = y => hgt - p.b - (y - o.y0) / (o.y1 - o.y0) * (hgt - p.t - p.b);
+  ctx.save(); ctx.strokeStyle = C.line; ctx.fillStyle = C.steel; ctx.lineWidth = 1; ctx.font = "11px " + cssv("--sans");
+  const nt = o.ticks || 5;
+  for (let i = 0; i <= nt; i++) {
+    const xv = o.x0 + (o.x1 - o.x0) * i / nt, yv = o.y0 + (o.y1 - o.y0) * i / nt;
+    ctx.beginPath(); ctx.moveTo(X(xv), hgt - p.b); ctx.lineTo(X(xv), hgt - p.b + 4); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(p.l - 4, Y(yv)); ctx.lineTo(p.l, Y(yv)); ctx.stroke();
+    ctx.textAlign = "center"; ctx.fillText(fmt(xv), X(xv), hgt - p.b + 16);
+    ctx.textAlign = "right"; ctx.fillText(fmt(yv), p.l - 7, Y(yv) + 4);
+  }
+  ctx.strokeStyle = C.ink; ctx.beginPath(); ctx.moveTo(p.l, p.t); ctx.lineTo(p.l, hgt - p.b); ctx.lineTo(w - p.r, hgt - p.b); ctx.stroke();
+  ctx.fillStyle = C.ink; ctx.textAlign = "center";
+  if (o.xlabel) ctx.fillText(o.xlabel, (p.l + w - p.r) / 2, hgt - 4);
+  if (o.ylabel) { ctx.save(); ctx.translate(12, (p.t + hgt - p.b) / 2); ctx.rotate(-Math.PI / 2); ctx.fillText(o.ylabel, 0, 0); ctx.restore(); }
+  ctx.restore();
+  return {X, Y, p};
+}
+function fmt(v) { if (Math.abs(v - Math.round(v)) < 1e-9) return String(Math.round(v)); const a = Math.abs(v); if (a >= 1000) return v.toFixed(0); if (a >= 10) return v.toFixed(0); if (a >= 1) return v.toFixed(1); if (a === 0) return "0"; return v.toFixed(2); }
+function polyline(ctx, pts, color, width, dash) {
+  ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = width || 2; if (dash) ctx.setLineDash(dash);
+  ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.stroke(); ctx.restore();
+}
+function dot(ctx, x, y, r, color, stroke) {
+  ctx.beginPath(); ctx.arc(x, y, r, 0, 2 * Math.PI); ctx.fillStyle = color; ctx.fill();
+  if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 1; ctx.stroke(); }
+}
+/* Labelled slider bound to a value. */
+function slider(parent, o, on) {
+  const out = h("output", {}, o.fmt ? o.fmt(o.value) : o.value);
+  const inp = h("input", {type: "range", min: o.min, max: o.max, step: o.step || 1, value: o.value, "aria-label": o.label});
+  inp.addEventListener("input", () => { const v = parseFloat(inp.value); out.textContent = o.fmt ? o.fmt(v) : v; on && on(v); });
+  parent.append(h("div", {class: "ctl"}, h("label", {}, o.label, " ", out), inp));
+  return inp;
+}
+function readout(parent, names) {
+  const box = h("div", {class: "readout"}), cells = {};
+  names.forEach(n => { const b = h("b", {}, "-"); cells[n] = b; box.append(h("div", {}, n, b)); });
+  parent.append(box);
+  return (n, v) => { cells[n].textContent = v; };
+}
+function legend(parent, items) {
+  const C = COL();
+  parent.append(h("div", {class: "legend"}, items.map(([t, i]) => h("span", {}, h("i", {style: "background:" + (typeof i === "number" ? C.c[i] : i)}), t))));
+}
+/* Animation loop that pauses when off screen or when reduced motion is requested. */
+function loop(step, ms) {
+  let on = false, raf = 0, last = 0, acc = 0;
+  const f = t => { if (!on) return; const dt = Math.min(0.05, (t - (last || t)) / 1000); last = t; acc += dt * 1000; if (!ms || acc >= ms) { acc = 0; step(dt); } raf = requestAnimationFrame(f); };
+  return {start() { if (!on) { on = true; last = 0; raf = requestAnimationFrame(f); } }, stop() { on = false; cancelAnimationFrame(raf); }, get running() { return on; }};
+}
+const reduced = () => window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* Knowledge checks, citation popups, flashcards and reading progress on lecture pages. */
+function initLecture(day) {
+  const kcs = $$(".kc"), key = "d" + day + ":kc", st = store.get(key, {});
+  const bar = $(".lec-bar i"), txt = $(".lec-txt");
+  const upd = () => {
+    const n = kcs.length, d = Object.values(st).filter(Boolean).length;
+    if (bar) bar.style.width = (n ? 100 * d / n : 0) + "%";
+    if (txt) txt.textContent = n ? `Knowledge checks answered correctly: ${d} of ${n}` : "";
+    store.set(key, st); store.set("d" + day + ":progress", n ? d / n : 0);
+  };
+  kcs.forEach((k, i) => {
+    const ans = +k.dataset.answer, fb = $(".fb", k);
+    $(".btn", k).addEventListener("click", () => {
+      const sel = $("input:checked", k);
+      if (!sel) { fb.className = "fb bad"; fb.textContent = "Select an option first."; return; }
+      const ok = +sel.value === ans;
+      fb.className = "fb " + (ok ? "ok" : "bad");
+      fb.textContent = (ok ? "Correct. " : "Not quite. ") + k.dataset.why;
+      st[i] = ok || st[i] || false; upd();
+    });
+    if (st[i]) { const r = $$("input", k)[ans]; if (r) r.checked = true; }
+  });
+  upd();
+  const refs = JSON.parse(($("#refdata") || {textContent: "{}"}).textContent || "{}");
+  let pop = null;
+  document.addEventListener("click", e => {
+    const c = e.target.closest(".cite");
+    if (pop) { pop.remove(); pop = null; }
+    if (!c) return;
+    pop = h("div", {class: "pop", role: "note"});
+    c.dataset.refs.split(",").forEach(n => pop.append(h("p", {html: "[" + n + "] " + (refs[n] || "")})));
+    document.body.append(pop);
+    const r = c.getBoundingClientRect();
+    pop.style.left = Math.max(8, Math.min(window.scrollX + r.left, window.scrollX + document.documentElement.clientWidth - 440)) + "px";
+    pop.style.top = (window.scrollY + r.bottom + 6) + "px";
+  });
+  $$(".card").forEach(c => { const t = () => c.classList.toggle("flip"); c.addEventListener("click", t); c.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); t(); } }); });
+}
+
+/* Lab shell: tabs, self-assessment with confidence ratings, reflection and learning-log export. */
+function initLab(day, title, SELF, REFLECT) {
+  const tabs = $$(".tabs button"), panels = $$(".tabpanel");
+  tabs.forEach((b, i) => b.addEventListener("click", () => {
+    tabs.forEach((x, j) => { x.setAttribute("aria-selected", i === j); panels[j].hidden = i !== j; });
+    window.dispatchEvent(new Event("resize"));
+  }));
+  const qbox = $("#quiz"), res = store.get("d" + day + ":quiz", {});
+  SELF.forEach((q, i) => {
+    const fb = h("div", {class: "fb"}), name = "q" + i;
+    const opts = q.options.map((o, j) => h("label", {}, h("input", {type: "radio", name, value: j}), " ", o));
+    const conf = h("div", {class: "conf"}, "Confidence:", ["sure", "unsure", "guess"].map(c => h("label", {}, h("input", {type: "radio", name: name + "c", value: c}), " " + c)));
+    const btn = h("button", {class: "btn", type: "button"}, "Check answer");
+    const box = h("div", {class: "kc"}, h("p", {class: "q"}, (i + 1) + ". " + q.q), opts, conf, btn, fb);
+    btn.addEventListener("click", () => {
+      const sel = $(`input[name=${name}]:checked`, box), cf = $(`input[name=${name}c]:checked`, box);
+      if (!sel) { fb.className = "fb bad"; fb.textContent = "Select an option first."; return; }
+      const ok = +sel.value === q.answer, c = cf ? cf.value : "not rated";
+      res[i] = {ok, conf: c}; store.set("d" + day + ":quiz", res);
+      fb.className = "fb " + (ok ? "ok" : "bad");
+      fb.textContent = (ok ? "Correct. " : "Not quite. ") + q.why + (!ok && c === "sure" ? " A confident error marks a topic to revisit first." : "");
+      summary();
+    });
+    qbox.append(box);
+  });
+  const sum = h("p", {class: "small"}); qbox.append(sum);
+  function summary() {
+    const v = Object.values(res), ok = v.filter(r => r.ok).length, conf = v.filter(r => !r.ok && r.conf === "sure").length;
+    sum.textContent = `Answered: ${v.length} of ${SELF.length}. Correct: ${ok}. Confident errors: ${conf}.`;
+  }
+  summary();
+  const rbox = $("#reflect"), refl = store.get("d" + day + ":reflect", {});
+  REFLECT.forEach((p, i) => {
+    const ta = h("textarea", {rows: 4, style: "width:100%;font:inherit;padding:8px;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink)"});
+    ta.value = refl[i] || "";
+    ta.addEventListener("input", () => { refl[i] = ta.value; store.set("d" + day + ":reflect", refl); });
+    rbox.append(h("p", {}, h("b", {}, (i + 1) + ". "), p), ta);
+  });
+  const ex = h("button", {class: "btn", type: "button"}, "Export learning log");
+  ex.addEventListener("click", () => {
+    const lines = [`# Learning log, day ${day}: ${title}`, "", `Exported: ${new Date().toISOString()}`, "", "## Self-assessment", ""];
+    SELF.forEach((q, i) => { const r = res[i]; lines.push(`${i + 1}. ${q.q}`, `   Result: ${r ? (r.ok ? "correct" : "incorrect") + ", confidence " + r.conf : "not answered"}`); });
+    lines.push("", "## Reflection", "");
+    REFLECT.forEach((p, i) => lines.push(`**${i + 1}. ${p}**`, "", refl[i] || "(no answer)", ""));
+    const url = URL.createObjectURL(new Blob([lines.join("\n")], {type: "text/markdown"}));
+    const a = h("a", {href: url, download: `learning_log_day${String(day).padStart(2, "0")}.md`}); document.body.append(a); a.click(); a.remove();
+  });
+  rbox.append(h("p", {}, ex));
+}
+
+/* Course home: progress per day from local storage. */
+function initHome(n, nq) {
+  for (let d = 1; d <= n; d++) {
+    const el = $("#dy" + d + " .done"); if (!el) continue;
+    const p = store.get("d" + d + ":progress", 0), q = Object.values(store.get("d" + d + ":quiz", {})).filter(r => r.ok).length;
+    el.textContent = (p > 0 || q > 0) ? `Reading checks ${Math.round(100 * p)}%, self-assessment ${q} of ${nq || 8} correct` : "";
+  }
+}
+
+/* Opaque blend of a palette colour with a background colour, used for heat maps without seams. */
+function mix(c1, c2, a) {
+  const hx = c => { c = (c || "#ffffff").trim(); if (c[0] === "#") { if (c.length === 4) c = "#" + c[1] + c[1] + c[2] + c[2] + c[3] + c[3];
+    return [1, 3, 5].map(i => parseInt(c.substr(i, 2), 16)); } const m = c.match(/\d+/g); return m ? m.slice(0, 3).map(Number) : [255, 255, 255]; };
+  const A = hx(c1), B = hx(c2); return "rgb(" + A.map((v, i) => Math.round(a * v + (1 - a) * B[i])).join(",") + ")";
+}
+
+/* Interactive scenes of the lecture pages. sv() builds an SVG element; scene() returns the parts of one scene:
+   its drawing, rows of buttons, a line that tells what happened and a row of readouts. SCENE_SHOT holds, for each
+   scene, a function that sets the state shown in the screenshot of the course README. */
+const SVGNS = "http://www.w3.org/2000/svg";
+function sv(tag, attrs, ...kids) {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const [k, v] of Object.entries(attrs || {})) { if (k === "text") e.textContent = v; else if (v != null) e.setAttribute(k, v); }
+  for (const k of kids.flat()) if (k != null) e.append(k.nodeType ? k : document.createTextNode(String(k)));
+  return e;
+}
+window.SCENE_SHOT = window.SCENE_SHOT || {};
+function scene(id, w, hgt, label) {
+  const root = document.getElementById(id);
+  if (!root) return null;
+  const box = h("div", {class: "sn-box"}), svg = sv("svg", {class: "sn-svg", viewBox: `0 0 ${w} ${hgt}`, role: "img", "aria-label": label});
+  box.append(svg); root.append(box);
+  const say = h("p", {class: "sn-say", "aria-live": "polite"});
+  return {root, box, svg, say,
+    row(label) { const r = h("div", {class: "sn-btns"}); if (label) r.append(h("span", {class: "sn-lab"}, label)); box.append(r); return r; },
+    btn(row, text, fn, ghost) {
+      const b = h("button", {class: ghost ? "btn ghost" : "btn", type: "button"}, text);
+      b.addEventListener("click", fn); row.append(b); return b; },
+    toggle(row, text, on, fn) {
+      const b = h("button", {class: "btn ghost", type: "button", "aria-pressed": String(!!on)}, text);
+      b.addEventListener("click", () => { const v = b.getAttribute("aria-pressed") !== "true"; b.setAttribute("aria-pressed", String(v)); fn(v); });
+      row.append(b); return b; },
+    tellAt() { box.append(say); },
+    tell(html) { say.innerHTML = html; },
+    ro(names) {
+      const r = h("div", {class: "sn-ro"}), cells = {};
+      names.forEach(n => { const b = h("b", {}, "-"); cells[n] = b; r.append(h("span", {}, n + ": ", b)); });
+      box.append(r); return (n, v) => { cells[n].textContent = v; }; }};
+}
+/* Colours of a scene, read from the theme: fill and stroke styles for SVG elements. */
+const fillc = c => `fill:var(${c})`, strokec = (c, w) => `fill:none;stroke:var(${c});stroke-width:${w || 2}`;
+</script>
+<script>initLab(5,"Visualization and Capstone Development",[{"q": "What three things does an operator dashboard need to show?", "options": ["Colours, logos and version", "State, trust and alarms", "Code, tests and logs", "Only the temperature"], "answer": 1, "why": "The operator must see the state, how far it can be trusted and what requires action."}, {"q": "What happens to the fingerprint when one setting of the configuration changes?", "options": ["Nothing", "It changes", "It becomes zero", "It is deleted"], "answer": 1, "why": "The fingerprint is a hash of the content, so any change produces a new value."}, {"q": "When should a twin report the status degraded?", "options": ["When telemetry is missing", "When data flow but the belief no longer agrees with the measurements", "When the fan is off", "Never"], "answer": 1, "why": "A twin whose model no longer describes the asset is no longer a twin."}, {"q": "What does solution verification estimate?", "options": ["The bias of the sensor", "The discretisation error of the deployed configuration", "The fan energy", "The trust limit"], "answer": 1, "why": "It compares the deployed step with finer steps."}, {"q": "What is the model error implied by a validation RMSE of 0.36 \u00b0C with a sensor noise of 0.35 \u00b0C?", "options": ["About 0.36 \u00b0C", "About 0.08 \u00b0C, below what the instrument can resolve", "Exactly zero", "About 0.71 \u00b0C"], "answer": 1, "why": "The square root of 0.36 squared minus 0.35 squared is about 0.08."}, {"q": "Why is parameter uncertainty only partial in the scorecard?", "options": ["Because of the dashboard", "Because the four-parameter intervals are invalid under the scaling symmetry", "Because the sensor is noisy", "Because there is no log"], "answer": 1, "why": "Day 3 showed that only ratios are identifiable from temperature data."}, {"q": "What decides whether the twin of the course can be deployed?", "options": ["The dashboard", "The open items of the credibility scorecard, above all validation on real hardware", "The number of plots", "The speed of the surrogate"], "answer": 1, "why": "A twin validated only against its simulator has not shown correspondence with the asset."}, {"q": "Why does the operations panel use an independent physics prediction for the trust check?", "options": ["It is faster", "Because a belief overwritten with readings would absorb a sensor bias", "It looks better", "Because of the log format"], "answer": 1, "why": "Detection needs a reference that does not depend on the sensor under suspicion."}],["Which element of the credibility scorecard would be hardest to complete for an asset from your field?", "In the operations panel, which fault did the twin detect latest, and how would you shorten the delay?", "What will your final project twin do when it loses trust in itself?"]);</script>
+<script>
+(function(){
+let tf=50; const P={R0:0.045,mcp:9000,hA0:2.2,hA1:12}, M={R0:0.0456,mcp:9180,hA0:2.193,hA1:12.23}, Tamb=35;
+slider($('#x-sl'),{label:'Fault time',min:10,max:110,step:5,value:tf,fmt:v=>'minute '+v},v=>{tf=v;run();});
+legend($('#x-leg'),[['true temperature',0],['reading',3],['physics prediction',1],['fan duty (scaled)',2]]);
+const ro=readout($('#x-ro'),['status at the end','trust lost at','seconds above 46 °C','events logged']);
+let res=null, logText='';
+function run(){ const kind=$('#x-fault').value, r=RNG(5), dt=10; let T=36, Tm=36, Tb=36, u=0, trust=true, lost=null, over=0;
+  const out={T:[],z:[],m:[],u:[]}, ev=[], res5=[];
+  const rec=(t,o)=>ev.push(JSON.stringify(Object.assign({t},o,{config:'dea2275ffa75'})));
+  rec(0,{event:'start',maturity:'DIGITAL TWIN'});
+  for(let k=0;k<720;k++){ const t=k*dt, I=40+6*Math.sin(2*Math.PI*t/1800), f=t>=tf*60;
+    const hA1=(kind==='fan'&&f)?P.hA1*0.3:P.hA1, hA0=(kind==='block'&&f)?P.hA0*0.5:P.hA0;
+    T+=dt*(I*I*P.R0-(hA0+hA1*u)*(T-Tamb))/P.mcp;
+    Tm+=dt*(I*I*M.R0-(M.hA0+M.hA1*u)*(Tm-Tamb))/M.mcp;   // independent physics prediction, never overwritten
+    Tb+=dt*(I*I*M.R0-(M.hA0+M.hA1*u)*(Tb-Tamb))/M.mcp;   // belief used for control
+    const z=T+((kind==='bias'&&f)?-4:0)+0.35*r.normal();
+    res5.push(z-Tm); if(res5.length>30) res5.shift(); const mres=res5.reduce((a,b)=>a+b,0)/res5.length;
+    if(trust&&res5.length===30&&Math.abs(mres)>1){ trust=false; lost=t; rec(t,{event:'trust lost',mean_residual_C:+mres.toFixed(2),maturity:'DEGRADED',policy:'fail-safe cooling'}); }
+    if(k%6===0) Tb=z;                                    // the shadow update of the belief, once per minute
+    u = trust ? clamp((Tb-42)/6,0,1) : 1;
+    if(k%60===0&&k>0) rec(t,{event:'status',T_belief:+Tb.toFixed(2),T_physics:+Tm.toFixed(2),fan:+u.toFixed(2),trust});
+    over+=T>46?dt:0; out.T.push(T); out.z.push(z); out.m.push(Tm); out.u.push(u); }
+  rec(7200,{event:'end',maturity:trust?'DIGITAL TWIN':'DEGRADED',seconds_over_46C:over});
+  res=out; logText=ev.join('\n'); $('#x-log').textContent=logText;
+  ro('status at the end',trust?'DIGITAL TWIN':'DEGRADED, fail-safe'); ro('trust lost at',lost===null?'never':'minute '+(lost/60).toFixed(0));
+  ro('seconds above 46 °C',over); ro('events logged',ev.length); store.set('d5:lab:last',{kind,tf,over,lost}); A.redraw(); }
+const A=stage($('#x-cv'),0.45,(ctx,w,hh)=>{ const C=COL(); ctx.clearRect(0,0,w,hh); if(!res) return;
+  const F=frame(ctx,w,hh,{x0:0,x1:120,y0:28,y1:62,xlabel:'time (min)',ylabel:'temperature (°C)'});
+  polyline(ctx,[[F.X(0),F.Y(46)],[F.X(120),F.Y(46)]],C.bad,1,[4,4]); polyline(ctx,[[F.X(tf),F.Y(28)],[F.X(tf),F.Y(62)]],C.steel,1,[2,3]);
+  res.z.forEach((v,i)=>{ if(i%3===0) dot(ctx,F.X(i/6),F.Y(clamp(v,28,62)),1.4,C.c[3]); });
+  polyline(ctx,res.T.map((v,i)=>[F.X(i/6),F.Y(v)]),C.c[0],2.2); polyline(ctx,res.m.map((v,i)=>[F.X(i/6),F.Y(v)]),C.c[1],1.4);
+  polyline(ctx,res.u.map((v,i)=>[F.X(i/6),F.Y(28+8*v)]),C.c[2],1.4); });
+$('#x-fault').addEventListener('change',run);
+$('#x-dl').addEventListener('click',()=>{ const url=URL.createObjectURL(new Blob([logText+'\n'],{type:'application/json'}));
+  const a=h('a',{href:url,download:'twin_log.jsonl'}); document.body.append(a); a.click(); a.remove(); });
+run();
+})();
+
+
+function partQuiz(id, spec){
+  const root=document.getElementById(id); if(!root) return; const saved=store.get(spec.key,{});
+  const tb=h('tbody',{}), t=h('table',{},[h('thead',{},h('tr',{},[h('th',{},spec.qhead||'Question'),h('th',{},spec.ahead||'Your answer'),h('th',{},'Feedback')])),tb]);
+  root.append(h('div',{class:'tablewrap'},t));
+  spec.items.forEach((it,i)=>{ const sel=h('select',{id:`${id}-s${i}`},[h('option',{value:''},'choose')].concat(it.options.map((o,k)=>h('option',{value:String(k)},o))));
+    if(saved[i]!==undefined) sel.value=saved[i];
+    sel.addEventListener('change',()=>{ const s=store.get(spec.key,{}); s[i]=sel.value; store.set(spec.key,s); });
+    tb.append(h('tr',{},[h('td',{},it.q),h('td',{},sel),h('td',{id:`${id}-f${i}`},'')])); });
+  const btn=h('button',{class:'btn',type:'button'},spec.button||'Check my answers'), sc=h('span',{class:'small'},'');
+  root.append(h('p',{},[btn,' ',sc]));
+  btn.addEventListener('click',()=>{ let ok=0;
+    spec.items.forEach((it,i)=>{ const v=document.getElementById(`${id}-s${i}`).value, f=document.getElementById(`${id}-f${i}`);
+      if(v===''){ f.textContent='Choose an answer.'; return; }
+      const right=+v===it.answer; if(right) ok++; f.textContent=(right?'Correct. ':'Not quite: '+it.options[it.answer]+'. ')+(it.why||''); });
+    sc.textContent=`${ok} of ${spec.items.length} correct.`; store.set(spec.key+':score',ok); });
+}
+function partNumbers(id, spec){
+  const root=document.getElementById(id); if(!root) return; const row=h('div',{class:'row'});
+  spec.fields.forEach((f,i)=>row.append(h('div',{class:'ctl',style:'min-width:230px'},[h('label',{for:`${id}-n${i}`},f.label),
+    h('input',{type:'number',step:'any',id:`${id}-n${i}`,style:'width:7rem'})])));
+  root.append(row);
+  const btn=h('button',{class:'btn',type:'button'},spec.button||'Check my values'), sc=h('span',{class:'small'},'');
+  root.append(h('p',{},[btn,' ',sc]));
+  btn.addEventListener('click',()=>{ let ok=0; const out=[];
+    spec.fields.forEach((f,i)=>{ const v=parseFloat(document.getElementById(`${id}-n${i}`).value), right=Math.abs(v-f.answer)<=f.tol;
+      if(right) ok++; out.push(`${f.short}: ${isNaN(v)?'missing':(right?'correct':'not yet')}`); });
+    sc.textContent=out.join(', ')+'. '+(spec.explain||''); store.set(spec.key+':score',ok); });
+}
+
+(function(){
+partQuiz('pb', {"key": "dt5:partB", "qhead": "Check", "ahead": "It answers", "items": [{"q": "Halving the time step reduces the error by the factor the method predicts.", "options": ["verification", "validation"], "answer": 0, "why": "It checks the solution of the equations."}, {"q": "The twin matches temperatures from a drive cycle it has not seen.", "options": ["verification", "validation"], "answer": 1, "why": "It checks the equations against reality."}, {"q": "Unit tests of the integrator pass.", "options": ["verification", "validation"], "answer": 0, "why": "They check the code."}, {"q": "The twin's predictions agree with laboratory measurements of a second pack.", "options": ["verification", "validation"], "answer": 1, "why": "It compares the model with measurements of a real asset."}, {"q": "The simulated energy balance closes to machine precision.", "options": ["verification", "validation"], "answer": 0, "why": "It checks that the program keeps the energy that its own equations demand, without any measurement."}, {"q": "The residual stays within the sensor noise during a month of operation.", "options": ["verification", "validation"], "answer": 1, "why": "It compares the twin with the readings of the asset."}]});
+partNumbers('pc', {"key": "dt5:partC", "explain": "The second case shows the noise floor: An RMSE barely above the noise implies a model error that the data can hardly separate from zero.", "fields": [{"label": "Model error for RMSE 0.42 and noise 0.35", "short": "first case", "answer": 0.232, "tol": 0.003}, {"label": "Model error for RMSE 0.36 and noise 0.35", "short": "second case", "answer": 0.084, "tol": 0.003}, {"label": "RMSE expected for a model error of 0.50 and noise 0.35", "short": "third case", "answer": 0.61, "tol": 0.003}]});
+})();
+
+
+function TeX(s, ...a){ return String.raw(s, ...a); }
+function scF(x, d){ d = d == null ? 2 : d; if (!isFinite(x)) return String(x); let s = (+x).toFixed(d);
+  if (/^-0(\.0+)?$/.test(s)) s = s.slice(1); return s; }
+function scP(x, d){ const s = scF(x, d); return s[0] === '-' ? '(' + s + ')' : s; }
+function scT(x, d){ return '{' + scF(x, d) + '}'; }
+function scS(x, d){ const s = scF(x, d); return s[0] === '-' ? s : '+' + s; }
+function scR(x, d){ const f = Math.pow(10, d == null ? 2 : d); return Math.round(x * f) / f; }
+function scH(s){ return String(s).replace(/(^|[^\w])-(?=[\d.])/g, '$1−'); }
+function scTeX(tex, display){
+  const M = window.MathJax;
+  if (M && typeof M.tex2svg === 'function') { try { return M.tex2svg(tex, {display: !!display}); } catch (e) {} }
+  return h('code', {class: 'tex'}, tex);
+}
+function scInline(el){
+  const M = window.MathJax; if (!(M && typeof M.tex2svg === 'function')) return;
+  const tw = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), nodes = [];
+  while (tw.nextNode()) if (tw.currentNode.nodeValue.indexOf('\\(') >= 0) nodes.push(tw.currentNode);
+  nodes.forEach(n => { const f = document.createDocumentFragment();
+    n.nodeValue.split(/\\\(([\s\S]+?)\\\)/).forEach((p, i) => f.append(i % 2 ? scTeX(p, false) : document.createTextNode(p)));
+    n.replaceWith(f); });
+}
+var SC_ALL = window.SC_ALL = window.SC_ALL || [];
+function scWhenMJ(f, t){ t = t || 0; const M = window.MathJax;
+  if (M && M.startup && M.startup.promise) { M.startup.promise.then(f); return; }
+  if (t < 300) setTimeout(() => scWhenMJ(f, t + 1), 100); }
+if (!window.__scInit) {
+  window.__scInit = 1;
+  scWhenMJ(() => SC_ALL.forEach(r => r()));
+  let moved = false; ['wheel', 'touchmove', 'keydown', 'mousedown'].forEach(e => window.addEventListener(e, () => { moved = true; }, {passive: true}));
+  const toHash = () => { const id = decodeURIComponent(location.hash.slice(1)), e = id && document.getElementById(id); if (e && !moved) e.scrollIntoView(); };
+  window.addEventListener('load', () => { setTimeout(toHash, 60); scWhenMJ(() => setTimeout(toHash, 60)); });
+}
+/* A calculation revealed one step at a time. spec: inputs [{key, label, min, max, step, value, d} or {key, label,
+   options, value}], presets [{label, values}], calc(v) -> R, steps(v, R) -> [{t, x, m, r, q: {label, ans, tol}}],
+   viz {aspect, label, legend, draw(ctx, w, h, v, R, k, all)} where k is the last step on show. */
+function partSteps(id, spec){
+  const root = document.getElementById(id); if (!root) return;
+  const v = {}, set = {}, shown = {}, prevM = [];
+  spec.inputs.forEach(i => { v[i.key] = i.value; });
+  let k = 0, all = false, timer = null, pend = false, first = true, fresh = -1, right = 0, R = {}, S = [];
+  const compute = () => { R = spec.calc ? spec.calc(v) : {}; S = spec.steps(v, R); if (k > S.length - 1) k = S.length - 1; };
+  compute();
+  const row = h('div', {class: 'row'});
+  spec.inputs.forEach(i => {
+    if (i.options) {
+      const sel = h('select', {'aria-label': i.label}, i.options.map((o, j) => h('option', {value: String(j)}, o)));
+      sel.value = String(i.value);
+      sel.addEventListener('change', () => { v[i.key] = +sel.value; update(); });
+      set[i.key] = x => { sel.value = String(x); };
+      row.append(h('div', {class: 'ctl'}, h('label', {}, i.label), sel));
+    } else {
+      const f = x => scH(scF(x, i.d == null ? 2 : i.d)), out = h('output', {}, f(i.value));
+      const inp = h('input', {type: 'range', min: i.min, max: i.max, step: i.step || 1, value: i.value, 'aria-label': i.label});
+      inp.addEventListener('input', () => { v[i.key] = parseFloat(inp.value); out.textContent = f(v[i.key]); update(); });
+      set[i.key] = x => { inp.value = x; out.textContent = f(x); };
+      row.append(h('div', {class: 'ctl'}, h('label', {}, i.label, ' ', out), inp));
+    }
+  });
+  const bench = h('div', {class: 'bench sc-in'}, row);
+  if (spec.presets) {
+    const pr = h('div', {class: 'sc-presets'}, h('span', {class: 'small'}, 'Start from:'));
+    spec.presets.forEach(p => { const b = h('button', {class: 'btn ghost', type: 'button'}, p.label);
+      b.addEventListener('click', () => { Object.keys(p.values).forEach(key => { v[key] = p.values[key]; if (set[key]) set[key](p.values[key]); }); update(); });
+      pr.append(b); });
+    bench.append(pr);
+  }
+  root.append(bench);
+  let stg = null;
+  if (spec.viz) {
+    const cv = h('canvas', {class: 'paper', role: 'img', 'aria-label': spec.viz.label || 'Figure of the calculation'});
+    root.append(cv);
+    if (spec.viz.legend) legend(root, spec.viz.legend);
+    stg = stage(cv, spec.viz.aspect || 0.4, (ctx, w, hh) => { ctx.clearRect(0, 0, w, hh);
+      spec.viz.draw(ctx, w, hh, v, R, all ? S.length - 1 : k, all); });
+  }
+  const ol = h('ol', {class: 'sc-steps', 'aria-live': 'polite'});
+  const prev = h('button', {class: 'btn ghost', type: 'button'}, '◀ Previous');
+  const next = h('button', {class: 'btn', type: 'button'}, 'Next step ▶');
+  const play = h('button', {class: 'btn ghost', type: 'button'}, 'Play');
+  const allb = h('button', {class: 'btn ghost', type: 'button'}, 'Show all steps');
+  const cnt = h('span', {class: 'sc-count'}), dots = h('div', {class: 'sc-dots', 'aria-hidden': 'true'});
+  const score = h('p', {class: 'small sc-score'});
+  root.append(ol, h('div', {class: 'sc-nav'}, dots, prev, next, play, allb, cnt), score);
+  function render(){
+    compute();
+    ol.textContent = '';
+    const last = all ? S.length - 1 : k;
+    S.forEach((s, i) => {
+      if (i > last) return;
+      const li = h('li', {class: (!all && i === k ? 'cur' : 'done') + (i === fresh ? ' new' : '')});
+      li.append(h('div', {class: 'sc-st'}, h('span', {class: 'sc-n'}, 'Step ' + (i + 1)), ' ', s.t));
+      if (s.x) { const d = h('div', {class: 'sc-x', html: s.x}); li.append(d); scInline(d); }
+      if (s.q && !all && !shown[i]) {
+        const inp = h('input', {type: 'number', step: 'any', 'aria-label': s.q.label});
+        const chk = h('button', {class: 'btn', type: 'button'}, 'Check'), rev = h('button', {class: 'btn ghost', type: 'button'}, 'Show the step');
+        const fb = h('span', {class: 'small', 'aria-live': 'polite'});
+        chk.addEventListener('click', () => { const x = parseFloat(inp.value);
+          if (isNaN(x)) { fb.textContent = 'Type a number first.'; return; }
+          if (Math.abs(x - s.q.ans) <= (s.q.tol == null ? 0.005 : s.q.tol)) { right++; shown[i] = 'ok'; stop(); render(); }
+          else fb.textContent = 'Not yet. Look at the steps above, try again or show the step.'; });
+        inp.addEventListener('keydown', e => { if (e.key === 'Enter') chk.click(); });
+        rev.addEventListener('click', () => { shown[i] = true; render(); });
+        li.append(h('div', {class: 'sc-q'}, h('label', {}, s.q.label), inp, chk, rev, fb));
+      } else {
+        if (s.m) { const m = h('div', {class: 'sc-m'}, scTeX(s.m, true));
+          if (!first && prevM[i] !== undefined && prevM[i] !== s.m) li.classList.add('chg'); li.append(m); }
+        if (s.r) { const d = h('div', {class: 'sc-x', html: s.r}); li.append(d); scInline(d); }
+        if (shown[i] === 'ok') li.append(h('div', {class: 'sc-ok'}, 'Your value was right.'));
+      }
+      prevM[i] = s.m;
+      ol.append(li);
+    });
+    dots.textContent = '';
+    S.forEach((_, i) => dots.append(h('i', {class: i <= last ? 'on' : ''})));
+    cnt.textContent = all ? `All ${S.length} steps on show` : `Step ${k + 1} of ${S.length}`;
+    prev.disabled = all || k === 0; next.disabled = all || k >= S.length - 1;
+    allb.textContent = all ? 'Step by step' : 'Show all steps';
+    const nq = S.filter(s => s.q).length;
+    score.textContent = nq ? `Values you computed right before the step was shown: ${right} of ${nq}.` : '';
+    if (stg) stg.redraw();
+    first = false; fresh = -1;
+  }
+  function update(){ if (pend) return; pend = true; requestAnimationFrame(() => { pend = false; render(); }); }
+  function stop(){ if (timer) { clearInterval(timer); timer = null; play.textContent = 'Play'; } }
+  function go(d){
+    const nk = clamp(k + d, 0, S.length - 1); if (nk === k) return;
+    if (d > 0 && S[k].q && !shown[k]) shown[k] = true;
+    k = nk; fresh = d > 0 ? k : -1; render();
+    if (d > 0) { const li = ol.lastElementChild; if (li) li.scrollIntoView({block: 'nearest', behavior: reduced() ? 'auto' : 'smooth'}); }
+  }
+  prev.addEventListener('click', () => { stop(); go(-1); });
+  next.addEventListener('click', () => { stop(); go(1); });
+  allb.addEventListener('click', () => { stop(); all = !all; render(); });
+  play.addEventListener('click', () => {
+    if (timer) { stop(); return; }
+    if (all || k >= S.length - 1) { all = false; k = 0; render(); }
+    play.textContent = 'Pause';
+    timer = setInterval(() => { if (k >= S.length - 1) { stop(); return; } go(1); if (k >= S.length - 1 || (S[k].q && !shown[k])) stop(); }, spec.ms || 1700);
+  });
+  root.addEventListener('keydown', e => { if (/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); stop(); go(1); } else if (e.key === 'ArrowLeft') { e.preventDefault(); stop(); go(-1); } });
+  root.tabIndex = -1;
+  SC_ALL.push(render);
+  render();
+}
+
+(function(){
+partSteps('pd-calc', {
+  inputs: [
+    {key: 'f', label: 'Extra warming of the faulted pack in °C per minute', min: 0, max: 1, step: 0.05, value: 0.6, d: 2},
+    {key: 'K', label: 'Gain of the observer', min: 0.1, max: 1, step: 0.1, value: 0.5, d: 1},
+    {key: 'ka', label: 'Allowance in °C', min: 0.2, max: 1.2, step: 0.1, value: 0.6, d: 1},
+    {key: 'h', label: 'Decision limit in °C', min: 1, max: 8, step: 0.5, value: 5, d: 1}
+  ],
+  presets: [
+    {label: 'Faulted pack, lecture settings', values: {f: 0.6, K: 0.5, ka: 0.6, h: 5}},
+    {label: 'Healthy pack', values: {f: 0, K: 0.5, ka: 0.6, h: 5}},
+    {label: 'Overwriting, K = 1', values: {f: 0.6, K: 1, ka: 0.6, h: 5}},
+    {label: 'Small fault, low limit', values: {f: 0.3, K: 0.5, ka: 0.4, h: 2}}
+  ],
+  calc: v => {
+    const n = [0.2, -0.3, 0.1, 0.25, -0.15, 0.3, -0.2, 0.05, -0.1, 0.15, -0.25, 0.1], st = [];
+    let Tb = 44, S = 0, alarm = null;
+    for (let k = 1; k <= 12; k++) {
+      const Tt = scR(44 + (0.1 + v.f) * k, 2), y = scR(Tt + n[k - 1], 2), Tm = scR(Tb + 0.1, 3), r = scR(y - Tm, 3), ar = Math.abs(r);
+      const S0 = S, Sraw = scR(S0 + ar - v.ka, 3); S = Math.max(0, Sraw);
+      if (alarm === null && S > v.h) alarm = k;
+      const Kr = scR(v.K * r, 3), Tn = scR(Tm + Kr, 3), lost = alarm !== null;
+      const uf = scR(Math.min(1, Math.max(0, (Tn - 42) / 6)), 2);
+      st.push({k, Tt, y, Tm, r, ar, S0, Sraw, S, Kr, Tn, lost, u: lost ? 1 : uf, uf}); Tb = Tn;
+    }
+    return {st, alarm};
+  },
+  steps: (v, R) => {
+    const f2 = x => scF(x, 2), f3 = x => scF(x, 3);
+    const out = R.st.map((s, i) => ({t: `Reading ${s.k}: y = ${f2(s.y)} °C`,
+      x: i === 0 ? 'The twin predicts with its model, compares the reading with the prediction, updates the cumulative sum and then corrects its belief. The fan follows the belief until trust is lost.' :
+         (s.lost && !R.st[i - 1].lost ? 'The sum has passed the decision limit: The twin withdraws its trust and switches to full cooling, the fail-safe action.' : ''),
+      m: TeX`\begin{aligned} \hat{T}^{-} &= ${f3(i ? R.st[i - 1].Tn : 44)} + 0.10 = ${f3(s.Tm)} \\ r &= ${f2(s.y)} - ${f3(s.Tm)} = ${f3(s.r)} \\ S &= \max(0,\; ${f3(s.S0)} + ${f3(s.ar)} - ${scF(v.ka, 1)}) = ${f3(s.S)}` +
+         (s.lost && (i === 0 || !R.st[i - 1].lost) ? TeX` > ${scF(v.h, 1)}` : '') +
+         TeX` \\ \hat{T} &= ${f3(s.Tm)} + ${scF(v.K, 1)} \times ${scP(s.r, 3)} = ${f3(s.Tn)} \\ u &= ` +
+         (s.lost ? TeX`1 \quad (\text{fail-safe})` : TeX`\mathrm{clip}((${f3(s.Tn)} - 42) / 6,\, 0,\, 1) = ${f2(s.uf)}`) + TeX` \end{aligned}`,
+      r: `The pack is at ${f2(s.Tt)} °C, the belief at ${f3(s.Tn)} °C.`,
+      q: i === 1 ? {label: 'Cumulative sum after reading 2:', ans: s.S, tol: 0.0015} : null}));
+    const last = R.st[R.st.length - 1];
+    out.push({t: 'The result',
+      x: R.alarm ? `Trust was lost at reading ${R.alarm}, ${R.alarm} minutes after the start. From then on the fan runs at full speed, whatever the belief says.` :
+         'The sum never passed the decision limit: The residuals stayed within what the allowance absorbs, and the twin kept its trust.',
+      m: TeX`\text{belief } ${f3(last.Tn)}\ ^{\circ}\text{C}, \qquad \text{pack } ${f2(last.Tt)}\ ^{\circ}\text{C}, \qquad \text{error of the belief } ${scF(scR(last.Tn - last.Tt, 3), 3)}\ ^{\circ}\text{C}`});
+    return out;
+  },
+  viz: {
+    aspect: 0.5, label: 'Pack, readings and belief, and the cumulative sum against its limit',
+    legend: [['pack', 'var(--steel)'], ['readings', 'var(--c2)'], ['belief', 'var(--accent)'], ['cumulative sum', 'var(--bad)']],
+    draw: (ctx, w, hh, v, R, k) => {
+      const C = COL(), h1 = Math.round(hh * 0.58), shown = Math.min(12, k + 1), st = R.st;
+      ctx.font = '12px ' + cssv('--sans');
+      const top = Math.max(...st.map(s => Math.max(s.Tt, s.y, s.Tn))), ystep = Math.max(1, Math.ceil((top + 0.5 - 43) / 4));
+      const F = frame(ctx, w, h1, {x0: 0, x1: 12, y0: 43, y1: 43 + 4 * ystep, xlabel: '', ylabel: '°C', ticks: 4});
+      polyline(ctx, [[F.X(0), F.Y(44)]].concat(st.map(s => [F.X(s.k), F.Y(s.Tt)])), C.steel, 1.6);
+      for (let i = 0; i < shown; i++) dot(ctx, F.X(st[i].k), F.Y(st[i].y), 4, C.c[1]);
+      const pb = [[F.X(0), F.Y(44)]]; for (let i = 0; i < shown; i++) pb.push([F.X(st[i].k), F.Y(st[i].Tn)]);
+      polyline(ctx, pb, C.accent, 2.2); pb.forEach(([x, y]) => dot(ctx, x, y, 3, C.accent));
+      ctx.save(); ctx.translate(0, h1);
+      const Smax = Math.max(v.h * 1.25, ...st.map(s => s.S)), G = frame(ctx, w, hh - h1, {x0: 0, x1: 12, y0: 0, y1: Math.ceil(Smax / 2) * 2, xlabel: 'minute', ylabel: 'sum', ticks: 4, pad: {t: 8}});
+      polyline(ctx, [[G.X(0), G.Y(v.h)], [G.X(12), G.Y(v.h)]], C.bad, 1.2, [6, 4]);
+      for (let i = 0; i < shown; i++) { const x0 = G.X(st[i].k - 0.3), x1 = G.X(st[i].k + 0.3); ctx.fillStyle = st[i].lost ? C.bad : C.c[1];
+        ctx.globalAlpha = 0.8; ctx.fillRect(x0, G.Y(st[i].S), x1 - x0, G.Y(0) - G.Y(st[i].S)); ctx.globalAlpha = 1; }
+      ctx.restore();
+    }
+  }
+});
+partSteps('pe-calc', {
+  inputs: [
+    {key: 'rm', label: 'Measured RMSE in °C', min: 0.3, max: 0.6, step: 0.0005, value: 0.3565, d: 4},
+    {key: 's', label: 'Sensor noise σ in °C', min: 0.1, max: 0.5, step: 0.01, value: 0.35, d: 2},
+    {key: 'N', label: 'Number of readings N', options: ['100', '361', '1000', '4000'], value: 1}
+  ],
+  presets: [
+    {label: 'Lecture, largest RMSE', values: {rm: 0.3565, s: 0.35, N: 1}},
+    {label: 'Worked example', values: {rm: 0.5, s: 0.4, N: 1}},
+    {label: 'A model error of 0.14', values: {rm: 0.377, s: 0.35, N: 1}},
+    {label: 'Lecture RMSE, 4000 readings', values: {rm: 0.3565, s: 0.35, N: 3}}
+  ],
+  calc: v => {
+    const N = [100, 361, 1000, 4000][v.N], r2 = scR(v.rm * v.rm, 6), s2 = scR(v.s * v.s, 6), diff = scR(r2 - s2, 6), em = scR(Math.sqrt(Math.max(0, diff)), 3);
+    const n2 = 2 * N, rt = scR(Math.sqrt(n2), 2), sd = scR(v.rm / rt, 4), gap = scR(v.rm - v.s, 4), z = scR(gap / sd, 2);
+    const sd0 = scR(v.s / rt, 4), need = scR(v.s + 2 * sd0, 4), need2 = scR(need * need, 6), emin = scR(Math.sqrt(scR(need2 - s2, 6)), 3);
+    return {N, r2, s2, diff, em, n2, rt, sd, gap, z, sd0, need, need2, emin, det: z > 2};
+  },
+  steps: (v, R) => {
+    const f3 = x => scF(x, 3), f4 = x => scF(x, 4), f6 = x => scF(x, 6);
+    return [
+      {t: 'The two squares',
+       x: 'Model error and sensor noise are independent, so their squares add up to the square of the RMSE.',
+       m: TeX`\mathrm{RMSE}^2 = ${f4(v.rm)}^2 = ${f6(R.r2)}, \qquad \sigma^2 = ${scF(v.s, 2)}^2 = ${f6(R.s2)}`},
+      {t: 'The implied model error',
+       x: 'The difference of the squares belongs to the model, and the max guards against a negative difference.',
+       m: TeX`e_{\mathrm{model}} = \sqrt{\max(0,\; ${f6(R.r2)} - ${f6(R.s2)})} = \sqrt{${f6(Math.max(0, R.diff))}} = ${f3(R.em)}\ ^{\circ}\text{C}`,
+       r: R.diff < 0 ? 'The RMSE lies below the noise, which only chance can produce.' : '',
+       q: {label: 'Implied model error in °C, three decimals:', ans: R.em, tol: 0.0015}},
+      {t: 'The scatter of the RMSE',
+       x: TeX`An RMSE from \(N\) readings scatters from one experiment to the next with a standard deviation of about \(\mathrm{RMSE} / \sqrt{2N}\).`,
+       m: TeX`\mathrm{SD}(\mathrm{RMSE}) \approx \frac{${f4(v.rm)}}{\sqrt{2 \times ${R.N}}} = \frac{${f4(v.rm)}}{\sqrt{${R.n2}}} = \frac{${f4(v.rm)}}{${scF(R.rt, 2)}} = ${f4(R.sd)}\ ^{\circ}\text{C}`},
+      {t: 'The distance above the floor',
+       x: 'The measured RMSE is compared with the noise floor in units of this scatter.',
+       m: TeX`\frac{\mathrm{RMSE} - \sigma}{\mathrm{SD}} = \frac{${f4(v.rm)} - ${scF(v.s, 2)}}{${f4(R.sd)}} = \frac{${scF(R.gap, 4)}}{${f4(R.sd)}} = ${scF(R.z, 2)}`,
+       r: R.det ? 'More than two scatters above the floor: The data show a model error.' :
+          'Not more than two scatters above the floor: A perfect model could have produced this RMSE, and the model error is too small to be detected with this sensor and this number of readings.'},
+      {t: 'The smallest detectable model error',
+       x: TeX`A model error becomes visible when it lifts the RMSE two scatters above the floor, to \(\sigma + 2\sigma / \sqrt{2N}\).`,
+       m: TeX`\begin{aligned} \sigma + \frac{2 \sigma}{\sqrt{2N}} &= ${scF(v.s, 2)} + 2 \times \frac{${scF(v.s, 2)}}{${scF(R.rt, 2)}} = ${scF(v.s, 2)} + 2 \times ${f4(R.sd0)} = ${f4(R.need)} \\ e_{\min} &= \sqrt{${f4(R.need)}^2 - ${f6(R.s2)}} = \sqrt{${f6(R.need2)} - ${f6(R.s2)}} = ${f3(R.emin)}\ ^{\circ}\text{C} \end{aligned}`,
+       r: `With this sensor and ${R.N} readings, a model error below about ${f3(R.emin)} °C stays hidden in the noise.`}
+    ];
+  },
+  viz: {
+    aspect: 0.42, label: 'Implied model error against the measured RMSE',
+    legend: [['implied model error', 'var(--accent)'], ['range a perfect model can produce', 'var(--grid)'], ['measured', 'var(--ink)'],
+             ['smallest detectable', 'var(--ok)']],
+    draw: (ctx, w, hh, v, R, k) => {
+      const C = COL(), lo = Math.min(v.s, v.rm) - 0.08, hi = Math.max(v.s, v.rm) + 0.12;
+      let st = 0.05; const start = q => Math.max(0, Math.round(Math.floor(lo / q + 1e-9) * q * 100) / 100);
+      while (st < 0.2 && start(st) + 5 * st < hi) st = st < 0.075 ? 0.1 : 0.2;
+      const x0 = start(st), x1 = Math.round((x0 + 5 * st) * 100) / 100, top = Math.sqrt(Math.max(0, x1 * x1 - v.s * v.s));
+      const y1 = [0.25, 0.5, 1, 1.5].find(c => c >= top) || 1.5;
+      const F = frame(ctx, w, hh, {x0, x1, y0: 0, y1, xlabel: 'RMSE in °C', ylabel: 'model error in °C', ticks: 5});
+      if (k >= 3) { ctx.fillStyle = C.grid; const a = F.X(Math.max(x0, v.s - 2 * R.sd0)), b = F.X(Math.min(x1, v.s + 2 * R.sd0)); ctx.fillRect(a, F.Y(y1), b - a, F.Y(0) - F.Y(y1)); }
+      polyline(ctx, [[F.X(v.s), F.Y(0)], [F.X(v.s), F.Y(y1)]], C.steel, 1, [4, 4]);
+      ctx.fillStyle = C.steel; ctx.font = '12px ' + cssv('--sans'); ctx.textAlign = 'left'; ctx.fillText('σ', F.X(v.s) + 4, F.Y(0.92 * y1));
+      const p = []; for (let i = 0; i <= 160; i++) { const r = x0 + (x1 - x0) * i / 160; p.push([F.X(r), F.Y(Math.min(y1, Math.sqrt(Math.max(0, r * r - v.s * v.s))))]); }
+      polyline(ctx, p, C.accent, 2.2);
+      if (k >= 1 && v.rm >= x0 && v.rm <= x1) dot(ctx, F.X(v.rm), F.Y(Math.min(y1, R.em)), 5, C.ink);
+      if (k >= 4 && R.need <= x1) { dot(ctx, F.X(R.need), F.Y(Math.min(y1, R.emin)), 4.5, C.ok, C.ink); }
+    }
+  }
+});
+})();
+</script>
+</body></html>

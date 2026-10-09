@@ -1,0 +1,949 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab: Intelligence lab | Digital Twin with Python</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Lexend:wght@500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"><style>:root{
+  --ink:#1B2A38; --paper:#F3F5F0; --panel:#FFFFFF; --steel:#56656F; --line:#D2DAD0; --grid:#E4EAE2;
+  --accent:#0E7A78; --ok:#2E8B57; --bad:#B53F2E; --band:rgba(14,122,120,.09);
+  --c1:#1F5F8B; --c2:#C98510; --c3:#2E8B57; --c4:#8B3F82; --c5:#B53F2E;
+  --sans:'Atkinson Hyperlegible',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --head:'Barlow Semi Condensed','Arial Narrow','Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root{
+  --ink:#E3EAEE; --paper:#0F171D; --panel:#16222A; --steel:#9DB0B9; --line:#2A3B45; --grid:#1B2A33;
+  --accent:#4FC2BE; --ok:#63C08E; --bad:#E58372; --band:rgba(79,194,190,.12);
+  --c1:#6FB0DA; --c2:#E6A83F; --c3:#63C08E; --c4:#CC8CC3; --c5:#E58372;
+}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.62 var(--sans)}
+a{color:var(--c1);text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:920px;margin:0 auto;padding:26px 20px 64px}
+header.top{border-bottom:2px solid var(--ink);padding-bottom:16px;margin-bottom:22px}
+header.top .course{margin:0;color:var(--steel);font-size:.93rem}
+header.top h1{font-family:var(--head);font-weight:600;font-size:clamp(1.8rem,4.2vw,2.7rem);line-height:1.08;margin:.3rem 0 .45rem;letter-spacing:.005em}
+header.top .who{margin:0;font-size:.9rem;color:var(--steel)}
+header.top nav{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px 16px}
+header.top nav a{font-size:.95rem}
+h2{font-family:var(--head);font-weight:600;font-size:1.7rem;line-height:1.15;margin:2rem 0 .55rem}
+h3{font-family:var(--head);font-weight:600;font-size:1.28rem;margin:1.4rem 0 .4rem}
+p,li{max-width:72ch}
+.small{font-size:.87rem;color:var(--steel)}
+code,pre{font-family:var(--mono);font-size:.86em}
+code{background:var(--band);padding:.08em .3em;border-radius:3px}
+p,li{overflow-wrap:break-word}
+p code,li code,td code,p.small a{overflow-wrap:anywhere}
+pre{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--c1);padding:12px 14px;overflow-x:auto;border-radius:4px;line-height:1.45}
+pre code{background:none;padding:0}
+blockquote{margin:1.1rem 0;padding:.6rem 1rem;border-left:4px solid var(--c2);background:var(--panel);border-radius:0 4px 4px 0}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.93rem;background:var(--panel)}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--band)}
+.tablewrap{overflow-x:auto}
+img{max-width:100%;height:auto}
+figure{margin:1.3rem 0}
+figure img{border:1px solid var(--line);border-radius:4px;background:#fff}
+figcaption{font-size:.87rem;color:var(--steel);margin-top:.35rem}
+button,select,input{font:inherit}
+select{padding:.3rem .45rem;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink);max-width:100%}
+.btn{background:var(--ink);color:var(--paper);border:0;border-radius:4px;padding:.42rem .9rem;cursor:pointer}
+.btn:hover{background:var(--accent)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+.ctl{display:flex;flex-direction:column;gap:2px;min-width:170px;flex:1}
+.ctl label{font-size:.86rem;color:var(--steel)}
+.ctl output{font-family:var(--mono);font-size:.85rem;color:var(--ink)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.bench{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px;margin:12px 0}
+.paper{background-color:var(--panel);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:12px 12px;border:1px solid var(--line);border-radius:4px;display:block;width:100%;touch-action:none}
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:10px 0}
+.readout div{background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:6px 9px;font-size:.86rem}
+.readout b{display:block;font-family:var(--mono);font-size:1.05rem}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.84rem;color:var(--steel)}
+.legend i{display:inline-block;width:14px;height:4px;margin-right:5px;vertical-align:middle;border-radius:2px}
+.tabs{display:flex;gap:2px;border-bottom:2px solid var(--line);flex-wrap:wrap;margin-top:8px}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;padding:.5rem .85rem;cursor:pointer;color:var(--steel)}
+.tabs button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--accent);font-weight:700}
+.tabpanel[hidden]{display:none}
+.kc{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:0 6px 6px 0;padding:10px 14px;margin:1.2rem 0}
+.kc .q{font-weight:700;margin:0 0 6px}
+.kc label{display:block;padding:3px 0;cursor:pointer}
+.kc .fb{margin-top:6px;font-size:.93rem}
+.fb.ok{color:var(--ok)} .fb.bad{color:var(--bad)}
+.conf{display:flex;gap:10px;flex-wrap:wrap;font-size:.86rem;color:var(--steel);margin-top:4px}
+.anim{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px;margin:1.3rem 0}
+.anim h4{font-family:var(--head);font-size:1.12rem;margin:0 0 6px}
+.lec-tools{position:sticky;top:0;z-index:5;background:var(--paper);padding:6px 0;border-bottom:1px solid var(--line)}
+.lec-prog{display:flex;align-items:center;gap:10px;font-size:.84rem;color:var(--steel)}
+.lec-bar{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.lec-bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+.cite{cursor:pointer;color:var(--c1);border-bottom:1px dotted var(--c1)}
+.pop{position:absolute;z-index:20;max-width:420px;background:var(--panel);border:1px solid var(--line);box-shadow:0 6px 18px rgba(0,0,0,.18);padding:10px 12px;border-radius:6px;font-size:.86rem}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.card{min-height:110px;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px;cursor:pointer;font-size:.93rem}
+.card .b{display:none;color:var(--steel)} .card.flip .f{display:none} .card.flip .b{display:block}
+.pycorner{background:var(--panel);border:1px dashed var(--c1);border-radius:6px;padding:4px 16px 8px;margin:1.3rem 0}
+.disc td:first-child{white-space:nowrap;font-weight:700}
+footer.sig{margin-top:48px;border-top:2px solid var(--ink);padding-top:14px;font-size:.84rem;color:var(--steel)}
+footer.sig p{max-width:none}
+.weeks{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:14px 0}
+.wk{background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--c1);border-radius:4px;padding:10px 12px}
+.wk h3{margin:.1rem 0 .3rem;font-size:1.12rem}
+.wk .n{font-family:var(--head);color:var(--steel);font-size:.9rem}
+.wk .links{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.88rem;margin-top:6px}
+.wk .done{font-size:.8rem;color:var(--ok)}
+.hero{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;align-items:center}
+.hero canvas{width:100%;height:auto}
+@media (max-width:720px){.hero{grid-template-columns:1fr}.ctl{min-width:140px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{.lec-tools,.tabs,nav,.btn{display:none}}
+
+.callout{border-left:4px solid var(--accent);background:var(--panel);padding:10px 14px;margin:14px 0;border-radius:4px}
+.callout b.t{display:block;margin-bottom:4px;color:var(--accent)}
+.eq{overflow-x:auto;margin:10px 0;text-align:center}
+.anim{margin:16px 0}
+details.ans{margin:4px 0 14px}
+/* Colab call-to-action boxes inside the lecture */
+.colabbox{display:flex;gap:.8rem;align-items:center;border:1px solid var(--line,#d9dccf);border-left:5px solid #f9ab00;background:var(--panel,#fff);border-radius:10px;padding:.65rem .9rem;margin:1.1rem 0}
+.colabbox p{margin:0}
+.colabbox .colabbtn img{display:block;height:22px}
+.colabpart{margin:.8rem 0 0;font-size:.95rem}
+/* Step-by-step calculators of the lab */
+.labpart{scroll-margin-top:10px}
+h3[id]{scroll-margin-top:10px}
+.stepcalc{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px;margin:12px 0;outline:none}
+.stepcalc .bench{margin:0 0 10px}
+.sc-presets{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0 0}
+.sc-presets .btn{font-size:.86rem;padding:.22rem .6rem}
+ol.sc-steps{list-style:none;margin:8px 0 0;padding:0}
+ol.sc-steps li{max-width:none;border:1px solid var(--line);border-left:4px solid var(--line);border-radius:0 6px 6px 0;padding:8px 12px;margin:8px 0;background:var(--paper)}
+ol.sc-steps li.cur{border-left-color:var(--accent);background:var(--panel);box-shadow:0 1px 8px rgba(0,0,0,.07)}
+ol.sc-steps li.new{animation:scin .35s ease}
+ol.sc-steps li.chg .sc-m{animation:scflash .9s ease}
+.sc-st{font-weight:700;font-size:.97rem}
+.sc-st .sc-n{display:inline-block;min-width:4.2em;color:var(--accent);font-family:var(--head);font-weight:600}
+.sc-x{font-size:.93rem;color:var(--steel);margin:3px 0;max-width:none}
+.sc-x p{margin:.2rem 0;max-width:none}
+.sc-m{overflow-x:auto;overflow-y:hidden;margin:4px 0;padding:2px 0;border-radius:4px;font-size:1.04em}
+.sc-m mjx-container[display="true"]{margin:.35em 0!important}
+.sc-q{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin-top:6px;font-size:.93rem}
+.sc-q label{font-weight:600}
+.sc-q input{width:7.5rem;padding:.25rem .4rem;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink)}
+.sc-ok{font-size:.86rem;color:var(--ok);font-weight:600}
+.sc-nav{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 4px;padding-top:10px;border-top:1px solid var(--line)}
+.sc-nav .sc-count{margin-left:auto;font-size:.88rem;color:var(--steel)}
+.sc-dots{display:flex;gap:4px;width:100%}
+.sc-dots i{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.sc-dots i.on{background:var(--accent)}
+.sc-score{margin:.2rem 0 0}
+code.tex{font-size:.8rem;white-space:pre-wrap;word-break:break-word}
+@keyframes scin{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@keyframes scflash{from{background:var(--band)}to{background:transparent}}
+/* Boxes in the lecture that open a part of the interactive lab */
+.labbox{display:flex;gap:.8rem;align-items:center;border:1px solid var(--line);border-left:5px solid var(--accent);background:var(--panel);border-radius:10px;padding:.65rem .9rem;margin:1.1rem 0}
+.labbox p{margin:0}
+.labbox a.btn{white-space:nowrap;text-decoration:none;font-size:.9rem}
+@media (max-width:560px){.labbox,.colabbox{flex-direction:column;align-items:flex-start}}
+/* Interactive scenes of the lecture pages: a small drawing, buttons and a line that tells what happened */
+.scene{background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--c2);border-radius:10px;padding:12px 14px;margin:1.4rem 0}
+.scene>p.small{margin:0 0 4px}
+.scene .sn-svg{display:block;width:100%;max-width:560px;height:auto;margin:6px auto 2px}
+.scene svg text{font-family:var(--sans);fill:var(--ink)}
+.scene svg .sn-t{transition:transform .28s ease}
+.sn-btns{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 4px;align-items:center}
+.sn-btns .btn{font-size:.9rem;padding:.34rem .75rem;min-height:2.15rem;line-height:1.25}
+.sn-btns .btn[aria-pressed=true]{box-shadow:inset 0 0 0 2px var(--ink)}
+.sn-btns .btn.ghost[aria-pressed=true]{background:var(--band);border-color:var(--accent);color:var(--ink)}
+.sn-lab{font-size:.84rem;color:var(--steel);margin-right:2px}
+.sn-say{min-height:3.3em;margin:6px 0 4px;padding:7px 11px;border-radius:8px;background:var(--band);font-size:.95rem;max-width:none}
+.sn-ro{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.86rem;color:var(--steel);margin:4px 0 0}
+.sn-ro b{font-family:var(--mono);color:var(--ink);font-weight:600;font-size:.84rem}
+.sn-pad{display:inline-grid;grid-template-columns:repeat(3,2.7rem);gap:4px;margin-right:10px}
+.sn-pad .btn{padding:.3rem 0;min-width:0}
+.sn-loop{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;font-size:.86rem;margin:6px 0 2px;color:var(--steel)}
+.sn-node{border:1px solid var(--line);border-radius:999px;padding:.08rem .6rem;background:var(--paper);color:var(--ink);transition:background .2s,border-color .2s}
+.sn-loop .on{border-color:var(--accent);background:var(--band)}
+.sn-loop b{font-family:var(--mono);color:var(--ink);font-weight:600}
+.scene .sn-pop{animation:snpop 1.1s ease forwards}
+@keyframes snpop{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-26px)}}
+.sn-box:focus{outline:none}
+.sn-box:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+.sn-note{border:1px solid var(--line);border-radius:8px;background:var(--paper);padding:6px 10px;margin:6px 0;font-family:var(--mono);font-size:.84rem}
+.sn-note-h{font-family:var(--sans);font-size:.84rem;color:var(--steel);margin-bottom:2px}
+.sn-note-l{overflow-wrap:anywhere}
+.sn-cards{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
+.sn-card{flex:1 1 180px;border:2px solid var(--line);border-radius:10px;padding:7px 10px;background:var(--paper);transition:border-color .2s,box-shadow .2s}
+.sn-card .sn-pos{display:block;font-size:.8rem;color:var(--steel)}
+.sn-card .sn-txt{font-family:var(--mono);font-size:.88rem;overflow-wrap:anywhere}
+.sn-card.win{border-color:var(--ok);box-shadow:inset 0 0 0 1px var(--ok)}
+.sn-card.tie{border-color:var(--c2)}
+.sn-table{width:100%;border-collapse:collapse;font-size:.84rem;margin:6px 0;background:var(--panel)}
+.sn-table th,.sn-table td{border:1px solid var(--line);padding:3px 6px;text-align:right}
+.sn-table th{background:var(--band);font-weight:600}
+.sn-table td.mv{background:var(--band);transition:background .3s}
+.sn-table td.ok{color:var(--ok);font-weight:700;text-align:center}
+.sn-table td.bad{color:var(--bad);font-weight:700;text-align:center}
+.sn-table td:first-child,.sn-table th:first-child{text-align:left}
+/* Theme layer of the Vel Tech courses, applied on top of style.css. */
+:root{
+  --ink:#1C2333; --paper:#F4F6FB; --panel:#FFFFFF; --steel:#5A6478; --line:#D5DAE7; --grid:#E7EAF3;
+  --ok:#23946B; --bad:#C9473B;
+  --c1:#2A5BD7; --c2:#D4870B; --c3:#23946B; --c4:#8E4BA8; --c5:#C9473B;
+  --sans:'Source Sans 3','Segoe UI',system-ui,-apple-system,Roboto,sans-serif;
+  --head:'Lexend','Segoe UI',system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root{
+  --ink:#E4E8F2; --paper:#11151F; --panel:#1A2030; --steel:#A3ACC2; --line:#2C3448; --grid:#1F2638;
+  --ok:#5CC796; --bad:#EE8A7E;
+  --c1:#7FA2F5; --c2:#F0B34A; --c3:#5CC796; --c4:#C79BDA; --c5:#EE8A7E;
+}}
+body{font-size:17.5px;line-height:1.6}
+header.top{border:1px solid var(--line);border-top:6px solid var(--accent);border-radius:12px;background:var(--panel);
+  padding:16px 20px 14px;margin-bottom:26px;box-shadow:0 1px 2px rgba(20,30,60,.05)}
+header.top h1{font-weight:600;letter-spacing:-.01em}
+header.top nav a{background:var(--band);padding:.12rem .55rem;border-radius:999px;text-decoration:none;color:var(--accent);font-weight:600;font-size:.9rem}
+header.top nav a:hover{background:var(--accent);color:var(--panel)}
+h2{font-weight:600;letter-spacing:-.005em}
+h2::after{content:"";display:block;width:46px;height:3px;border-radius:2px;background:var(--accent);margin-top:7px}
+h3{font-weight:600}
+a{color:var(--accent)}
+.btn{background:var(--accent);color:#fff;border-radius:8px}
+.btn:hover{background:var(--ink)}
+.btn.ghost{border-radius:8px}
+.bench,.kc,.card,pre,table,.readout div{border-radius:10px}
+.kc{border-radius:0 10px 10px 0}
+.readout div{background:var(--band)}
+.tabs button[aria-selected=true]{color:var(--accent)}
+th{background:var(--band)}
+blockquote{border-left-color:var(--accent);border-radius:0 10px 10px 0}
+/* Colab call-to-action boxes and links */
+.colabbox{display:flex;gap:.9rem;align-items:center;border:1px solid var(--line);border-left:5px solid #F9AB00;
+  background:var(--panel);border-radius:10px;padding:.7rem 1rem;margin:1.2rem 0}
+.colabbox p{margin:0}
+.colabbox .colabbtn{flex:0 0 auto;line-height:0}
+.colabbox .colabbtn img,.colabpart img{height:20px;width:auto;max-width:none;display:inline-block;vertical-align:middle}
+.colabpart{margin:.9rem 0 0;font-size:.95rem}
+.colabpart a{display:inline-flex;align-items:center;gap:.55rem;text-decoration:none;font-weight:600}
+/* Readable buttons: the accent of the dark scheme is light, so buttons on it carry dark text, and a ghost button
+   under the pointer gets a light tint instead of the ink colour */
+.btn.ghost:hover{background:var(--band)}
+@media (prefers-color-scheme:dark){.btn,.btn:hover{color:#111827}}
+:root{--accent:#0369A1;--band:rgba(3,105,161,.08)}@media (prefers-color-scheme:dark){:root{--accent:#7DD3FC;--band:rgba(125,211,252,.13)}}</style><script>window.MathJax={tex:{inlineMath:[["\\(","\\)"]]},svg:{fontCache:"local"}};</script><script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script></head>
+<body><div class="wrap">
+<header class="top"><p class="course">Digital Twin with Python (VTR UGE 21), day 4 of 5</p><h1>Intelligence Layer of the Twin</h1><p class="who">Prof. Dr. Utku Kose, Süleyman Demirel University</p><nav><a href="../../index.html">Course home</a><a href="https://github.com/utkukose/digital-twin-veltech-NB-lecture/tree/main/days/day-04">Day overview</a><a href="lecture.html">Lecture</a><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-04/NB04_intelligence_layer.ipynb">Colab notebook</a><a href="Day04_Lecture_Notes.pdf">PDF notes</a></nav></header>
+<h2>Intelligence lab</h2><p>Part A runs a control room in which four controllers set the fan of the pack and you set the weights of the objective that ranks them. Part B matches the needs of an operator with the services of the twin. Part C computes a cumulative sum by hand. Parts D, E and F repeat three services of the lecture step by step, with sliders for their numbers: a prediction of a Gaussian process, a remaining useful life from a fitted line and one decision of the twin in the loop. In these parts every intermediate value is rounded, and the next step continues with the rounded value, as in a calculation by hand.</p>
+<div class="tabs" role="tablist"><button aria-selected="true">Explore</button><button aria-selected="false">Check yourself</button><button aria-selected="false">Reflect and export</button></div>
+<section class="tabpanel"><h3 id="pa">Part A: The control room</h3>
+<div class="bench">
+<p>Four controllers drive the fan of the pack over a two-hour trip with a hot afternoon load. Set the weights of the
+objective, which put a degree-hour above 44 °C, a kilowatt-hour (kWh) of fan energy and a milliampere-hour (mAh) of lost
+capacity on one scale, then run all four. A degree-hour is one degree above 44 °C for one hour. Without cooling the fan
+stays off, and the always-on fan runs at full duty. The fixed rule switches the fan fully on above 42 °C and off again
+below 40 °C. The twin in the loop plans once per minute: It looks ten minutes ahead with three fan settings, 0, 0.5 and
+1, and applies the cheapest one. The weights are a business decision: Watch how they change the ranking.</p>
+<div class="row" id="o-sl"></div>
+<p><button class="btn" id="o-run" type="button">Run the four controllers</button></p>
+<canvas class="paper" id="o-cv" aria-label="Pack temperature under four controllers"></canvas>
+<div class="legend" id="o-leg"></div>
+<div class="tablewrap"><table><thead><tr><th>Controller</th><th>Peak (°C)</th><th>Degree-hours above 44 °C</th><th>Fan energy (kWh)</th>
+<th>Capacity lost (mAh)</th><th>Objective</th></tr></thead><tbody id="o-tb"></tbody></table></div>
+<p class="small" id="o-txt"></p>
+</div>
+<p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-04/NB04_intelligence_layer.ipynb#scrollTo=sec-7" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 7: the twin plans the fan of the full pack model.</a></p><h3>Part B: Which service of the twin?</h3><p>Match each need of an operator with the service that meets it.</p><div id="pb"></div><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-04/NB04_intelligence_layer.ipynb#scrollTo=sec-2" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 2: a Gaussian-process surrogate and its training box.</a></p><h3>Part C: A cumulative sum by hand</h3><p>The standardised residuals of five periods are 0.1, 0.4, 0.6, 0.5 and 0.7. The cumulative sum starts at zero and adds each residual minus an allowance of 0.25, but never falls below zero. The alarm is raised when the sum exceeds 1.0.</p><div id="pc"></div><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-04/NB04_intelligence_layer.ipynb#scrollTo=sec-5" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 5: the cumulative sum against a fixed limit on the pack.</a></p><section class="labpart" id="pd"><h3>Part D: A Gaussian-process prediction, step by step</h3><p>The worked example of the lecture: a Gaussian process with one input, the current, the squared exponential kernel and no noise. The mean of the training outputs is 50 °C, and the first training point is 53 °C at 40 A. A second training point, 60 °C at 55 A, can be added. The sliders set the query, the length scale \(\ell\) and the amplitude \(\sigma_f\). The figure draws the prediction over all currents with a band of two standard deviations on each side.</p><div class="stepcalc" id="pd-calc"></div></section><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-04/NB04_intelligence_layer.ipynb#scrollTo=sec-2" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 2: a Gaussian process with three inputs trained on 120 simulations.</a></p><section class="labpart" id="pe"><h3>Part E: A remaining useful life from a fitted line</h3><p>The estimate of the lecture on a short history: six measurements of the capacity, one every 20 trips from trip 0 to trip 100. A straight line is fitted by least squares and followed down to the end-of-life level of 48 Ah. The true pack loses a fixed amount of capacity per trip, and from a knee on it loses twice as much. The sliders set this loss, the measurement noise and the trip of the knee. The figure compares the extrapolated line with the true capacity.</p><div class="stepcalc" id="pe-calc"></div></section><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-04/NB04_intelligence_layer.ipynb#scrollTo=sec-6" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 6: the same estimate on 180 trips, with a bootstrap interval.</a></p><section class="labpart" id="pf"><h3>Part F: One decision of the twin in the loop</h3><p>The planner of the lecture, shortened so that every number can be followed by hand: three candidate fan duties instead of six, three explicit Euler steps of 100 s instead of fifteen steps of 20 s, a constant current of 40 A and air at 35 °C, with the calibrated parameters of Day 3. The cost of a candidate adds the squared excess above 44 °C and the energy of the fan, each times the length of a step in minutes. The ageing term of the lecture is left out here. The sliders set the temperature at the moment of the decision and the weight of the fan energy.</p><div class="stepcalc" id="pf-calc"></div></section><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-04/NB04_intelligence_layer.ipynb#scrollTo=sec-7" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 7: the planner with six duties and fifteen steps over a whole trip.</a></p></section>
+<section class="tabpanel" hidden><p>Answer each question, rate your confidence and check the answer. Results stay in this browser.</p><div id="quiz"></div></section>
+<section class="tabpanel" hidden><p>Write a short answer to each question. The text is saved in this browser and is included when you export the learning log.</p><div id="reflect"></div></section>
+<footer class="sig"><p><strong>Prof. Dr. Utku Kose</strong><br>Full Professor, Department of Computer Engineering, Süleyman Demirel University, Isparta, Türkiye<br>Founding Director, AI Application and Research Center (YAZEM), Süleyman Demirel University<br>Head of the Computer Science Division, Department of Computer Engineering, Süleyman Demirel University<br>Additional affiliations: University of North Dakota (USA), Universidad Panamericana (Mexico City, Mexico), Vel Tech University (Chennai, India)<br>IEEE Senior Member, ACM Professional Member<br><a href="https://orcid.org/0000-0002-9652-6415">ORCID 0000-0002-9652-6415</a> | <a href="https://www.utkukose.com">utkukose.com</a> | <a href="https://github.com/utkukose">github.com/utkukose</a><br><a href="mailto:utkukose@sdu.edu.tr">utkukose@sdu.edu.tr</a> | <a href="mailto:utku.kose@und.edu">utku.kose@und.edu</a> | <a href="mailto:ukose@up.edu.mx">ukose@up.edu.mx</a> | <a href="mailto:utkukose@gmail.com">utkukose@gmail.com</a></p><p>This course is updated in line with current developments in the field. Last update: October 2026. Course materials licensed under CC BY 4.0. Code licensed under MIT.</p></footer></div>
+<script>window.COURSE_PREFIX="vtdt";</script>
+<script>"use strict";
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+function h(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (k === "class") e.className = v;
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
+    else if (k === "html") e.innerHTML = v;
+    else e.setAttribute(k, v);
+  }
+  for (const k of kids.flat()) if (k != null) e.append(k.nodeType ? k : document.createTextNode(String(k)));
+  return e;
+}
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const COL = () => ({ink: cssv("--ink"), steel: cssv("--steel"), line: cssv("--line"), grid: cssv("--grid"),
+  panel: cssv("--panel"), accent: cssv("--accent"), ok: cssv("--ok"), bad: cssv("--bad"),
+  c: [cssv("--c1"), cssv("--c2"), cssv("--c3"), cssv("--c4"), cssv("--c5")]});
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+function RNG(seed) {
+  let s = seed >>> 0;
+  const r = () => { s += 0x6D2B79F5; let t = s; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  r.normal = () => { let u = 0, v = 0; while (u === 0) u = r(); while (v === 0) v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
+  r.int = n => Math.floor(r() * n);
+  r.uniform = (a, b) => a + (b - a) * r();
+  return r;
+}
+const store = {
+  key: k => (window.COURSE_PREFIX || "vt") + ":" + k,
+  get(k, d) { try { const v = localStorage.getItem(this.key(k)); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(this.key(k), JSON.stringify(v)); } catch (e) {} }
+};
+/* Canvas with device-pixel scaling. draw(ctx, w, h) is called on setup and on resize. */
+function stage(cv, aspect, draw) {
+  const ctx = cv.getContext("2d");
+  const fit = () => {
+    const w = cv.clientWidth || 600, hgt = Math.round(w * aspect), d = window.devicePixelRatio || 1;
+    cv.style.height = hgt + "px"; cv.width = Math.round(w * d); cv.height = Math.round(hgt * d);
+    ctx.setTransform(d, 0, 0, d, 0, 0); cv._w = w; cv._h = hgt; draw && draw(ctx, w, hgt);
+  };
+  new ResizeObserver(() => fit()).observe(cv);
+  fit();
+  return {ctx, redraw: () => draw && draw(ctx, cv._w, cv._h), size: () => [cv._w, cv._h]};
+}
+/* Axes frame: returns mapping helpers. */
+function frame(ctx, w, hgt, o) {
+  const C = COL(), p = Object.assign({l: 48, r: 12, t: 12, b: 34}, o.pad || {});
+  const X = x => p.l + (x - o.x0) / (o.x1 - o.x0) * (w - p.l - p.r);
+  const Y = y => hgt - p.b - (y - o.y0) / (o.y1 - o.y0) * (hgt - p.t - p.b);
+  ctx.save(); ctx.strokeStyle = C.line; ctx.fillStyle = C.steel; ctx.lineWidth = 1; ctx.font = "11px " + cssv("--sans");
+  const nt = o.ticks || 5;
+  for (let i = 0; i <= nt; i++) {
+    const xv = o.x0 + (o.x1 - o.x0) * i / nt, yv = o.y0 + (o.y1 - o.y0) * i / nt;
+    ctx.beginPath(); ctx.moveTo(X(xv), hgt - p.b); ctx.lineTo(X(xv), hgt - p.b + 4); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(p.l - 4, Y(yv)); ctx.lineTo(p.l, Y(yv)); ctx.stroke();
+    ctx.textAlign = "center"; ctx.fillText(fmt(xv), X(xv), hgt - p.b + 16);
+    ctx.textAlign = "right"; ctx.fillText(fmt(yv), p.l - 7, Y(yv) + 4);
+  }
+  ctx.strokeStyle = C.ink; ctx.beginPath(); ctx.moveTo(p.l, p.t); ctx.lineTo(p.l, hgt - p.b); ctx.lineTo(w - p.r, hgt - p.b); ctx.stroke();
+  ctx.fillStyle = C.ink; ctx.textAlign = "center";
+  if (o.xlabel) ctx.fillText(o.xlabel, (p.l + w - p.r) / 2, hgt - 4);
+  if (o.ylabel) { ctx.save(); ctx.translate(12, (p.t + hgt - p.b) / 2); ctx.rotate(-Math.PI / 2); ctx.fillText(o.ylabel, 0, 0); ctx.restore(); }
+  ctx.restore();
+  return {X, Y, p};
+}
+function fmt(v) { if (Math.abs(v - Math.round(v)) < 1e-9) return String(Math.round(v)); const a = Math.abs(v); if (a >= 1000) return v.toFixed(0); if (a >= 10) return v.toFixed(0); if (a >= 1) return v.toFixed(1); if (a === 0) return "0"; return v.toFixed(2); }
+function polyline(ctx, pts, color, width, dash) {
+  ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = width || 2; if (dash) ctx.setLineDash(dash);
+  ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.stroke(); ctx.restore();
+}
+function dot(ctx, x, y, r, color, stroke) {
+  ctx.beginPath(); ctx.arc(x, y, r, 0, 2 * Math.PI); ctx.fillStyle = color; ctx.fill();
+  if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 1; ctx.stroke(); }
+}
+/* Labelled slider bound to a value. */
+function slider(parent, o, on) {
+  const out = h("output", {}, o.fmt ? o.fmt(o.value) : o.value);
+  const inp = h("input", {type: "range", min: o.min, max: o.max, step: o.step || 1, value: o.value, "aria-label": o.label});
+  inp.addEventListener("input", () => { const v = parseFloat(inp.value); out.textContent = o.fmt ? o.fmt(v) : v; on && on(v); });
+  parent.append(h("div", {class: "ctl"}, h("label", {}, o.label, " ", out), inp));
+  return inp;
+}
+function readout(parent, names) {
+  const box = h("div", {class: "readout"}), cells = {};
+  names.forEach(n => { const b = h("b", {}, "-"); cells[n] = b; box.append(h("div", {}, n, b)); });
+  parent.append(box);
+  return (n, v) => { cells[n].textContent = v; };
+}
+function legend(parent, items) {
+  const C = COL();
+  parent.append(h("div", {class: "legend"}, items.map(([t, i]) => h("span", {}, h("i", {style: "background:" + (typeof i === "number" ? C.c[i] : i)}), t))));
+}
+/* Animation loop that pauses when off screen or when reduced motion is requested. */
+function loop(step, ms) {
+  let on = false, raf = 0, last = 0, acc = 0;
+  const f = t => { if (!on) return; const dt = Math.min(0.05, (t - (last || t)) / 1000); last = t; acc += dt * 1000; if (!ms || acc >= ms) { acc = 0; step(dt); } raf = requestAnimationFrame(f); };
+  return {start() { if (!on) { on = true; last = 0; raf = requestAnimationFrame(f); } }, stop() { on = false; cancelAnimationFrame(raf); }, get running() { return on; }};
+}
+const reduced = () => window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* Knowledge checks, citation popups, flashcards and reading progress on lecture pages. */
+function initLecture(day) {
+  const kcs = $$(".kc"), key = "d" + day + ":kc", st = store.get(key, {});
+  const bar = $(".lec-bar i"), txt = $(".lec-txt");
+  const upd = () => {
+    const n = kcs.length, d = Object.values(st).filter(Boolean).length;
+    if (bar) bar.style.width = (n ? 100 * d / n : 0) + "%";
+    if (txt) txt.textContent = n ? `Knowledge checks answered correctly: ${d} of ${n}` : "";
+    store.set(key, st); store.set("d" + day + ":progress", n ? d / n : 0);
+  };
+  kcs.forEach((k, i) => {
+    const ans = +k.dataset.answer, fb = $(".fb", k);
+    $(".btn", k).addEventListener("click", () => {
+      const sel = $("input:checked", k);
+      if (!sel) { fb.className = "fb bad"; fb.textContent = "Select an option first."; return; }
+      const ok = +sel.value === ans;
+      fb.className = "fb " + (ok ? "ok" : "bad");
+      fb.textContent = (ok ? "Correct. " : "Not quite. ") + k.dataset.why;
+      st[i] = ok || st[i] || false; upd();
+    });
+    if (st[i]) { const r = $$("input", k)[ans]; if (r) r.checked = true; }
+  });
+  upd();
+  const refs = JSON.parse(($("#refdata") || {textContent: "{}"}).textContent || "{}");
+  let pop = null;
+  document.addEventListener("click", e => {
+    const c = e.target.closest(".cite");
+    if (pop) { pop.remove(); pop = null; }
+    if (!c) return;
+    pop = h("div", {class: "pop", role: "note"});
+    c.dataset.refs.split(",").forEach(n => pop.append(h("p", {html: "[" + n + "] " + (refs[n] || "")})));
+    document.body.append(pop);
+    const r = c.getBoundingClientRect();
+    pop.style.left = Math.max(8, Math.min(window.scrollX + r.left, window.scrollX + document.documentElement.clientWidth - 440)) + "px";
+    pop.style.top = (window.scrollY + r.bottom + 6) + "px";
+  });
+  $$(".card").forEach(c => { const t = () => c.classList.toggle("flip"); c.addEventListener("click", t); c.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); t(); } }); });
+}
+
+/* Lab shell: tabs, self-assessment with confidence ratings, reflection and learning-log export. */
+function initLab(day, title, SELF, REFLECT) {
+  const tabs = $$(".tabs button"), panels = $$(".tabpanel");
+  tabs.forEach((b, i) => b.addEventListener("click", () => {
+    tabs.forEach((x, j) => { x.setAttribute("aria-selected", i === j); panels[j].hidden = i !== j; });
+    window.dispatchEvent(new Event("resize"));
+  }));
+  const qbox = $("#quiz"), res = store.get("d" + day + ":quiz", {});
+  SELF.forEach((q, i) => {
+    const fb = h("div", {class: "fb"}), name = "q" + i;
+    const opts = q.options.map((o, j) => h("label", {}, h("input", {type: "radio", name, value: j}), " ", o));
+    const conf = h("div", {class: "conf"}, "Confidence:", ["sure", "unsure", "guess"].map(c => h("label", {}, h("input", {type: "radio", name: name + "c", value: c}), " " + c)));
+    const btn = h("button", {class: "btn", type: "button"}, "Check answer");
+    const box = h("div", {class: "kc"}, h("p", {class: "q"}, (i + 1) + ". " + q.q), opts, conf, btn, fb);
+    btn.addEventListener("click", () => {
+      const sel = $(`input[name=${name}]:checked`, box), cf = $(`input[name=${name}c]:checked`, box);
+      if (!sel) { fb.className = "fb bad"; fb.textContent = "Select an option first."; return; }
+      const ok = +sel.value === q.answer, c = cf ? cf.value : "not rated";
+      res[i] = {ok, conf: c}; store.set("d" + day + ":quiz", res);
+      fb.className = "fb " + (ok ? "ok" : "bad");
+      fb.textContent = (ok ? "Correct. " : "Not quite. ") + q.why + (!ok && c === "sure" ? " A confident error marks a topic to revisit first." : "");
+      summary();
+    });
+    qbox.append(box);
+  });
+  const sum = h("p", {class: "small"}); qbox.append(sum);
+  function summary() {
+    const v = Object.values(res), ok = v.filter(r => r.ok).length, conf = v.filter(r => !r.ok && r.conf === "sure").length;
+    sum.textContent = `Answered: ${v.length} of ${SELF.length}. Correct: ${ok}. Confident errors: ${conf}.`;
+  }
+  summary();
+  const rbox = $("#reflect"), refl = store.get("d" + day + ":reflect", {});
+  REFLECT.forEach((p, i) => {
+    const ta = h("textarea", {rows: 4, style: "width:100%;font:inherit;padding:8px;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink)"});
+    ta.value = refl[i] || "";
+    ta.addEventListener("input", () => { refl[i] = ta.value; store.set("d" + day + ":reflect", refl); });
+    rbox.append(h("p", {}, h("b", {}, (i + 1) + ". "), p), ta);
+  });
+  const ex = h("button", {class: "btn", type: "button"}, "Export learning log");
+  ex.addEventListener("click", () => {
+    const lines = [`# Learning log, day ${day}: ${title}`, "", `Exported: ${new Date().toISOString()}`, "", "## Self-assessment", ""];
+    SELF.forEach((q, i) => { const r = res[i]; lines.push(`${i + 1}. ${q.q}`, `   Result: ${r ? (r.ok ? "correct" : "incorrect") + ", confidence " + r.conf : "not answered"}`); });
+    lines.push("", "## Reflection", "");
+    REFLECT.forEach((p, i) => lines.push(`**${i + 1}. ${p}**`, "", refl[i] || "(no answer)", ""));
+    const url = URL.createObjectURL(new Blob([lines.join("\n")], {type: "text/markdown"}));
+    const a = h("a", {href: url, download: `learning_log_day${String(day).padStart(2, "0")}.md`}); document.body.append(a); a.click(); a.remove();
+  });
+  rbox.append(h("p", {}, ex));
+}
+
+/* Course home: progress per day from local storage. */
+function initHome(n, nq) {
+  for (let d = 1; d <= n; d++) {
+    const el = $("#dy" + d + " .done"); if (!el) continue;
+    const p = store.get("d" + d + ":progress", 0), q = Object.values(store.get("d" + d + ":quiz", {})).filter(r => r.ok).length;
+    el.textContent = (p > 0 || q > 0) ? `Reading checks ${Math.round(100 * p)}%, self-assessment ${q} of ${nq || 8} correct` : "";
+  }
+}
+
+/* Opaque blend of a palette colour with a background colour, used for heat maps without seams. */
+function mix(c1, c2, a) {
+  const hx = c => { c = (c || "#ffffff").trim(); if (c[0] === "#") { if (c.length === 4) c = "#" + c[1] + c[1] + c[2] + c[2] + c[3] + c[3];
+    return [1, 3, 5].map(i => parseInt(c.substr(i, 2), 16)); } const m = c.match(/\d+/g); return m ? m.slice(0, 3).map(Number) : [255, 255, 255]; };
+  const A = hx(c1), B = hx(c2); return "rgb(" + A.map((v, i) => Math.round(a * v + (1 - a) * B[i])).join(",") + ")";
+}
+
+/* Interactive scenes of the lecture pages. sv() builds an SVG element; scene() returns the parts of one scene:
+   its drawing, rows of buttons, a line that tells what happened and a row of readouts. SCENE_SHOT holds, for each
+   scene, a function that sets the state shown in the screenshot of the course README. */
+const SVGNS = "http://www.w3.org/2000/svg";
+function sv(tag, attrs, ...kids) {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const [k, v] of Object.entries(attrs || {})) { if (k === "text") e.textContent = v; else if (v != null) e.setAttribute(k, v); }
+  for (const k of kids.flat()) if (k != null) e.append(k.nodeType ? k : document.createTextNode(String(k)));
+  return e;
+}
+window.SCENE_SHOT = window.SCENE_SHOT || {};
+function scene(id, w, hgt, label) {
+  const root = document.getElementById(id);
+  if (!root) return null;
+  const box = h("div", {class: "sn-box"}), svg = sv("svg", {class: "sn-svg", viewBox: `0 0 ${w} ${hgt}`, role: "img", "aria-label": label});
+  box.append(svg); root.append(box);
+  const say = h("p", {class: "sn-say", "aria-live": "polite"});
+  return {root, box, svg, say,
+    row(label) { const r = h("div", {class: "sn-btns"}); if (label) r.append(h("span", {class: "sn-lab"}, label)); box.append(r); return r; },
+    btn(row, text, fn, ghost) {
+      const b = h("button", {class: ghost ? "btn ghost" : "btn", type: "button"}, text);
+      b.addEventListener("click", fn); row.append(b); return b; },
+    toggle(row, text, on, fn) {
+      const b = h("button", {class: "btn ghost", type: "button", "aria-pressed": String(!!on)}, text);
+      b.addEventListener("click", () => { const v = b.getAttribute("aria-pressed") !== "true"; b.setAttribute("aria-pressed", String(v)); fn(v); });
+      row.append(b); return b; },
+    tellAt() { box.append(say); },
+    tell(html) { say.innerHTML = html; },
+    ro(names) {
+      const r = h("div", {class: "sn-ro"}), cells = {};
+      names.forEach(n => { const b = h("b", {}, "-"); cells[n] = b; r.append(h("span", {}, n + ": ", b)); });
+      box.append(r); return (n, v) => { cells[n].textContent = v; }; }};
+}
+/* Colours of a scene, read from the theme: fill and stroke styles for SVG elements. */
+const fillc = c => `fill:var(${c})`, strokec = (c, w) => `fill:none;stroke:var(${c});stroke-width:${w || 2}`;
+</script>
+<script>initLab(4,"Intelligence Layer of the Twin",[{"q": "What does a Gaussian-process surrogate provide besides a prediction?", "options": ["A gradient", "A standard deviation", "A causal explanation", "A physical law"], "answer": 1, "why": "A Gaussian process predicts a mean and a standard deviation."}, {"q": "When does the design of experiments for a surrogate pay for itself?", "options": ["Never", "After the number of queries at which the saved time exceeds the cost of the design", "Immediately", "Only on a graphics processing unit (GPU)"], "answer": 1, "why": "The break-even point compares design cost with time saved per query."}, {"q": "Why is model reduction not worthwhile for the pack model?", "options": ["It is inaccurate", "The full model has only four states", "The modes are unstable", "Proper orthogonal decomposition needs a GPU"], "answer": 1, "why": "Reducing four states saves almost nothing."}, {"q": "Why did the pure machine-learning model fail in the heatwave?", "options": ["It was too small", "Nothing constrained it outside its training range", "It overfitted the physics", "The sensor failed"], "answer": 1, "why": "Data-driven models extrapolate without physical constraints."}, {"q": "What does the allowance k in the cumulative sum do?", "options": ["Sets the alarm limit", "Absorbs ordinary noise so that only persistent deviations accumulate", "Sets the sampling rate", "Removes the fault"], "answer": 1, "why": "k is subtracted from every residual before accumulation."}, {"q": "Why can a residual detector miss a fault entirely?", "options": ["Because it is too sensitive", "Because the fault barely changes the monitored signal", "Because faults are random", "Because the model is too accurate"], "answer": 1, "why": "A detector only sees what changes its input."}, {"q": "What does a bootstrap interval of a remaining-useful-life estimate leave out?", "options": ["Noise", "The possibility that the shape of the degradation model is wrong", "The data", "The threshold"], "answer": 1, "why": "It quantifies fit uncertainty within one model form only."}, {"q": "Who should set the weights of the objective of the controller?", "options": ["The solver", "The data scientist alone", "The people responsible for the trade-off, such as operations and safety", "Nobody"], "answer": 2, "why": "The weights encode a business and safety trade-off, not an engineering fact."}],["In the control room, which weights made the planning controller lose, and what does that tell you?", "Name a fault in a system from your field that a temperature-based detector would not see.", "Where in your field is a remaining-useful-life number reported, and does it come with an interval?"]);</script>
+<script>
+(function(){
+const W={hot:60,kwh:500,mah:2}; const sl=$('#o-sl');
+slider(sl,{label:'Weight of a degree-hour above 44 °C',min:0,max:300,step:10,value:W.hot},v=>{W.hot=v;show();});
+slider(sl,{label:'Weight of a kWh of fan energy',min:0,max:3000,step:50,value:W.kwh},v=>{W.kwh=v;show();});
+slider(sl,{label:'Weight of a mAh of capacity',min:0,max:10,step:0.5,value:W.mah},v=>{W.mah=v;show();});
+legend($('#o-leg'),[['no cooling',3],['always on',0],['fixed rule',1],['twin in the loop',2]]);
+const P={R0:0.045,mcp:9000,hA0:2.2,hA1:12,Tamb:38,fanW:25};
+const I=t=>36+14*Math.max(0,Math.sin(2*Math.PI*t/2400))+6*Math.sin(2*Math.PI*t/600);
+const step=(T,t,u,dt)=>T+dt*(I(t)**2*P.R0-(P.hA0+P.hA1*u)*(T-P.Tamb))/P.mcp;
+const fade=(T,t,dt)=>dt*Math.abs(I(t))*5.5e-8*Math.exp(-3800*(1/(T+273.15)-1/298.15))*1000;
+function run(kind){ let T=36; const dt=10, out=[]; let hot=0, kwh=0, mah=0, u=0;
+  for(let k=0;k<720;k++){ const t=k*dt;
+    if(kind==='none') u=0; else if(kind==='always') u=1; else if(kind==='rule') u=T>42?1:(T<40?0:u);
+    else if(k%6===0){ let best=null; for(const c of [0,0.5,1]){ let x=T, cost=0; for(let j=0;j<60;j++){ const tt=t+j*dt; x=step(x,tt,c,dt);
+          cost+=W.hot*Math.max(0,x-44)*dt/3600+W.kwh*P.fanW*c*dt/3.6e6+W.mah*fade(x,tt,dt); } if(!best||cost<best[1]) best=[c,cost]; } u=best[0]; }
+    T=step(T,t,u,dt); hot+=Math.max(0,T-44)*dt/3600; kwh+=P.fanW*u*dt/3.6e6; mah+=fade(T,t,dt); out.push(T); }
+  return {T:out,peak:Math.max(...out),hot,kwh,mah}; }
+let res=null;
+const A=stage($('#o-cv'),0.45,(ctx,w,hh)=>{ const C=COL(); ctx.clearRect(0,0,w,hh); if(!res) return;
+  const F=frame(ctx,w,hh,{x0:0,x1:120,y0:34,y1:62,xlabel:'time (min)',ylabel:'temperature (°C)'});
+  polyline(ctx,[[F.X(0),F.Y(44)],[F.X(120),F.Y(44)]],C.bad,1,[4,4]);
+  [['none',3],['always',0],['rule',1],['twin',2]].forEach(([k,c])=>polyline(ctx,res[k].T.map((v,i)=>[F.X(i/6),F.Y(v)]),C.c[c],k==='twin'?2.6:1.6)); });
+function show(){ if(!res) return; const tb=$('#o-tb'); tb.innerHTML=''; const names={none:'no cooling',always:'always on',rule:'fixed rule',twin:'twin in the loop'};
+  const obj=k=>res[k].hot*W.hot+res[k].kwh*W.kwh+res[k].mah*W.mah; const order=Object.keys(names).sort((a,b)=>obj(a)-obj(b));
+  order.forEach(k=>tb.append(h('tr',{},[names[k],res[k].peak.toFixed(1),res[k].hot.toFixed(2),res[k].kwh.toFixed(3),res[k].mah.toFixed(2),obj(k).toFixed(1)].map(x=>h('td',{},x)))));
+  $('#o-txt').textContent='Lowest objective with these weights: '+names[order[0]]+'. The twin controller re-plans with the weights you set; press run again after changing them.';
+  store.set('d4:lab:weights',W); }
+$('#o-run').addEventListener('click',()=>{ res={none:run('none'),always:run('always'),rule:run('rule'),twin:run('twin')}; A.redraw(); show(); });
+$('#o-run').click();
+})();
+
+
+function partQuiz(id, spec){
+  const root=document.getElementById(id); if(!root) return; const saved=store.get(spec.key,{});
+  const tb=h('tbody',{}), t=h('table',{},[h('thead',{},h('tr',{},[h('th',{},spec.qhead||'Question'),h('th',{},spec.ahead||'Your answer'),h('th',{},'Feedback')])),tb]);
+  root.append(h('div',{class:'tablewrap'},t));
+  spec.items.forEach((it,i)=>{ const sel=h('select',{id:`${id}-s${i}`},[h('option',{value:''},'choose')].concat(it.options.map((o,k)=>h('option',{value:String(k)},o))));
+    if(saved[i]!==undefined) sel.value=saved[i];
+    sel.addEventListener('change',()=>{ const s=store.get(spec.key,{}); s[i]=sel.value; store.set(spec.key,s); });
+    tb.append(h('tr',{},[h('td',{},it.q),h('td',{},sel),h('td',{id:`${id}-f${i}`},'')])); });
+  const btn=h('button',{class:'btn',type:'button'},spec.button||'Check my answers'), sc=h('span',{class:'small'},'');
+  root.append(h('p',{},[btn,' ',sc]));
+  btn.addEventListener('click',()=>{ let ok=0;
+    spec.items.forEach((it,i)=>{ const v=document.getElementById(`${id}-s${i}`).value, f=document.getElementById(`${id}-f${i}`);
+      if(v===''){ f.textContent='Choose an answer.'; return; }
+      const right=+v===it.answer; if(right) ok++; f.textContent=(right?'Correct. ':'Not quite: '+it.options[it.answer]+'. ')+(it.why||''); });
+    sc.textContent=`${ok} of ${spec.items.length} correct.`; store.set(spec.key+':score',ok); });
+}
+function partNumbers(id, spec){
+  const root=document.getElementById(id); if(!root) return; const row=h('div',{class:'row'});
+  spec.fields.forEach((f,i)=>row.append(h('div',{class:'ctl',style:'min-width:230px'},[h('label',{for:`${id}-n${i}`},f.label),
+    h('input',{type:'number',step:'any',id:`${id}-n${i}`,style:'width:7rem'})])));
+  root.append(row);
+  const btn=h('button',{class:'btn',type:'button'},spec.button||'Check my values'), sc=h('span',{class:'small'},'');
+  root.append(h('p',{},[btn,' ',sc]));
+  btn.addEventListener('click',()=>{ let ok=0; const out=[];
+    spec.fields.forEach((f,i)=>{ const v=parseFloat(document.getElementById(`${id}-n${i}`).value), right=Math.abs(v-f.answer)<=f.tol;
+      if(right) ok++; out.push(`${f.short}: ${isNaN(v)?'missing':(right?'correct':'not yet')}`); });
+    sc.textContent=out.join(', ')+'. '+(spec.explain||''); store.set(spec.key+':score',ok); });
+}
+
+(function(){
+partQuiz('pb', {"key": "dt4:partB", "qhead": "Need", "ahead": "Service", "items": [{"q": "Answer thousands of questions about the peak temperature per second.", "options": ["surrogate model", "hybrid model", "cumulative sum", "remaining useful life", "what-if scenario", "twin in the loop"], "answer": 0, "why": ""}, {"q": "Correct a physics model that misses a small effect.", "options": ["surrogate model", "hybrid model", "cumulative sum", "remaining useful life", "what-if scenario", "twin in the loop"], "answer": 1, "why": ""}, {"q": "Raise an alarm when the cooling slowly loses effect.", "options": ["surrogate model", "hybrid model", "cumulative sum", "remaining useful life", "what-if scenario", "twin in the loop"], "answer": 2, "why": ""}, {"q": "Plan the replacement of the pack.", "options": ["surrogate model", "hybrid model", "cumulative sum", "remaining useful life", "what-if scenario", "twin in the loop"], "answer": 3, "why": ""}, {"q": "Check what a heat wave next week would do to the pack.", "options": ["surrogate model", "hybrid model", "cumulative sum", "remaining useful life", "what-if scenario", "twin in the loop"], "answer": 4, "why": ""}, {"q": "Set the fan automatically for the next minutes.", "options": ["surrogate model", "hybrid model", "cumulative sum", "remaining useful life", "what-if scenario", "twin in the loop"], "answer": 5, "why": ""}]});
+partNumbers('pc', {"key": "dt4:partC", "explain": "Sums: 0, 0.15, 0.5, 0.75, 1.2. No single residual is large, yet the sum crosses the limit in period 5.", "fields": [{"label": "Sum after period 3", "short": "after period 3", "answer": 0.5, "tol": 0.005}, {"label": "Sum after period 5", "short": "after period 5", "answer": 1.2, "tol": 0.005}, {"label": "Period of the alarm", "short": "alarm", "answer": 5, "tol": 0.01}]});
+})();
+
+
+function TeX(s, ...a){ return String.raw(s, ...a); }
+function scF(x, d){ d = d == null ? 2 : d; if (!isFinite(x)) return String(x); let s = (+x).toFixed(d);
+  if (/^-0(\.0+)?$/.test(s)) s = s.slice(1); return s; }
+function scP(x, d){ const s = scF(x, d); return s[0] === '-' ? '(' + s + ')' : s; }
+function scT(x, d){ return '{' + scF(x, d) + '}'; }
+function scS(x, d){ const s = scF(x, d); return s[0] === '-' ? s : '+' + s; }
+function scR(x, d){ const f = Math.pow(10, d == null ? 2 : d); return Math.round(x * f) / f; }
+function scH(s){ return String(s).replace(/(^|[^\w])-(?=[\d.])/g, '$1−'); }
+function scTeX(tex, display){
+  const M = window.MathJax;
+  if (M && typeof M.tex2svg === 'function') { try { return M.tex2svg(tex, {display: !!display}); } catch (e) {} }
+  return h('code', {class: 'tex'}, tex);
+}
+function scInline(el){
+  const M = window.MathJax; if (!(M && typeof M.tex2svg === 'function')) return;
+  const tw = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), nodes = [];
+  while (tw.nextNode()) if (tw.currentNode.nodeValue.indexOf('\\(') >= 0) nodes.push(tw.currentNode);
+  nodes.forEach(n => { const f = document.createDocumentFragment();
+    n.nodeValue.split(/\\\(([\s\S]+?)\\\)/).forEach((p, i) => f.append(i % 2 ? scTeX(p, false) : document.createTextNode(p)));
+    n.replaceWith(f); });
+}
+var SC_ALL = window.SC_ALL = window.SC_ALL || [];
+function scWhenMJ(f, t){ t = t || 0; const M = window.MathJax;
+  if (M && M.startup && M.startup.promise) { M.startup.promise.then(f); return; }
+  if (t < 300) setTimeout(() => scWhenMJ(f, t + 1), 100); }
+if (!window.__scInit) {
+  window.__scInit = 1;
+  scWhenMJ(() => SC_ALL.forEach(r => r()));
+  let moved = false; ['wheel', 'touchmove', 'keydown', 'mousedown'].forEach(e => window.addEventListener(e, () => { moved = true; }, {passive: true}));
+  const toHash = () => { const id = decodeURIComponent(location.hash.slice(1)), e = id && document.getElementById(id); if (e && !moved) e.scrollIntoView(); };
+  window.addEventListener('load', () => { setTimeout(toHash, 60); scWhenMJ(() => setTimeout(toHash, 60)); });
+}
+/* A calculation revealed one step at a time. spec: inputs [{key, label, min, max, step, value, d} or {key, label,
+   options, value}], presets [{label, values}], calc(v) -> R, steps(v, R) -> [{t, x, m, r, q: {label, ans, tol}}],
+   viz {aspect, label, legend, draw(ctx, w, h, v, R, k, all)} where k is the last step on show. */
+function partSteps(id, spec){
+  const root = document.getElementById(id); if (!root) return;
+  const v = {}, set = {}, shown = {}, prevM = [];
+  spec.inputs.forEach(i => { v[i.key] = i.value; });
+  let k = 0, all = false, timer = null, pend = false, first = true, fresh = -1, right = 0, R = {}, S = [];
+  const compute = () => { R = spec.calc ? spec.calc(v) : {}; S = spec.steps(v, R); if (k > S.length - 1) k = S.length - 1; };
+  compute();
+  const row = h('div', {class: 'row'});
+  spec.inputs.forEach(i => {
+    if (i.options) {
+      const sel = h('select', {'aria-label': i.label}, i.options.map((o, j) => h('option', {value: String(j)}, o)));
+      sel.value = String(i.value);
+      sel.addEventListener('change', () => { v[i.key] = +sel.value; update(); });
+      set[i.key] = x => { sel.value = String(x); };
+      row.append(h('div', {class: 'ctl'}, h('label', {}, i.label), sel));
+    } else {
+      const f = x => scH(scF(x, i.d == null ? 2 : i.d)), out = h('output', {}, f(i.value));
+      const inp = h('input', {type: 'range', min: i.min, max: i.max, step: i.step || 1, value: i.value, 'aria-label': i.label});
+      inp.addEventListener('input', () => { v[i.key] = parseFloat(inp.value); out.textContent = f(v[i.key]); update(); });
+      set[i.key] = x => { inp.value = x; out.textContent = f(x); };
+      row.append(h('div', {class: 'ctl'}, h('label', {}, i.label, ' ', out), inp));
+    }
+  });
+  const bench = h('div', {class: 'bench sc-in'}, row);
+  if (spec.presets) {
+    const pr = h('div', {class: 'sc-presets'}, h('span', {class: 'small'}, 'Start from:'));
+    spec.presets.forEach(p => { const b = h('button', {class: 'btn ghost', type: 'button'}, p.label);
+      b.addEventListener('click', () => { Object.keys(p.values).forEach(key => { v[key] = p.values[key]; if (set[key]) set[key](p.values[key]); }); update(); });
+      pr.append(b); });
+    bench.append(pr);
+  }
+  root.append(bench);
+  let stg = null;
+  if (spec.viz) {
+    const cv = h('canvas', {class: 'paper', role: 'img', 'aria-label': spec.viz.label || 'Figure of the calculation'});
+    root.append(cv);
+    if (spec.viz.legend) legend(root, spec.viz.legend);
+    stg = stage(cv, spec.viz.aspect || 0.4, (ctx, w, hh) => { ctx.clearRect(0, 0, w, hh);
+      spec.viz.draw(ctx, w, hh, v, R, all ? S.length - 1 : k, all); });
+  }
+  const ol = h('ol', {class: 'sc-steps', 'aria-live': 'polite'});
+  const prev = h('button', {class: 'btn ghost', type: 'button'}, '◀ Previous');
+  const next = h('button', {class: 'btn', type: 'button'}, 'Next step ▶');
+  const play = h('button', {class: 'btn ghost', type: 'button'}, 'Play');
+  const allb = h('button', {class: 'btn ghost', type: 'button'}, 'Show all steps');
+  const cnt = h('span', {class: 'sc-count'}), dots = h('div', {class: 'sc-dots', 'aria-hidden': 'true'});
+  const score = h('p', {class: 'small sc-score'});
+  root.append(ol, h('div', {class: 'sc-nav'}, dots, prev, next, play, allb, cnt), score);
+  function render(){
+    compute();
+    ol.textContent = '';
+    const last = all ? S.length - 1 : k;
+    S.forEach((s, i) => {
+      if (i > last) return;
+      const li = h('li', {class: (!all && i === k ? 'cur' : 'done') + (i === fresh ? ' new' : '')});
+      li.append(h('div', {class: 'sc-st'}, h('span', {class: 'sc-n'}, 'Step ' + (i + 1)), ' ', s.t));
+      if (s.x) { const d = h('div', {class: 'sc-x', html: s.x}); li.append(d); scInline(d); }
+      if (s.q && !all && !shown[i]) {
+        const inp = h('input', {type: 'number', step: 'any', 'aria-label': s.q.label});
+        const chk = h('button', {class: 'btn', type: 'button'}, 'Check'), rev = h('button', {class: 'btn ghost', type: 'button'}, 'Show the step');
+        const fb = h('span', {class: 'small', 'aria-live': 'polite'});
+        chk.addEventListener('click', () => { const x = parseFloat(inp.value);
+          if (isNaN(x)) { fb.textContent = 'Type a number first.'; return; }
+          if (Math.abs(x - s.q.ans) <= (s.q.tol == null ? 0.005 : s.q.tol)) { right++; shown[i] = 'ok'; stop(); render(); }
+          else fb.textContent = 'Not yet. Look at the steps above, try again or show the step.'; });
+        inp.addEventListener('keydown', e => { if (e.key === 'Enter') chk.click(); });
+        rev.addEventListener('click', () => { shown[i] = true; render(); });
+        li.append(h('div', {class: 'sc-q'}, h('label', {}, s.q.label), inp, chk, rev, fb));
+      } else {
+        if (s.m) { const m = h('div', {class: 'sc-m'}, scTeX(s.m, true));
+          if (!first && prevM[i] !== undefined && prevM[i] !== s.m) li.classList.add('chg'); li.append(m); }
+        if (s.r) { const d = h('div', {class: 'sc-x', html: s.r}); li.append(d); scInline(d); }
+        if (shown[i] === 'ok') li.append(h('div', {class: 'sc-ok'}, 'Your value was right.'));
+      }
+      prevM[i] = s.m;
+      ol.append(li);
+    });
+    dots.textContent = '';
+    S.forEach((_, i) => dots.append(h('i', {class: i <= last ? 'on' : ''})));
+    cnt.textContent = all ? `All ${S.length} steps on show` : `Step ${k + 1} of ${S.length}`;
+    prev.disabled = all || k === 0; next.disabled = all || k >= S.length - 1;
+    allb.textContent = all ? 'Step by step' : 'Show all steps';
+    const nq = S.filter(s => s.q).length;
+    score.textContent = nq ? `Values you computed right before the step was shown: ${right} of ${nq}.` : '';
+    if (stg) stg.redraw();
+    first = false; fresh = -1;
+  }
+  function update(){ if (pend) return; pend = true; requestAnimationFrame(() => { pend = false; render(); }); }
+  function stop(){ if (timer) { clearInterval(timer); timer = null; play.textContent = 'Play'; } }
+  function go(d){
+    const nk = clamp(k + d, 0, S.length - 1); if (nk === k) return;
+    if (d > 0 && S[k].q && !shown[k]) shown[k] = true;
+    k = nk; fresh = d > 0 ? k : -1; render();
+    if (d > 0) { const li = ol.lastElementChild; if (li) li.scrollIntoView({block: 'nearest', behavior: reduced() ? 'auto' : 'smooth'}); }
+  }
+  prev.addEventListener('click', () => { stop(); go(-1); });
+  next.addEventListener('click', () => { stop(); go(1); });
+  allb.addEventListener('click', () => { stop(); all = !all; render(); });
+  play.addEventListener('click', () => {
+    if (timer) { stop(); return; }
+    if (all || k >= S.length - 1) { all = false; k = 0; render(); }
+    play.textContent = 'Pause';
+    timer = setInterval(() => { if (k >= S.length - 1) { stop(); return; } go(1); if (k >= S.length - 1 || (S[k].q && !shown[k])) stop(); }, spec.ms || 1700);
+  });
+  root.addEventListener('keydown', e => { if (/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); stop(); go(1); } else if (e.key === 'ArrowLeft') { e.preventDefault(); stop(); go(-1); } });
+  root.tabIndex = -1;
+  SC_ALL.push(render);
+  render();
+}
+
+(function(){
+partSteps('pd-calc', {
+  inputs: [
+    {key: 'q', label: 'Query current in A', min: 10, max: 90, step: 1, value: 49, d: 0},
+    {key: 'l', label: 'Length scale ℓ in A', min: 3, max: 20, step: 1, value: 9, d: 0},
+    {key: 'sf', label: 'Amplitude of the kernel in °C', min: 4, max: 20, step: 1, value: 12, d: 0},
+    {key: 'two', label: 'Training points', options: ['one, at 40 A', 'two, at 40 and 55 A'], value: 0}
+  ],
+  presets: [
+    {label: 'Lecture, one length scale away', values: {q: 49, l: 9, sf: 12, two: 0}},
+    {label: 'Three length scales away', values: {q: 67, l: 9, sf: 12, two: 0}},
+    {label: 'Two points, query between', values: {q: 48, l: 9, sf: 12, two: 1}},
+    {label: 'Two points, short length scale', values: {q: 48, l: 4, sf: 12, two: 1}}
+  ],
+  calc: v => {
+    const s2 = v.sf * v.sf, kern = (a, b) => { const d = scR(Math.abs(a - b) / v.l, 3), h = scR(d * d / 2, 4), e = scR(Math.exp(-h), 4);
+      return {d, h, e, k: scR(s2 * e, 2)}; };
+    const R = {s2, k1: kern(v.q, 40)};
+    if (v.two) {
+      R.k2 = kern(v.q, 55); R.k12 = kern(55, 40);
+      const c = R.k12.k; R.det = scR(s2 * s2 - c * c, 2);
+      R.a1n = scR(s2 * 3 - c * 10, 2); R.a2n = scR(s2 * 10 - c * 3, 2); R.a1 = scR(R.a1n / R.det, 6); R.a2 = scR(R.a2n / R.det, 6);
+      R.m1 = scR(R.k1.k * R.a1, 2); R.m2 = scR(R.k2.k * R.a2, 2); R.mu = scR(50 + R.m1 + R.m2, 2);
+      R.v1n = scR(s2 * R.k1.k - c * R.k2.k, 2); R.v2n = scR(s2 * R.k2.k - c * R.k1.k, 2); R.v1 = scR(R.v1n / R.det, 6); R.v2 = scR(R.v2n / R.det, 6);
+      R.r1 = scR(R.k1.k * R.v1, 2); R.r2 = scR(R.k2.k * R.v2, 2); R.var = scR(s2 - R.r1 - R.r2, 2);
+    } else {
+      R.w = scR(R.k1.k * 3, 2); R.m1 = scR(R.w / s2, 2); R.mu = scR(50 + R.m1, 2);
+      R.kk = scR(R.k1.k * R.k1.k, 2); R.r1 = scR(R.kk / s2, 2); R.var = scR(s2 - R.r1, 2);
+    }
+    R.sd = scR(Math.sqrt(Math.max(0, R.var)), 2); R.lo = scR(R.mu - 2 * R.sd, 2); R.hi = scR(R.mu + 2 * R.sd, 2);
+    const ex = (a, b) => s2 * Math.exp(-Math.pow((a - b) / v.l, 2) / 2), pts = [40].concat(v.two ? [55] : []), ys = [3].concat(v.two ? [10] : []);
+    R.f = q => { if (!v.two) { const k = ex(q, 40); return [50 + k * 3 / s2, Math.sqrt(Math.max(0, s2 - k * k / s2))]; }
+      const c = ex(55, 40), det = s2 * s2 - c * c, k1 = ex(q, 40), k2 = ex(q, 55);
+      const a1 = (s2 * 3 - c * 10) / det, a2 = (s2 * 10 - c * 3) / det, v1 = (s2 * k1 - c * k2) / det, v2 = (s2 * k2 - c * k1) / det;
+      return [50 + k1 * a1 + k2 * a2, Math.sqrt(Math.max(0, s2 - k1 * v1 - k2 * v2))]; };
+    R.pts = pts; R.ys = ys;
+    return R;
+  },
+  steps: (v, R) => {
+    const f2 = x => scF(x, 2), f3 = x => scF(x, 3), f4 = x => scF(x, 4), f6 = x => scF(x, 6), S2 = v.sf * v.sf;
+    const kstep = (K, a, nm, dn) => TeX`${dn} &= \frac{|${v.q} - ${a}|}{${v.l}} = ${f3(K.d)} \\ ${nm} &= ${v.sf}^2\, e^{-${f3(K.d)}^2 / 2} = ${S2} \times e^{-${f4(K.h)}} = ${S2} \times ${f4(K.e)} = ${f2(K.k)}`;
+    if (!v.two) return [
+      {t: 'The kernel at the training point',
+       x: TeX`With a single training point, the table \(\mathbf{K}\) is one number, the kernel of the point with itself: \(\kappa(40, 40) = \sigma_f^2\).`,
+       m: TeX`\mathbf{K} = \kappa(40, 40) = ${v.sf}^2 = ${S2}`},
+      {t: 'Distance and kernel of the query',
+       x: 'The distance counts length scales between the query and the training point, and the kernel falls with it.',
+       m: TeX`\begin{aligned} ` + kstep(R.k1, 40, TeX`\kappa(q, 40)`, 'd') + TeX` \end{aligned}`,
+       q: {label: 'Kernel value, two decimals:', ans: R.k1.k, tol: 0.011}},
+      {t: 'The prediction',
+       x: TeX`The training output lies \(53 - 50 = 3\) °C above the mean, and the prediction adds this deviation weighted by \(\kappa(q, 40) / \sigma_f^2\).`,
+       m: TeX`\mu(q) = 50 + \frac{\kappa(q, 40) \times 3}{${S2}} = 50 + \frac{${f2(R.w)}}{${S2}} = 50 + ${f2(R.m1)} = ${f2(R.mu)}\ ^{\circ}\text{C}`,
+       q: {label: 'Prediction in °C, two decimals:', ans: R.mu, tol: 0.011}},
+      {t: 'The standard deviation',
+       x: TeX`The variance starts from \(\sigma_f^2\), and the training point takes away \(\kappa(q, 40)^2 / \sigma_f^2\).`,
+       m: TeX`s(q)^2 = ${S2} - \frac{${f2(R.k1.k)}^2}{${S2}} = ${S2} - \frac{${f2(R.kk)}}{${S2}} = ${S2} - ${f2(R.r1)} = ${f2(R.var)}, \qquad s(q) = ${f2(R.sd)}\ ^{\circ}\text{C}`},
+      {t: 'The band of two standard deviations',
+       x: R.k1.d >= 3 ? 'Three length scales or more from the training point, the prediction has returned to the mean and the standard deviation to σ_f: The process knows nothing about this query.' :
+          (R.k1.d === 0 ? 'At the training point itself the prediction equals the training output, and the standard deviation is zero.' : 'About 95 percent of the outputs of a normal distribution lie within two standard deviations of its mean.'),
+       m: TeX`\mu \pm 2s = ${f2(R.mu)} \pm 2 \times ${f2(R.sd)} = ${f2(R.lo)} \text{ to } ${f2(R.hi)}\ ^{\circ}\text{C}`}
+    ];
+    return [
+      {t: 'The table of the two training points',
+       x: TeX`The kernel of each point with itself is \(\sigma_f^2\), and the two points lie \(55 - 40 = 15\) A apart.`,
+       m: TeX`\begin{aligned} \kappa(55, 40) &= ${S2} \times e^{-(15/${v.l})^2 / 2} = ${S2} \times ${f4(R.k12.e)} = ${f2(R.k12.k)} \\ \mathbf{K} &= \begin{pmatrix} ${S2} & ${f2(R.k12.k)} \\ ${f2(R.k12.k)} & ${S2} \end{pmatrix}, \qquad \det \mathbf{K} = ${S2}^2 - ${f2(R.k12.k)}^2 = ${f2(R.det)} \end{aligned}`},
+      {t: 'Solving for the weights',
+       x: TeX`The deviations of the training outputs from the mean are 3 and 10 °C. Solving \(\mathbf{K}\,\alpha = (3, 10)\) with the inverse of a table of two rows gives the weights.`,
+       m: TeX`\begin{aligned} \alpha_1 &= \frac{${S2} \times 3 - ${f2(R.k12.k)} \times 10}{${f2(R.det)}} = \frac{${f2(R.a1n)}}{${f2(R.det)}} = ${f6(R.a1)} \\ \alpha_2 &= \frac{${S2} \times 10 - ${f2(R.k12.k)} \times 3}{${f2(R.det)}} = \frac{${f2(R.a2n)}}{${f2(R.det)}} = ${f6(R.a2)} \end{aligned}`},
+      {t: 'The kernels of the query',
+       x: 'The query is compared with both training points.',
+       m: TeX`\begin{aligned} ` + kstep(R.k1, 40, TeX`\kappa_1`, 'd_1') + TeX` \\ ` + kstep(R.k2, 55, TeX`\kappa_2`, 'd_2') + TeX` \end{aligned}`},
+      {t: 'The prediction',
+       x: 'The prediction adds the weights, each times the kernel of its training point.',
+       m: TeX`\mu(q) = 50 + ${f2(R.k1.k)} \times ${scP(R.a1, 6)} + ${f2(R.k2.k)} \times ${scP(R.a2, 6)} = 50 ${R.m1 < 0 ? '-' : '+'} ${f2(Math.abs(R.m1))} ${R.m2 < 0 ? '-' : '+'} ${f2(Math.abs(R.m2))} = ${f2(R.mu)}\ ^{\circ}\text{C}`,
+       q: {label: 'Prediction in °C, two decimals:', ans: R.mu, tol: 0.011}},
+      {t: 'The standard deviation',
+       x: TeX`The variance needs \(\mathbf{K}^{-1}\mathbf{k}\), the same solve with the kernels of the query on the right-hand side.`,
+       m: TeX`\begin{aligned} v_1 &= \frac{${S2} \times ${f2(R.k1.k)} - ${f2(R.k12.k)} \times ${f2(R.k2.k)}}{${f2(R.det)}} = ${f6(R.v1)} \\ v_2 &= \frac{${S2} \times ${f2(R.k2.k)} - ${f2(R.k12.k)} \times ${f2(R.k1.k)}}{${f2(R.det)}} = ${f6(R.v2)} \\ s(q)^2 &= ${S2} - ${f2(R.k1.k)} \times ${scP(R.v1, 6)} - ${f2(R.k2.k)} \times ${scP(R.v2, 6)} \\ &= ${S2} - ${f2(R.r1)} - ${scP(R.r2, 2)} = ${f2(R.var)} \\ s(q) &= ${f2(R.sd)}\ ^{\circ}\text{C} \end{aligned}`},
+      {t: 'The band of two standard deviations',
+       x: 'About 95 percent of the outputs of a normal distribution lie within two standard deviations of its mean.',
+       m: TeX`\mu \pm 2s = ${f2(R.mu)} \pm 2 \times ${f2(R.sd)} = ${f2(R.lo)} \text{ to } ${f2(R.hi)}\ ^{\circ}\text{C}`}
+    ];
+  },
+  viz: {
+    aspect: 0.42, label: 'Prediction of the Gaussian process with a band of two standard deviations',
+    legend: [['prediction', 'var(--accent)'], ['band of two standard deviations', 'var(--grid)'], ['training point', 'var(--ink)'], ['query', 'var(--c2)']],
+    draw: (ctx, w, hh, v, R, k) => {
+      const C = COL(), top = 50 + 2 * v.sf + 15, bot = 50 - 2 * v.sf - 5, ys = Math.ceil((top - bot) / 4 / 5) * 5, y0 = Math.floor(bot / 5) * 5;
+      const F = frame(ctx, w, hh, {x0: 10, x1: 90, y0, y1: y0 + 4 * ys, xlabel: 'current in A', ylabel: 'peak temperature in °C', ticks: 4});
+      const up = [], dn = [], mid = [];
+      for (let i = 0; i <= 160; i++) { const q = 10 + i * 0.5, [m, s] = R.f(q); mid.push([F.X(q), F.Y(m)]); up.push([F.X(q), F.Y(m + 2 * s)]); dn.push([F.X(q), F.Y(m - 2 * s)]); }
+      ctx.fillStyle = C.grid; ctx.beginPath(); up.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); dn.slice().reverse().forEach(([x, y]) => ctx.lineTo(x, y)); ctx.closePath(); ctx.fill();
+      polyline(ctx, [[F.X(10), F.Y(50)], [F.X(90), F.Y(50)]], C.steel, 1, [4, 4]);
+      polyline(ctx, mid, C.accent, 2.2);
+      R.pts.forEach((p, i) => dot(ctx, F.X(p), F.Y(50 + R.ys[i]), 5, C.ink));
+      const last = v.two ? 5 : 4;
+      if (k >= (v.two ? 3 : 2)) { dot(ctx, F.X(v.q), F.Y(R.mu), 5, C.c[1], C.ink); }
+      if (k >= last) { polyline(ctx, [[F.X(v.q), F.Y(R.lo)], [F.X(v.q), F.Y(R.hi)]], C.c[1], 2.4); }
+    }
+  }
+});
+partSteps('pe-calc', {
+  inputs: [
+    {key: 'b', label: 'True loss per trip in mAh', min: 10, max: 30, step: 1, value: 15, d: 0},
+    {key: 'ns', label: 'Measurement noise, scale', min: 0, max: 2, step: 0.5, value: 1, d: 1},
+    {key: 'kn', label: 'Knee of the fade', options: ['no knee', 'at trip 300', 'at trip 500'], value: 0}
+  ],
+  presets: [
+    {label: 'Steady fade', values: {b: 15, ns: 1, kn: 0}},
+    {label: 'A knee at trip 300', values: {b: 15, ns: 1, kn: 1}},
+    {label: 'Faster fade, no noise', values: {b: 24, ns: 0, kn: 0}},
+    {label: 'Noisy, knee at 500', values: {b: 15, ns: 2, kn: 2}}
+  ],
+  calc: v => {
+    const n = [0, 20, 40, 60, 80, 100], pat = [0.03, -0.04, 0.02, 0.05, -0.03, -0.01], b1 = v.b / 1000, knee = [Infinity, 300, 500][v.kn];
+    const Qt = x => x <= knee ? 60 - b1 * x : 60 - b1 * knee - 2 * b1 * (x - knee);
+    const Q = n.map((x, i) => scR(Qt(x) + v.ns * pat[i], 3)), sumQ = scR(Q.reduce((s, x) => s + x, 0), 3), Qm = scR(sumQ / 6, 4);
+    const dn = n.map(x => x - 50), dq = Q.map(x => scR(x - Qm, 4)), pr = dn.map((x, i) => scR(x * dq[i], 3));
+    const sxy = scR(pr.reduce((s, x) => s + x, 0), 3), sxx = 7000, bh = scR(sxy / sxx, 6), bn = scR(bh * 50, 4), a = scR(Qm - bn, 4);
+    const need = scR(48 - a, 4), nE = scR(need / bh, 0), rul = nE - 100;
+    const tE = knee === Infinity || 60 - b1 * knee <= 48 ? 12 / b1 : knee + (60 - b1 * knee - 48) / (2 * b1);
+    return {n, Q, sumQ, Qm, dn, dq, pr, sxy, sxx, bh, bn, a, need, nE, rul, tE: Math.round(tE), knee, Qt, b1};
+  },
+  steps: (v, R) => {
+    const f3 = x => scF(x, 3), f4 = x => scF(x, 4), sumStr = (a, d) => a.map((x, i) => i === 0 ? scF(x, d) : (x < 0 ? ' - ' : ' + ') + scF(Math.abs(x), d)).join('');
+    return [
+      {t: 'The measured capacities',
+       x: 'Six measurements of the capacity in Ah, after the trips 0, 20, 40, 60, 80 and 100. Each carries a small random error.',
+       m: TeX`Q = (${R.Q.map(f3).join(',\ ')})`},
+      {t: 'The two means',
+       x: 'The line of least squares passes through the point of the two means.',
+       m: TeX`\bar{n} = \frac{0 + 20 + 40 + 60 + 80 + 100}{6} = 50, \qquad \bar{Q} = \frac{${f3(R.sumQ)}}{6} = ${f4(R.Qm)}`},
+      {t: 'The slope',
+       x: TeX`The slope is the sum of the products of the deviations from the two means, divided by the sum of the squared deviations of the trips, \(2500 + 900 + 100\)${'​'}\({} + 100 + 900 + 2500\)${'​'}\({} = 7000\).`,
+       m: TeX`\begin{aligned} Q - \bar{Q} &= (${R.dq.map(x => scT(x, 4)).join(',\ ')}) \\ \textstyle\sum (n - \bar{n})(Q - \bar{Q}) &= ${sumStr(R.pr.slice(0, 3), 3)} \\ &\phantom{=}\ ${(R.pr[3] < 0 ? '- ' : '+ ') + sumStr([Math.abs(R.pr[3])].concat(R.pr.slice(4)), 3)} = ${f3(R.sxy)} \\ b &= ${f3(R.sxy)} / 7000 = ${scF(R.bh, 6)}\ \text{Ah per trip} \end{aligned}`,
+       q: {label: 'Slope in Ah per trip, six decimals:', ans: R.bh, tol: 0.0000015}},
+      {t: 'The intercept',
+       x: 'The intercept is the capacity of the line at trip 0.',
+       m: TeX`a = \bar{Q} - b\,\bar{n} = ${f4(R.Qm)} - ${scP(R.bh, 6)} \times 50 = ${f4(R.Qm)} ${R.bn < 0 ? '+' : '-'} ${f4(Math.abs(R.bn))} = ${f4(R.a)}\ \text{Ah}`},
+      {t: 'End of life and remaining useful life',
+       x: 'The line reaches the end-of-life level of 48 Ah at the trip below. The latest trip has the number 100.',
+       m: TeX`n_{\mathrm{EOL}} = \frac{48 - ${f4(R.a)}}{${scF(R.bh, 6)}} = \frac{${scT(R.need, 4)}}{${scF(R.bh, 6)}} = ${R.nE}, \qquad \mathrm{RUL} = ${R.nE} - 100 = ${R.rul}\ \text{trips}`,
+       q: {label: 'Remaining useful life in trips:', ans: R.rul, tol: 1.5}},
+      {t: 'The truth',
+       x: R.knee === Infinity ? 'Without a knee the true pack loses the same amount on every trip, so the line only errs by the noise of the measurements.' :
+          `From trip ${R.knee} on, the true pack loses twice as much per trip. Nothing in the first 100 trips shows this, and the line cannot foresee it.`,
+       m: TeX`\text{true end of life: trip } ${R.tE}, \qquad \text{error of the estimate: } ${R.nE} - ${R.tE} = ${R.nE - R.tE}\ \text{trips}`,
+       r: Math.abs(R.nE - R.tE) > 50 ? 'The estimate misses the true end of life by far more than its noise could explain.' : 'The estimate lies close to the true end of life.'}
+    ];
+  },
+  viz: {
+    aspect: 0.42, label: 'Measured capacity, the extrapolated line and the true capacity',
+    legend: [['measured', 'var(--ink)'], ['fitted line', 'var(--accent)'], ['true capacity', 'var(--steel)'], ['end of life, 48 Ah', 'var(--bad)']],
+    draw: (ctx, w, hh, v, R, k) => {
+      const C = COL(), X1 = Math.ceil(Math.max(R.nE, R.tE, 400) * 1.1 / 200) * 200;
+      const F = frame(ctx, w, hh, {x0: 0, x1: X1, y0: 46, y1: 61, xlabel: 'trip', ylabel: 'capacity in Ah', ticks: X1 / 200 > 6 ? X1 / 400 : X1 / 200, pad: {l: 52}});
+      polyline(ctx, [[F.X(0), F.Y(48)], [F.X(X1), F.Y(48)]], C.bad, 1.2, [6, 4]);
+      const tc = []; for (let i = 0; i <= 200; i++) { const x = X1 * i / 200; tc.push([F.X(x), F.Y(Math.max(46, R.Qt(x)))]); }
+      if (k >= 5) polyline(ctx, tc, C.steel, 1.6, [3, 3]);
+      if (k >= 3) { const x2 = Math.max(100, Math.min(X1, R.nE * 1.05)); polyline(ctx, [[F.X(0), F.Y(R.a)], [F.X(x2), F.Y(R.a + R.bh * x2)]], C.accent, 2); }
+      R.n.forEach((x, i) => dot(ctx, F.X(x), F.Y(R.Q[i]), 4, C.ink));
+      if (k >= 4) { dot(ctx, F.X(R.nE), F.Y(48), 5, C.accent, C.ink); ctx.fillStyle = C.accent; ctx.font = '12px ' + cssv('--sans'); ctx.textAlign = 'center'; ctx.fillText('trip ' + R.nE, F.X(R.nE), F.Y(48) + 18); }
+      if (k >= 5) { dot(ctx, F.X(R.tE), F.Y(48), 5, C.steel, C.ink); ctx.fillStyle = C.steel; ctx.textAlign = 'center'; ctx.fillText('true: ' + R.tE, F.X(R.tE), F.Y(48) - 10); }
+    }
+  }
+});
+partSteps('pf-calc', {
+  inputs: [
+    {key: 'T0', label: 'Temperature now in °C', min: 40, max: 50, step: 0.5, value: 44, d: 1},
+    {key: 'wf', label: 'Weight of the fan energy', min: 0, max: 0.2, step: 0.01, value: 0.02, d: 2}
+  ],
+  presets: [
+    {label: 'At the limit, 44 °C', values: {T0: 44, wf: 0.02}},
+    {label: 'Already hot, 46 °C', values: {T0: 46, wf: 0.02}},
+    {label: 'Cool pack, 41 °C', values: {T0: 41, wf: 0.02}},
+    {label: 'Expensive energy', values: {T0: 46, wf: 0.2}}
+  ],
+  calc: v => {
+    const cand = [0, 0.5, 1], dtm = scR(100 / 60, 4), out = cand.map(u => {
+      const g1 = scR(12.23 * u, 3), G = scR(2.193 + g1, 3), st = []; let T = v.T0, hot = 0;
+      for (let j = 0; j < 3; j++) { const dT = scR(T - 35, 3), cool = scR(G * dT, 3), net = scR(72.96 - cool, 3), rate = scR(net / 9180, 6), inc = scR(100 * rate, 4), Tn = scR(T + inc, 3);
+        const ex = scR(Math.max(0, Tn - 44), 3), sq = scR(ex * ex, 4); hot = scR(hot + sq, 4); st.push({T, dT, cool, net, rate, inc, Tn, ex, sq}); T = Tn; }
+      const hc = scR(hot * dtm, 3), fe = scR(v.wf * u * 25 * dtm * 3, 3), J = scR(hc + fe, 3);
+      return {u, g1, G, st, hot, hc, fe, J};
+    });
+    const best = out.reduce((b, o, i) => (o.J < out[b].J ? i : b), 0);
+    return {out, best, dtm};
+  },
+  steps: (v, R) => {
+    const f3 = x => scF(x, 3), f4 = x => scF(x, 4), res = [];
+    R.out.forEach((o, i) => {
+      const s = o.st;
+      res.push({t: `Candidate u = ${scF(o.u, 1)}: three steps ahead`,
+        x: i === 0 ? TeX`The heating at 40 A is \(40^2 \times 0.0456 = 72.96\) W. Each step computes the cooling, the net power, the rate and the new temperature, as in the Euler step of Day 1, with \(m c_p = 9180\) J/K.` : '',
+        m: TeX`\begin{aligned} hA_0 + hA_1 u &= 2.193 + 12.23 \times ${scF(o.u, 1)} = ${f3(o.G)}\ \text{W/K} \\ ` + s.map((p, j) =>
+             TeX`T_${j + 1} &= ${f3(p.T)} + 100 \times \frac{72.96 - ${f3(o.G)} \times ${scP(p.dT, 3)}}{9180} = ${f3(p.T)} ${p.inc < 0 ? '-' : '+'} ${f4(Math.abs(p.inc))} = ${f3(p.Tn)}`).join(TeX` \\ `) + TeX` \end{aligned}`});
+      res.push({t: `Candidate u = ${scF(o.u, 1)}: its cost`,
+        x: i === 0 ? TeX`Each step lasts \(100 / 60 = ${f4(R.dtm)}\) minutes. The heat term squares the excess above 44 °C, and the fan term charges \(w_{\mathrm{fan}}\) for every watt and minute of the fan of 25 W.` : '',
+        m: TeX`\begin{aligned} \text{heat} &= (${s.map(p => f3(p.ex) + '^2').join(' + ')}) \times ${f4(R.dtm)} = ${f4(o.hot)} \times ${f4(R.dtm)} = ${f3(o.hc)} \\ \text{fan} &= ${scF(v.wf, 2)} \times ${scF(o.u, 1)} \times 25 \times ${f4(R.dtm)} \times 3 = ${f3(o.fe)} \\ J(${scF(o.u, 1)}) &= ${f3(o.hc)} + ${f3(o.fe)} = ${f3(o.J)} \end{aligned}`,
+        q: i === 0 ? {label: 'Cost of the candidate u = 0:', ans: o.J, tol: 0.006} : null});
+    });
+    const b = R.out[R.best];
+    res.push({t: 'The decision',
+      x: `The planner applies the duty with the lowest cost for one step and plans again from the new state, the receding horizon.` +
+         (b.u === 1 ? ' Here the heat term dominates, and the full fan is worth its energy.' : b.u === 0 ? ' Here the pack stays below 44 °C without the fan, so any fan energy is wasted.' : ' Half the fan holds the pack below 44 °C at half the energy of the full fan.'),
+      m: TeX`J(0) = ${f3(R.out[0].J)}, \qquad J(0.5) = ${f3(R.out[1].J)}, \qquad J(1) = ${f3(R.out[2].J)} \qquad \Rightarrow \qquad u = ${scF(b.u, 1)}`,
+      q: {label: 'Fan duty that the planner applies:', ans: b.u, tol: 0.01}});
+    return res;
+  },
+  viz: {
+    aspect: 0.42, label: 'The three candidates over the horizon and their costs',
+    legend: [['u = 0', 'var(--c3)'], ['u = 0.5', 'var(--c2)'], ['u = 1', 'var(--accent)'], ['44 °C', 'var(--bad)']],
+    draw: (ctx, w, hh, v, R, k) => {
+      const C = COL(), cols = [C.c[2], C.c[1], C.accent], wl = Math.round(w * 0.62), all = R.out.map(o => o.st.map(p => p.Tn)).flat().concat([v.T0, 44]);
+      const lo = Math.floor(Math.min(...all) - 0.5), hi = Math.ceil(Math.max(...all) + 0.5), span = Math.max(3, hi - lo), y1 = lo + 3 * Math.ceil(span / 3);
+      ctx.font = '12px ' + cssv('--sans');
+      const F = frame(ctx, wl, hh, {x0: 0, x1: 300, y0: lo, y1, xlabel: 'seconds ahead', ylabel: '°C', ticks: 3});
+      polyline(ctx, [[F.X(0), F.Y(44)], [F.X(300), F.Y(44)]], C.bad, 1.2, [6, 4]);
+      R.out.forEach((o, i) => { if (k >= 2 * i) { const p = [[F.X(0), F.Y(v.T0)]].concat(o.st.map((s, j) => [F.X(100 * (j + 1)), F.Y(s.Tn)]));
+        polyline(ctx, p, cols[i], 2.2); p.forEach(([x, y]) => dot(ctx, x, y, 3, cols[i])); } });
+      const x0 = wl + 54, x1 = w - 10, T2 = 14, B2 = 34, ns = x => { const q = Math.pow(10, Math.floor(Math.log10(x))); for (const m of [1, 2, 2.5, 5, 10]) if (m * q >= x) return m * q; return 10 * q; }, Jm = 4 * ns(Math.max(1, ...R.out.map(o => o.J)) * 1.1 / 4);
+      const Y = y => hh - B2 - y / Jm * (hh - T2 - B2), gw = (x1 - x0) / 3;
+      for (let i = 0; i <= 4; i++) { const yv = Jm * i / 4; ctx.strokeStyle = C.grid; ctx.beginPath(); ctx.moveTo(x0, Y(yv)); ctx.lineTo(x1, Y(yv)); ctx.stroke();
+        ctx.fillStyle = C.steel; ctx.textAlign = 'right'; ctx.fillText(scF(yv, yv >= 10 ? 0 : 1), x0 - 6, Y(yv) + 4); }
+      ctx.strokeStyle = C.ink; ctx.beginPath(); ctx.moveTo(x0, T2 - 4); ctx.lineTo(x0, Y(0)); ctx.lineTo(x1, Y(0)); ctx.stroke();
+      ctx.save(); ctx.translate(wl + 14, (T2 + hh - B2) / 2); ctx.rotate(-Math.PI / 2); ctx.fillStyle = C.ink; ctx.textAlign = 'center'; ctx.fillText('cost J', 0, 0); ctx.restore();
+      R.out.forEach((o, i) => { const cx = x0 + (i + 0.5) * gw, bw = Math.min(46, gw * 0.6);
+        ctx.fillStyle = C.ink; ctx.textAlign = 'center'; ctx.fillText('u = ' + scF(o.u, 1), cx, Y(0) + 17);
+        if (k >= 2 * i + 1) { ctx.fillStyle = cols[i]; ctx.globalAlpha = (k >= 6 && i === R.best) ? 1 : 0.6;
+          ctx.fillRect(cx - bw / 2, Y(o.J), bw, Y(0) - Y(o.J)); ctx.globalAlpha = 1; ctx.fillStyle = C.ink; ctx.fillText(scF(o.J, 2), cx, Y(o.J) - 5); } });
+    }
+  }
+});
+})();
+</script>
+</body></html>
