@@ -1,0 +1,929 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab: Simulation lab | Digital Twin with Python</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Lexend:wght@500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"><style>:root{
+  --ink:#1B2A38; --paper:#F3F5F0; --panel:#FFFFFF; --steel:#56656F; --line:#D2DAD0; --grid:#E4EAE2;
+  --accent:#0E7A78; --ok:#2E8B57; --bad:#B53F2E; --band:rgba(14,122,120,.09);
+  --c1:#1F5F8B; --c2:#C98510; --c3:#2E8B57; --c4:#8B3F82; --c5:#B53F2E;
+  --sans:'Atkinson Hyperlegible',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --head:'Barlow Semi Condensed','Arial Narrow','Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root{
+  --ink:#E3EAEE; --paper:#0F171D; --panel:#16222A; --steel:#9DB0B9; --line:#2A3B45; --grid:#1B2A33;
+  --accent:#4FC2BE; --ok:#63C08E; --bad:#E58372; --band:rgba(79,194,190,.12);
+  --c1:#6FB0DA; --c2:#E6A83F; --c3:#63C08E; --c4:#CC8CC3; --c5:#E58372;
+}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.62 var(--sans)}
+a{color:var(--c1);text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:920px;margin:0 auto;padding:26px 20px 64px}
+header.top{border-bottom:2px solid var(--ink);padding-bottom:16px;margin-bottom:22px}
+header.top .course{margin:0;color:var(--steel);font-size:.93rem}
+header.top h1{font-family:var(--head);font-weight:600;font-size:clamp(1.8rem,4.2vw,2.7rem);line-height:1.08;margin:.3rem 0 .45rem;letter-spacing:.005em}
+header.top .who{margin:0;font-size:.9rem;color:var(--steel)}
+header.top nav{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px 16px}
+header.top nav a{font-size:.95rem}
+h2{font-family:var(--head);font-weight:600;font-size:1.7rem;line-height:1.15;margin:2rem 0 .55rem}
+h3{font-family:var(--head);font-weight:600;font-size:1.28rem;margin:1.4rem 0 .4rem}
+p,li{max-width:72ch}
+.small{font-size:.87rem;color:var(--steel)}
+code,pre{font-family:var(--mono);font-size:.86em}
+code{background:var(--band);padding:.08em .3em;border-radius:3px}
+p,li{overflow-wrap:break-word}
+p code,li code,td code,p.small a{overflow-wrap:anywhere}
+pre{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--c1);padding:12px 14px;overflow-x:auto;border-radius:4px;line-height:1.45}
+pre code{background:none;padding:0}
+blockquote{margin:1.1rem 0;padding:.6rem 1rem;border-left:4px solid var(--c2);background:var(--panel);border-radius:0 4px 4px 0}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.93rem;background:var(--panel)}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--band)}
+.tablewrap{overflow-x:auto}
+img{max-width:100%;height:auto}
+figure{margin:1.3rem 0}
+figure img{border:1px solid var(--line);border-radius:4px;background:#fff}
+figcaption{font-size:.87rem;color:var(--steel);margin-top:.35rem}
+button,select,input{font:inherit}
+select{padding:.3rem .45rem;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink);max-width:100%}
+.btn{background:var(--ink);color:var(--paper);border:0;border-radius:4px;padding:.42rem .9rem;cursor:pointer}
+.btn:hover{background:var(--accent)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+.ctl{display:flex;flex-direction:column;gap:2px;min-width:170px;flex:1}
+.ctl label{font-size:.86rem;color:var(--steel)}
+.ctl output{font-family:var(--mono);font-size:.85rem;color:var(--ink)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.bench{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px;margin:12px 0}
+.paper{background-color:var(--panel);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:12px 12px;border:1px solid var(--line);border-radius:4px;display:block;width:100%;touch-action:none}
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:10px 0}
+.readout div{background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:6px 9px;font-size:.86rem}
+.readout b{display:block;font-family:var(--mono);font-size:1.05rem}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.84rem;color:var(--steel)}
+.legend i{display:inline-block;width:14px;height:4px;margin-right:5px;vertical-align:middle;border-radius:2px}
+.tabs{display:flex;gap:2px;border-bottom:2px solid var(--line);flex-wrap:wrap;margin-top:8px}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;padding:.5rem .85rem;cursor:pointer;color:var(--steel)}
+.tabs button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--accent);font-weight:700}
+.tabpanel[hidden]{display:none}
+.kc{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:0 6px 6px 0;padding:10px 14px;margin:1.2rem 0}
+.kc .q{font-weight:700;margin:0 0 6px}
+.kc label{display:block;padding:3px 0;cursor:pointer}
+.kc .fb{margin-top:6px;font-size:.93rem}
+.fb.ok{color:var(--ok)} .fb.bad{color:var(--bad)}
+.conf{display:flex;gap:10px;flex-wrap:wrap;font-size:.86rem;color:var(--steel);margin-top:4px}
+.anim{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px;margin:1.3rem 0}
+.anim h4{font-family:var(--head);font-size:1.12rem;margin:0 0 6px}
+.lec-tools{position:sticky;top:0;z-index:5;background:var(--paper);padding:6px 0;border-bottom:1px solid var(--line)}
+.lec-prog{display:flex;align-items:center;gap:10px;font-size:.84rem;color:var(--steel)}
+.lec-bar{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.lec-bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+.cite{cursor:pointer;color:var(--c1);border-bottom:1px dotted var(--c1)}
+.pop{position:absolute;z-index:20;max-width:420px;background:var(--panel);border:1px solid var(--line);box-shadow:0 6px 18px rgba(0,0,0,.18);padding:10px 12px;border-radius:6px;font-size:.86rem}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.card{min-height:110px;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px;cursor:pointer;font-size:.93rem}
+.card .b{display:none;color:var(--steel)} .card.flip .f{display:none} .card.flip .b{display:block}
+.pycorner{background:var(--panel);border:1px dashed var(--c1);border-radius:6px;padding:4px 16px 8px;margin:1.3rem 0}
+.disc td:first-child{white-space:nowrap;font-weight:700}
+footer.sig{margin-top:48px;border-top:2px solid var(--ink);padding-top:14px;font-size:.84rem;color:var(--steel)}
+footer.sig p{max-width:none}
+.weeks{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:14px 0}
+.wk{background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--c1);border-radius:4px;padding:10px 12px}
+.wk h3{margin:.1rem 0 .3rem;font-size:1.12rem}
+.wk .n{font-family:var(--head);color:var(--steel);font-size:.9rem}
+.wk .links{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.88rem;margin-top:6px}
+.wk .done{font-size:.8rem;color:var(--ok)}
+.hero{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;align-items:center}
+.hero canvas{width:100%;height:auto}
+@media (max-width:720px){.hero{grid-template-columns:1fr}.ctl{min-width:140px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{.lec-tools,.tabs,nav,.btn{display:none}}
+
+.callout{border-left:4px solid var(--accent);background:var(--panel);padding:10px 14px;margin:14px 0;border-radius:4px}
+.callout b.t{display:block;margin-bottom:4px;color:var(--accent)}
+.eq{overflow-x:auto;margin:10px 0;text-align:center}
+/* Pointer under an equation to the step-by-step part of the lab that computes it */
+.labref{margin:-4px 0 14px;text-align:center;font-size:.87rem;color:var(--steel);max-width:none}
+.labref a{color:var(--accent);font-weight:600;white-space:nowrap}
+.anim{margin:16px 0}
+details.ans{margin:4px 0 14px}
+/* Colab call-to-action boxes inside the lecture */
+.colabbox{display:flex;gap:.8rem;align-items:center;border:1px solid var(--line,#d9dccf);border-left:5px solid #f9ab00;background:var(--panel,#fff);border-radius:10px;padding:.65rem .9rem;margin:1.1rem 0}
+.colabbox p{margin:0}
+.colabbox .colabbtn img{display:block;height:22px}
+.colabpart{margin:.8rem 0 0;font-size:.95rem}
+/* Step-by-step calculators of the lab */
+.labpart{scroll-margin-top:10px}
+h3[id]{scroll-margin-top:10px}
+.stepcalc{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px;margin:12px 0;outline:none}
+.stepcalc .bench{margin:0 0 10px}
+.sc-presets{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0 0}
+.sc-presets .btn{font-size:.86rem;padding:.22rem .6rem}
+ol.sc-steps{list-style:none;margin:8px 0 0;padding:0}
+ol.sc-steps li{max-width:none;border:1px solid var(--line);border-left:4px solid var(--line);border-radius:0 6px 6px 0;padding:8px 12px;margin:8px 0;background:var(--paper)}
+ol.sc-steps li.cur{border-left-color:var(--accent);background:var(--panel);box-shadow:0 1px 8px rgba(0,0,0,.07)}
+ol.sc-steps li.new{animation:scin .35s ease}
+ol.sc-steps li.chg .sc-m{animation:scflash .9s ease}
+.sc-st{font-weight:700;font-size:.97rem}
+.sc-st .sc-n{display:inline-block;min-width:4.2em;color:var(--accent);font-family:var(--head);font-weight:600}
+.sc-x{font-size:.93rem;color:var(--steel);margin:3px 0;max-width:none}
+.sc-x p{margin:.2rem 0;max-width:none}
+.sc-m{overflow-x:auto;overflow-y:hidden;margin:4px 0;padding:2px 0;border-radius:4px;font-size:1.04em}
+.sc-m mjx-container[display="true"]{margin:.35em 0!important}
+.sc-q{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin-top:6px;font-size:.93rem}
+.sc-q label{font-weight:600}
+.sc-q input{width:7.5rem;padding:.25rem .4rem;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink)}
+.sc-ok{font-size:.86rem;color:var(--ok);font-weight:600}
+.sc-nav{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 4px;padding-top:10px;border-top:1px solid var(--line)}
+.sc-nav .sc-count{margin-left:auto;font-size:.88rem;color:var(--steel)}
+.sc-dots{display:flex;gap:4px;width:100%}
+.sc-dots i{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.sc-dots i.on{background:var(--accent)}
+.sc-score{margin:.2rem 0 0}
+code.tex{font-size:.8rem;white-space:pre-wrap;word-break:break-word}
+@keyframes scin{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@keyframes scflash{from{background:var(--band)}to{background:transparent}}
+/* Boxes in the lecture that open a part of the interactive lab */
+.labbox{display:flex;gap:.8rem;align-items:center;border:1px solid var(--line);border-left:5px solid var(--accent);background:var(--panel);border-radius:10px;padding:.65rem .9rem;margin:1.1rem 0}
+.labbox p{margin:0}
+.labbox a.btn{white-space:nowrap;text-decoration:none;font-size:.9rem}
+@media (max-width:560px){.labbox,.colabbox{flex-direction:column;align-items:flex-start}}
+/* Interactive scenes of the lecture pages: a small drawing, buttons and a line that tells what happened */
+.scene{background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--c2);border-radius:10px;padding:12px 14px;margin:1.4rem 0}
+.scene>p.small{margin:0 0 4px}
+.scene .sn-svg{display:block;width:100%;max-width:560px;height:auto;margin:6px auto 2px}
+.scene svg text{font-family:var(--sans);fill:var(--ink)}
+.scene svg .sn-t{transition:transform .28s ease}
+.sn-btns{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 4px;align-items:center}
+.sn-btns .btn{font-size:.9rem;padding:.34rem .75rem;min-height:2.15rem;line-height:1.25}
+.sn-btns .btn[aria-pressed=true]{box-shadow:inset 0 0 0 2px var(--ink)}
+.sn-btns .btn.ghost[aria-pressed=true]{background:var(--band);border-color:var(--accent);color:var(--ink)}
+.sn-lab{font-size:.84rem;color:var(--steel);margin-right:2px}
+.sn-say{min-height:3.3em;margin:6px 0 4px;padding:7px 11px;border-radius:8px;background:var(--band);font-size:.95rem;max-width:none}
+.sn-ro{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.86rem;color:var(--steel);margin:4px 0 0}
+.sn-ro b{font-family:var(--mono);color:var(--ink);font-weight:600;font-size:.84rem}
+.sn-pad{display:inline-grid;grid-template-columns:repeat(3,2.7rem);gap:4px;margin-right:10px}
+.sn-pad .btn{padding:.3rem 0;min-width:0}
+.sn-loop{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;font-size:.86rem;margin:6px 0 2px;color:var(--steel)}
+.sn-node{border:1px solid var(--line);border-radius:999px;padding:.08rem .6rem;background:var(--paper);color:var(--ink);transition:background .2s,border-color .2s}
+.sn-loop .on{border-color:var(--accent);background:var(--band)}
+.sn-loop b{font-family:var(--mono);color:var(--ink);font-weight:600}
+.scene .sn-pop{animation:snpop 1.1s ease forwards}
+@keyframes snpop{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-26px)}}
+.sn-box:focus{outline:none}
+.sn-box:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+.sn-note{border:1px solid var(--line);border-radius:8px;background:var(--paper);padding:6px 10px;margin:6px 0;font-family:var(--mono);font-size:.84rem}
+.sn-note-h{font-family:var(--sans);font-size:.84rem;color:var(--steel);margin-bottom:2px}
+.sn-note-l{overflow-wrap:anywhere}
+.sn-cards{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
+.sn-card{flex:1 1 180px;border:2px solid var(--line);border-radius:10px;padding:7px 10px;background:var(--paper);transition:border-color .2s,box-shadow .2s}
+.sn-card .sn-pos{display:block;font-size:.8rem;color:var(--steel)}
+.sn-card .sn-txt{font-family:var(--mono);font-size:.88rem;overflow-wrap:anywhere}
+.sn-card.win{border-color:var(--ok);box-shadow:inset 0 0 0 1px var(--ok)}
+.sn-card.tie{border-color:var(--c2)}
+.sn-table{width:100%;border-collapse:collapse;font-size:.84rem;margin:6px 0;background:var(--panel)}
+.sn-table th,.sn-table td{border:1px solid var(--line);padding:3px 6px;text-align:right}
+.sn-table th{background:var(--band);font-weight:600}
+.sn-table td.mv{background:var(--band);transition:background .3s}
+.sn-table td.ok{color:var(--ok);font-weight:700;text-align:center}
+.sn-table td.bad{color:var(--bad);font-weight:700;text-align:center}
+.sn-table td:first-child,.sn-table th:first-child{text-align:left}
+/* Theme layer of the Vel Tech courses, applied on top of style.css. */
+:root{
+  --ink:#1C2333; --paper:#F4F6FB; --panel:#FFFFFF; --steel:#5A6478; --line:#D5DAE7; --grid:#E7EAF3;
+  --ok:#23946B; --bad:#C9473B;
+  --c1:#2A5BD7; --c2:#D4870B; --c3:#23946B; --c4:#8E4BA8; --c5:#C9473B;
+  --sans:'Source Sans 3','Segoe UI',system-ui,-apple-system,Roboto,sans-serif;
+  --head:'Lexend','Segoe UI',system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root{
+  --ink:#E4E8F2; --paper:#11151F; --panel:#1A2030; --steel:#A3ACC2; --line:#2C3448; --grid:#1F2638;
+  --ok:#5CC796; --bad:#EE8A7E;
+  --c1:#7FA2F5; --c2:#F0B34A; --c3:#5CC796; --c4:#C79BDA; --c5:#EE8A7E;
+}}
+body{font-size:17.5px;line-height:1.6}
+header.top{border:1px solid var(--line);border-top:6px solid var(--accent);border-radius:12px;background:var(--panel);
+  padding:16px 20px 14px;margin-bottom:26px;box-shadow:0 1px 2px rgba(20,30,60,.05)}
+header.top h1{font-weight:600;letter-spacing:-.01em}
+header.top nav a{background:var(--band);padding:.12rem .55rem;border-radius:999px;text-decoration:none;color:var(--accent);font-weight:600;font-size:.9rem}
+header.top nav a:hover{background:var(--accent);color:var(--panel)}
+h2{font-weight:600;letter-spacing:-.005em}
+h2::after{content:"";display:block;width:46px;height:3px;border-radius:2px;background:var(--accent);margin-top:7px}
+h3{font-weight:600}
+a{color:var(--accent)}
+.btn{background:var(--accent);color:#fff;border-radius:8px}
+.btn:hover{background:var(--ink)}
+.btn.ghost{border-radius:8px}
+.bench,.kc,.card,pre,table,.readout div{border-radius:10px}
+.kc{border-radius:0 10px 10px 0}
+.readout div{background:var(--band)}
+.tabs button[aria-selected=true]{color:var(--accent)}
+th{background:var(--band)}
+blockquote{border-left-color:var(--accent);border-radius:0 10px 10px 0}
+/* Colab call-to-action boxes and links */
+.colabbox{display:flex;gap:.9rem;align-items:center;border:1px solid var(--line);border-left:5px solid #F9AB00;
+  background:var(--panel);border-radius:10px;padding:.7rem 1rem;margin:1.2rem 0}
+.colabbox p{margin:0}
+.colabbox .colabbtn{flex:0 0 auto;line-height:0}
+.colabbox .colabbtn img,.colabpart img{height:20px;width:auto;max-width:none;display:inline-block;vertical-align:middle}
+.colabpart{margin:.9rem 0 0;font-size:.95rem}
+.colabpart a{display:inline-flex;align-items:center;gap:.55rem;text-decoration:none;font-weight:600}
+/* Readable buttons: the accent of the dark scheme is light, so buttons on it carry dark text, and a ghost button
+   under the pointer gets a light tint instead of the ink colour */
+.btn.ghost:hover{background:var(--band)}
+@media (prefers-color-scheme:dark){.btn,.btn:hover{color:#111827}}
+:root{--accent:#0369A1;--band:rgba(3,105,161,.08)}@media (prefers-color-scheme:dark){:root{--accent:#7DD3FC;--band:rgba(125,211,252,.13)}}</style><script>window.MathJax={tex:{inlineMath:[["\\(","\\)"]]},svg:{fontCache:"local"}};</script><script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script></head>
+<body><div class="wrap">
+<header class="top"><p class="course">Digital Twin with Python (VTR UGE 21), day 2 of 5</p><h1>Simulation Foundations in Python</h1><p class="who">Prof. Dr. Utku Kose, Süleyman Demirel University</p><nav><a href="../../index.html">Course home</a><a href="https://github.com/utkukose/digital-twin-veltech-NB-lecture/tree/main/days/day-02">Day overview</a><a href="lecture.html">Lecture</a><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-02/NB02_simulation_foundations.ipynb">Colab notebook</a><a href="Day02_Lecture_Notes.pdf">PDF notes</a></nav></header>
+<h2>Simulation lab</h2><p>Part A repeats one step of the three methods of the lecture, slope by slope, with sliders for its numbers. Part B integrates the thermal model of the pack with three methods and collects every run in a diagram of error against cost. Part C computes a stability limit and an order by hand. Part D runs the event list of a small charging depot, event by event, also with sliders. Part E chooses the kind of simulation for six systems. In Parts A and D every intermediate value is rounded, and the next step continues with the rounded value, as in a calculation by hand.</p>
+<div class="tabs" role="tablist"><button aria-selected="true">Explore</button><button aria-selected="false">Check yourself</button><button aria-selected="false">Reflect and export</button></div>
+<section class="tabpanel"><section class="labpart" id="pa"><h3>Part A: One step with Euler, Heun and Runge-Kutta</h3><p>The worked example of the lecture: one step of the thermal model of the pack with each of the three methods, compared with the exact solution. The slope at a temperature \(T\) is \(f(T)\)​\({} = (I^2 R - (hA_0 + hA_1 u)(T - 35))\)​\({} / 9000\) degrees per second, with \(R = 0.045\) ohm, \(hA_0 = 2.2\) W/K, \(hA_1 = 12\) W/K and air at 35 °C. The sliders set the step, the start temperature, the current and the fan duty. The figure draws the exact curve and the straight line along which each method moves through the step.</p><div class="stepcalc" id="pa-calc"></div></section><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-02/NB02_simulation_foundations.ipynb#scrollTo=sec-2" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 2: the three methods over one hour and their measured orders.</a></p><h3 id="pb">Part B: The integrator workbench</h3>
+<div class="bench">
+<p>Choose an integration method, a step size and a fan duty, from 0 for off to 1 for full power, and integrate the
+thermal model of the pack over two hours. The reference is the classical Runge-Kutta method of order 4, abbreviated RK4,
+with a step of one second. Every run is added to the scoreboard, where the plot of error against the number of derivative
+evaluations, the work-precision diagram of the lecture, shows which method buys accuracy most cheaply.</p>
+<div class="row"><div class="ctl"><label for="i-m">Method</label><select id="i-m"><option value="euler">Explicit Euler (order 1)</option>
+<option value="heun">Heun (order 2)</option><option value="rk4" selected>Classical Runge-Kutta (order 4)</option></select></div></div>
+<div class="row" id="i-sl"></div>
+<canvas class="paper" id="i-cv" aria-label="Numerical and reference solution"></canvas>
+<div class="legend" id="i-leg"></div><div id="i-ro"></div>
+<p><button class="btn" id="i-run" type="button">Run and add to scoreboard</button>
+<button class="btn ghost" id="i-clr" type="button">Clear scoreboard</button></p>
+<h3>Scoreboard</h3>
+<canvas class="paper" id="i-fr" aria-label="Error against derivative evaluations"></canvas>
+<div class="tablewrap"><table><thead><tr><th>Run</th><th>Method</th><th>Step</th><th>Fan duty</th><th>Evaluations</th>
+<th>Final error</th></tr></thead><tbody id="i-tb"></tbody></table></div>
+</div>
+<p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-02/NB02_simulation_foundations.ipynb#scrollTo=sec-2" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 2: measure the orders of the three methods.</a></p><h3>Part C: Accuracy and stability by hand</h3><p>The pack has a heat capacity of 9000 J/K, a passive cooling conductance of 2.2 W/K and an extra 12 W/K at full fan. The stability limit of explicit Euler is twice the heat capacity divided by the total conductance.</p><div id="pc"></div><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-02/NB02_simulation_foundations.ipynb#scrollTo=sec-3" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 3: watch Euler fail beyond its stability limit.</a></p><section class="labpart" id="pd"><h3>Part D: The event list of a small depot, event by event</h3><p>A discrete-event simulation of the charging depot of the lecture, small enough to follow by hand: six vehicles arrive with the states of charge 0.20, 0.35, 0.10, 0.40, 0.25 and 0.30 and are charged to 0.90 with a current \(I_c\), so that a charge takes \(t_c\)​\({} = (0.9 - \mathrm{SoC}_{\mathrm{in}}) \times 60 / I_c\) hours. Each step takes the earliest event from the list, moves the clock to its time and carries it out. At equal times an end of charge goes first. The sliders set the number of bays, the charging current and the spacing of the arrivals, a factor on the arrival times 0, 0.3, 0.5, 1.1, 1.3 and 1.6 hours. The chart shows the bays and the line up to the clock of the current step.</p><div class="stepcalc" id="pd-calc"></div></section><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-02/NB02_simulation_foundations.ipynb#scrollTo=sec-5" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 5: the depot with 60 vehicles a day and its event list in code.</a></p><h3>Part E: Which kind of simulation?</h3><p>Choose the family that fits each system best.</p><div id="pe"></div><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-02/NB02_simulation_foundations.ipynb#scrollTo=sec-6" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 6: the fleet as an agent-based simulation.</a></p></section>
+<section class="tabpanel" hidden><p>Answer each question, rate your confidence and check the answer. Results stay in this browser.</p><div id="quiz"></div></section>
+<section class="tabpanel" hidden><p>Write a short answer to each question. The text is saved in this browser and is included when you export the learning log.</p><div id="reflect"></div></section>
+<footer class="sig"><p><strong>Prof. Dr. Utku Kose</strong><br>Full Professor, Department of Computer Engineering, Süleyman Demirel University, Isparta, Türkiye<br>Founding Director, AI Application and Research Center (YAZEM), Süleyman Demirel University<br>Head of the Computer Science Division, Department of Computer Engineering, Süleyman Demirel University<br>Additional affiliations: University of North Dakota (USA), Universidad Panamericana (Mexico City, Mexico), Vel Tech University (Chennai, India)<br>IEEE Senior Member, ACM Professional Member<br><a href="https://orcid.org/0000-0002-9652-6415">ORCID 0000-0002-9652-6415</a> | <a href="https://www.utkukose.com">utkukose.com</a> | <a href="https://github.com/utkukose">github.com/utkukose</a><br><a href="mailto:utkukose@sdu.edu.tr">utkukose@sdu.edu.tr</a> | <a href="mailto:utku.kose@und.edu">utku.kose@und.edu</a> | <a href="mailto:ukose@up.edu.mx">ukose@up.edu.mx</a> | <a href="mailto:utkukose@gmail.com">utkukose@gmail.com</a></p><p>This course is updated in line with current developments in the field. Last update: October 2026. Course materials licensed under CC BY 4.0. Code licensed under MIT.</p></footer></div>
+<script>window.COURSE_PREFIX="vtdt";</script>
+<script>"use strict";
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+function h(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (k === "class") e.className = v;
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
+    else if (k === "html") e.innerHTML = v;
+    else e.setAttribute(k, v);
+  }
+  for (const k of kids.flat()) if (k != null) e.append(k.nodeType ? k : document.createTextNode(String(k)));
+  return e;
+}
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const COL = () => ({ink: cssv("--ink"), steel: cssv("--steel"), line: cssv("--line"), grid: cssv("--grid"),
+  panel: cssv("--panel"), accent: cssv("--accent"), ok: cssv("--ok"), bad: cssv("--bad"),
+  c: [cssv("--c1"), cssv("--c2"), cssv("--c3"), cssv("--c4"), cssv("--c5")]});
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+function RNG(seed) {
+  let s = seed >>> 0;
+  const r = () => { s += 0x6D2B79F5; let t = s; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  r.normal = () => { let u = 0, v = 0; while (u === 0) u = r(); while (v === 0) v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
+  r.int = n => Math.floor(r() * n);
+  r.uniform = (a, b) => a + (b - a) * r();
+  return r;
+}
+const store = {
+  key: k => (window.COURSE_PREFIX || "vt") + ":" + k,
+  get(k, d) { try { const v = localStorage.getItem(this.key(k)); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(this.key(k), JSON.stringify(v)); } catch (e) {} }
+};
+/* Canvas with device-pixel scaling. draw(ctx, w, h) is called on setup and on resize. */
+function stage(cv, aspect, draw) {
+  const ctx = cv.getContext("2d");
+  const fit = () => {
+    const w = cv.clientWidth || 600, hgt = Math.round(w * aspect), d = window.devicePixelRatio || 1;
+    cv.style.height = hgt + "px"; cv.width = Math.round(w * d); cv.height = Math.round(hgt * d);
+    ctx.setTransform(d, 0, 0, d, 0, 0); cv._w = w; cv._h = hgt; draw && draw(ctx, w, hgt);
+  };
+  new ResizeObserver(() => fit()).observe(cv);
+  fit();
+  return {ctx, redraw: () => draw && draw(ctx, cv._w, cv._h), size: () => [cv._w, cv._h]};
+}
+/* Axes frame: returns mapping helpers. */
+function frame(ctx, w, hgt, o) {
+  const C = COL(), p = Object.assign({l: 48, r: 12, t: 12, b: 34}, o.pad || {});
+  const X = x => p.l + (x - o.x0) / (o.x1 - o.x0) * (w - p.l - p.r);
+  const Y = y => hgt - p.b - (y - o.y0) / (o.y1 - o.y0) * (hgt - p.t - p.b);
+  ctx.save(); ctx.strokeStyle = C.line; ctx.fillStyle = C.steel; ctx.lineWidth = 1; ctx.font = "11px " + cssv("--sans");
+  const nt = o.ticks || 5;
+  for (let i = 0; i <= nt; i++) {
+    const xv = o.x0 + (o.x1 - o.x0) * i / nt, yv = o.y0 + (o.y1 - o.y0) * i / nt;
+    ctx.beginPath(); ctx.moveTo(X(xv), hgt - p.b); ctx.lineTo(X(xv), hgt - p.b + 4); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(p.l - 4, Y(yv)); ctx.lineTo(p.l, Y(yv)); ctx.stroke();
+    ctx.textAlign = "center"; ctx.fillText(fmt(xv), X(xv), hgt - p.b + 16);
+    ctx.textAlign = "right"; ctx.fillText(fmt(yv), p.l - 7, Y(yv) + 4);
+  }
+  ctx.strokeStyle = C.ink; ctx.beginPath(); ctx.moveTo(p.l, p.t); ctx.lineTo(p.l, hgt - p.b); ctx.lineTo(w - p.r, hgt - p.b); ctx.stroke();
+  ctx.fillStyle = C.ink; ctx.textAlign = "center";
+  if (o.xlabel) ctx.fillText(o.xlabel, (p.l + w - p.r) / 2, hgt - 4);
+  if (o.ylabel) { ctx.save(); ctx.translate(12, (p.t + hgt - p.b) / 2); ctx.rotate(-Math.PI / 2); ctx.fillText(o.ylabel, 0, 0); ctx.restore(); }
+  ctx.restore();
+  return {X, Y, p};
+}
+function fmt(v) { if (Math.abs(v - Math.round(v)) < 1e-9) return String(Math.round(v)); const a = Math.abs(v); if (a >= 1000) return v.toFixed(0); if (a >= 10) return v.toFixed(0); if (a >= 1) return v.toFixed(1); if (a === 0) return "0"; return v.toFixed(2); }
+function polyline(ctx, pts, color, width, dash) {
+  ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = width || 2; if (dash) ctx.setLineDash(dash);
+  ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.stroke(); ctx.restore();
+}
+function dot(ctx, x, y, r, color, stroke) {
+  ctx.beginPath(); ctx.arc(x, y, r, 0, 2 * Math.PI); ctx.fillStyle = color; ctx.fill();
+  if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 1; ctx.stroke(); }
+}
+/* Labelled slider bound to a value. */
+function slider(parent, o, on) {
+  const out = h("output", {}, o.fmt ? o.fmt(o.value) : o.value);
+  const inp = h("input", {type: "range", min: o.min, max: o.max, step: o.step || 1, value: o.value, "aria-label": o.label});
+  inp.addEventListener("input", () => { const v = parseFloat(inp.value); out.textContent = o.fmt ? o.fmt(v) : v; on && on(v); });
+  parent.append(h("div", {class: "ctl"}, h("label", {}, o.label, " ", out), inp));
+  return inp;
+}
+function readout(parent, names) {
+  const box = h("div", {class: "readout"}), cells = {};
+  names.forEach(n => { const b = h("b", {}, "-"); cells[n] = b; box.append(h("div", {}, n, b)); });
+  parent.append(box);
+  return (n, v) => { cells[n].textContent = v; };
+}
+function legend(parent, items) {
+  const C = COL();
+  parent.append(h("div", {class: "legend"}, items.map(([t, i]) => h("span", {}, h("i", {style: "background:" + (typeof i === "number" ? C.c[i] : i)}), t))));
+}
+/* Animation loop that pauses when off screen or when reduced motion is requested. */
+function loop(step, ms) {
+  let on = false, raf = 0, last = 0, acc = 0;
+  const f = t => { if (!on) return; const dt = Math.min(0.05, (t - (last || t)) / 1000); last = t; acc += dt * 1000; if (!ms || acc >= ms) { acc = 0; step(dt); } raf = requestAnimationFrame(f); };
+  return {start() { if (!on) { on = true; last = 0; raf = requestAnimationFrame(f); } }, stop() { on = false; cancelAnimationFrame(raf); }, get running() { return on; }};
+}
+const reduced = () => window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* Knowledge checks, citation popups, flashcards and reading progress on lecture pages. */
+function initLecture(day) {
+  const kcs = $$(".kc"), key = "d" + day + ":kc", st = store.get(key, {});
+  const bar = $(".lec-bar i"), txt = $(".lec-txt");
+  const upd = () => {
+    const n = kcs.length, d = Object.values(st).filter(Boolean).length;
+    if (bar) bar.style.width = (n ? 100 * d / n : 0) + "%";
+    if (txt) txt.textContent = n ? `Knowledge checks answered correctly: ${d} of ${n}` : "";
+    store.set(key, st); store.set("d" + day + ":progress", n ? d / n : 0);
+  };
+  kcs.forEach((k, i) => {
+    const ans = +k.dataset.answer, fb = $(".fb", k);
+    $(".btn", k).addEventListener("click", () => {
+      const sel = $("input:checked", k);
+      if (!sel) { fb.className = "fb bad"; fb.textContent = "Select an option first."; return; }
+      const ok = +sel.value === ans;
+      fb.className = "fb " + (ok ? "ok" : "bad");
+      fb.textContent = (ok ? "Correct. " : "Not quite. ") + k.dataset.why;
+      st[i] = ok || st[i] || false; upd();
+    });
+    if (st[i]) { const r = $$("input", k)[ans]; if (r) r.checked = true; }
+  });
+  upd();
+  const refs = JSON.parse(($("#refdata") || {textContent: "{}"}).textContent || "{}");
+  let pop = null;
+  document.addEventListener("click", e => {
+    const c = e.target.closest(".cite");
+    if (pop) { pop.remove(); pop = null; }
+    if (!c) return;
+    pop = h("div", {class: "pop", role: "note"});
+    c.dataset.refs.split(",").forEach(n => pop.append(h("p", {html: "[" + n + "] " + (refs[n] || "")})));
+    document.body.append(pop);
+    const r = c.getBoundingClientRect();
+    pop.style.left = Math.max(8, Math.min(window.scrollX + r.left, window.scrollX + document.documentElement.clientWidth - 440)) + "px";
+    pop.style.top = (window.scrollY + r.bottom + 6) + "px";
+  });
+  $$(".card").forEach(c => { const t = () => c.classList.toggle("flip"); c.addEventListener("click", t); c.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); t(); } }); });
+}
+
+/* Lab shell: tabs, self-assessment with confidence ratings, reflection and learning-log export. */
+function initLab(day, title, SELF, REFLECT) {
+  const tabs = $$(".tabs button"), panels = $$(".tabpanel");
+  tabs.forEach((b, i) => b.addEventListener("click", () => {
+    tabs.forEach((x, j) => { x.setAttribute("aria-selected", i === j); panels[j].hidden = i !== j; });
+    window.dispatchEvent(new Event("resize"));
+  }));
+  const qbox = $("#quiz"), res = store.get("d" + day + ":quiz", {});
+  SELF.forEach((q, i) => {
+    const fb = h("div", {class: "fb"}), name = "q" + i;
+    const opts = q.options.map((o, j) => h("label", {}, h("input", {type: "radio", name, value: j}), " ", o));
+    const conf = h("div", {class: "conf"}, "Confidence:", ["sure", "unsure", "guess"].map(c => h("label", {}, h("input", {type: "radio", name: name + "c", value: c}), " " + c)));
+    const btn = h("button", {class: "btn", type: "button"}, "Check answer");
+    const box = h("div", {class: "kc"}, h("p", {class: "q"}, (i + 1) + ". " + q.q), opts, conf, btn, fb);
+    btn.addEventListener("click", () => {
+      const sel = $(`input[name=${name}]:checked`, box), cf = $(`input[name=${name}c]:checked`, box);
+      if (!sel) { fb.className = "fb bad"; fb.textContent = "Select an option first."; return; }
+      const ok = +sel.value === q.answer, c = cf ? cf.value : "not rated";
+      res[i] = {ok, conf: c}; store.set("d" + day + ":quiz", res);
+      fb.className = "fb " + (ok ? "ok" : "bad");
+      fb.textContent = (ok ? "Correct. " : "Not quite. ") + q.why + (!ok && c === "sure" ? " A confident error marks a topic to revisit first." : "");
+      summary();
+    });
+    qbox.append(box);
+  });
+  const sum = h("p", {class: "small"}); qbox.append(sum);
+  function summary() {
+    const v = Object.values(res), ok = v.filter(r => r.ok).length, conf = v.filter(r => !r.ok && r.conf === "sure").length;
+    sum.textContent = `Answered: ${v.length} of ${SELF.length}. Correct: ${ok}. Confident errors: ${conf}.`;
+  }
+  summary();
+  const rbox = $("#reflect"), refl = store.get("d" + day + ":reflect", {});
+  REFLECT.forEach((p, i) => {
+    const ta = h("textarea", {rows: 4, style: "width:100%;font:inherit;padding:8px;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink)"});
+    ta.value = refl[i] || "";
+    ta.addEventListener("input", () => { refl[i] = ta.value; store.set("d" + day + ":reflect", refl); });
+    rbox.append(h("p", {}, h("b", {}, (i + 1) + ". "), p), ta);
+  });
+  const ex = h("button", {class: "btn", type: "button"}, "Export learning log");
+  ex.addEventListener("click", () => {
+    const lines = [`# Learning log, day ${day}: ${title}`, "", `Exported: ${new Date().toISOString()}`, "", "## Self-assessment", ""];
+    SELF.forEach((q, i) => { const r = res[i]; lines.push(`${i + 1}. ${q.q}`, `   Result: ${r ? (r.ok ? "correct" : "incorrect") + ", confidence " + r.conf : "not answered"}`); });
+    lines.push("", "## Reflection", "");
+    REFLECT.forEach((p, i) => lines.push(`**${i + 1}. ${p}**`, "", refl[i] || "(no answer)", ""));
+    const url = URL.createObjectURL(new Blob([lines.join("\n")], {type: "text/markdown"}));
+    const a = h("a", {href: url, download: `learning_log_day${String(day).padStart(2, "0")}.md`}); document.body.append(a); a.click(); a.remove();
+  });
+  rbox.append(h("p", {}, ex));
+}
+
+/* Course home: progress per day from local storage. */
+function initHome(n, nq) {
+  for (let d = 1; d <= n; d++) {
+    const el = $("#dy" + d + " .done"); if (!el) continue;
+    const p = store.get("d" + d + ":progress", 0), q = Object.values(store.get("d" + d + ":quiz", {})).filter(r => r.ok).length;
+    el.textContent = (p > 0 || q > 0) ? `Reading checks ${Math.round(100 * p)}%, self-assessment ${q} of ${nq || 8} correct` : "";
+  }
+}
+
+/* Opaque blend of a palette colour with a background colour, used for heat maps without seams. */
+function mix(c1, c2, a) {
+  const hx = c => { c = (c || "#ffffff").trim(); if (c[0] === "#") { if (c.length === 4) c = "#" + c[1] + c[1] + c[2] + c[2] + c[3] + c[3];
+    return [1, 3, 5].map(i => parseInt(c.substr(i, 2), 16)); } const m = c.match(/\d+/g); return m ? m.slice(0, 3).map(Number) : [255, 255, 255]; };
+  const A = hx(c1), B = hx(c2); return "rgb(" + A.map((v, i) => Math.round(a * v + (1 - a) * B[i])).join(",") + ")";
+}
+
+/* Interactive scenes of the lecture pages. sv() builds an SVG element; scene() returns the parts of one scene:
+   its drawing, rows of buttons, a line that tells what happened and a row of readouts. SCENE_SHOT holds, for each
+   scene, a function that sets the state shown in the screenshot of the course README. */
+const SVGNS = "http://www.w3.org/2000/svg";
+function sv(tag, attrs, ...kids) {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const [k, v] of Object.entries(attrs || {})) { if (k === "text") e.textContent = v; else if (v != null) e.setAttribute(k, v); }
+  for (const k of kids.flat()) if (k != null) e.append(k.nodeType ? k : document.createTextNode(String(k)));
+  return e;
+}
+window.SCENE_SHOT = window.SCENE_SHOT || {};
+function scene(id, w, hgt, label) {
+  const root = document.getElementById(id);
+  if (!root) return null;
+  const box = h("div", {class: "sn-box"}), svg = sv("svg", {class: "sn-svg", viewBox: `0 0 ${w} ${hgt}`, role: "img", "aria-label": label});
+  box.append(svg); root.append(box);
+  const say = h("p", {class: "sn-say", "aria-live": "polite"});
+  return {root, box, svg, say,
+    row(label) { const r = h("div", {class: "sn-btns"}); if (label) r.append(h("span", {class: "sn-lab"}, label)); box.append(r); return r; },
+    btn(row, text, fn, ghost) {
+      const b = h("button", {class: ghost ? "btn ghost" : "btn", type: "button"}, text);
+      b.addEventListener("click", fn); row.append(b); return b; },
+    toggle(row, text, on, fn) {
+      const b = h("button", {class: "btn ghost", type: "button", "aria-pressed": String(!!on)}, text);
+      b.addEventListener("click", () => { const v = b.getAttribute("aria-pressed") !== "true"; b.setAttribute("aria-pressed", String(v)); fn(v); });
+      row.append(b); return b; },
+    tellAt() { box.append(say); },
+    tell(html) { say.innerHTML = html; },
+    ro(names) {
+      const r = h("div", {class: "sn-ro"}), cells = {};
+      names.forEach(n => { const b = h("b", {}, "-"); cells[n] = b; r.append(h("span", {}, n + ": ", b)); });
+      box.append(r); return (n, v) => { cells[n].textContent = v; }; }};
+}
+/* Colours of a scene, read from the theme: fill and stroke styles for SVG elements. */
+const fillc = c => `fill:var(${c})`, strokec = (c, w) => `fill:none;stroke:var(${c});stroke-width:${w || 2}`;
+</script>
+<script>initLab(2,"Simulation Foundations in Python",[{"q": "Which paradigm describes a system whose state changes only when something happens?", "options": ["Continuous", "Discrete-event", "Agent-based", "Monte Carlo"], "answer": 1, "why": "Discrete-event simulation jumps from event to event."}, {"q": "What is stiffness?", "options": ["A large step size", "A wide spread of time scales in one model", "A nonlinear model", "A model with many parameters"], "answer": 1, "why": "Stiff systems combine very fast and very slow dynamics."}, {"q": "What order does explicit Euler have?", "options": ["0", "1", "2", "4"], "answer": 1, "why": "Its global error shrinks in proportion to the step size."}, {"q": "How is the order of a method measured?", "options": ["From its name", "From the ratio of errors at step sizes that differ by a factor of two", "From the run time", "From the number of lines of code"], "answer": 1, "why": "The base-2 logarithm of the error ratio estimates the order."}, {"q": "What is the stability limit of explicit Euler for the thermal model at full fan?", "options": ["About 13 s", "About 1270 s", "About 8200 s", "There is none"], "answer": 1, "why": "The limit is 2 m cp divided by the total conductance, about 1270 seconds at full fan."}, {"q": "Why can an adaptive solver be a poor choice for a hard real-time loop?", "options": ["It is inaccurate", "Its time per step varies, so a deadline cannot be guaranteed", "It cannot integrate differential equations", "It needs a graphics processor"], "answer": 1, "why": "Predictable worst-case time matters more than average time under a deadline."}, {"q": "At a utilisation above one, what happens to the queue at the depot?", "options": ["It stays short", "It grows without bound", "It disappears", "It oscillates"], "answer": 1, "why": "Arrivals exceed the capacity of the bays."}, {"q": "Which test encodes the second law of thermodynamics for the pack?", "options": ["The state of charge does not move without current", "More cooling never raises the rate of heating", "The same seed gives the same result", "Capacity only decreases"], "answer": 1, "why": "Cooling cannot add heat; a model in which it does violates the second law."}],["In the workbench, which method and step size would you choose for a twin that updates once per second, and why?", "Name a system from your field that needs two of the three simulation paradigms at once.", "Which physical test would you write first for a model from your field, and what error would it catch?"]);</script>
+<script>
+// Thermal part of the pack model: dT/dt = (I^2 R - (hA0 + hA1 u)(T - Tamb)) / mcp, with a periodic current.
+var TH={R0:0.045,mcp:9000,hA0:2.2,hA1:12,Tamb:35};
+function thRate(t,T,u){ const I=40+6*Math.sin(2*Math.PI*t/1800); return (I*I*TH.R0-(TH.hA0+TH.hA1*u)*(T-TH.Tamb))/TH.mcp; }
+function thStep(m,t,T,dt,u){ if(m==='euler') return T+dt*thRate(t,T,u);
+  if(m==='heun'){ const k1=thRate(t,T,u), k2=thRate(t+dt,T+dt*k1,u); return T+dt/2*(k1+k2); }
+  const k1=thRate(t,T,u), k2=thRate(t+dt/2,T+dt/2*k1,u), k3=thRate(t+dt/2,T+dt/2*k2,u), k4=thRate(t+dt,T+dt*k3,u);
+  return T+dt/6*(k1+2*k2+2*k3+k4); }
+function thSolve(m,dt,Tend,u){ let t=0,T=36; const out=[[0,T]]; while(t<Tend-1e-9){ const h=Math.min(dt,Tend-t); T=thStep(m,t,T,h,u); t+=h; out.push([t,T]); } return out; }
+var EVALS={euler:1,heun:2,rk4:4};
+
+(function(){
+const S={k:4,u:0}; const steps=[1,2,5,10,20,50,100,200,400,800,1600]; let res=null;
+const sl=$('#i-sl');
+slider(sl,{label:'Step size',min:0,max:steps.length-1,step:1,value:S.k,fmt:v=>steps[v]+' s'},v=>{S.k=v;run();});
+slider(sl,{label:'Fan duty',min:0,max:1,step:0.05,value:S.u,fmt:v=>v.toFixed(2)},v=>{S.u=v;run();});
+legend($('#i-leg'),[['reference',0],['numerical solution',3]]);
+const ro=readout($('#i-ro'),['final error','derivative evaluations','stability limit of Euler']);
+const runs=store.get('d2:lab:runs',[]); const Tend=7200;
+function run(){ const m=$('#i-m').value, dt=steps[S.k]; const sol=thSolve(m,dt,Tend,S.u), ref=thSolve('rk4',1,Tend,S.u);
+  const err=Math.abs(sol[sol.length-1][1]-ref[ref.length-1][1]); const ev=Math.ceil(Tend/dt)*EVALS[m];
+  res={m,dt,sol,ref,err,ev}; ro('final error',isFinite(err)&&err<1e3?err.toExponential(2)+' °C':'diverged');
+  ro('derivative evaluations',ev); ro('stability limit of Euler',(2*TH.mcp/(TH.hA0+TH.hA1*S.u)).toFixed(0)+' s'); A.redraw(); }
+const A=stage($('#i-cv'),0.45,(ctx,w,hh)=>{ const C=COL(); ctx.clearRect(0,0,w,hh); if(!res) return;
+  const F=frame(ctx,w,hh,{x0:0,x1:120,y0:30,y1:66,xlabel:'time (min)',ylabel:'temperature (°C)'});
+  polyline(ctx,res.ref.filter((_,i)=>i%10===0).map(([t,T])=>[F.X(t/60),F.Y(T)]),C.c[0],2.4);
+  polyline(ctx,res.sol.map(([t,T])=>[F.X(t/60),F.Y(clamp(T,30,66))]),C.c[3],1.6); });
+const B=stage($('#i-fr'),0.4,(ctx,w,hh)=>{ const C=COL(); ctx.clearRect(0,0,w,hh);
+  const F=frame(ctx,w,hh,{x0:0,x1:5,y0:-12,y1:2,xlabel:'log10 of derivative evaluations',ylabel:'log10 of final error'});
+  const col={euler:C.c[3],heun:C.c[1],rk4:C.c[2]};
+  runs.forEach(r=>{ if(r.err>0&&r.err<1e3) dot(ctx,F.X(Math.log10(r.ev)),F.Y(Math.max(-12,Math.log10(r.err))),5,col[r.m],C.ink); }); });
+function table(){ const tb=$('#i-tb'); tb.innerHTML='';
+  runs.forEach((r,i)=>tb.append(h('tr',{},[i+1,r.m,r.dt+' s',r.u.toFixed(2),r.ev,(r.err<1e3?r.err.toExponential(2):'diverged')].map(x=>h('td',{},x))))); }
+$('#i-m').addEventListener('change',run);
+$('#i-run').addEventListener('click',()=>{ runs.push({m:res.m,dt:res.dt,u:S.u,ev:res.ev,err:res.err}); store.set('d2:lab:runs',runs); table(); B.redraw(); });
+$('#i-clr').addEventListener('click',()=>{ runs.length=0; store.set('d2:lab:runs',runs); table(); B.redraw(); });
+run(); table();
+})();
+
+
+function partQuiz(id, spec){
+  const root=document.getElementById(id); if(!root) return; const saved=store.get(spec.key,{});
+  const tb=h('tbody',{}), t=h('table',{},[h('thead',{},h('tr',{},[h('th',{},spec.qhead||'Question'),h('th',{},spec.ahead||'Your answer'),h('th',{},'Feedback')])),tb]);
+  root.append(h('div',{class:'tablewrap'},t));
+  spec.items.forEach((it,i)=>{ const sel=h('select',{id:`${id}-s${i}`},[h('option',{value:''},'choose')].concat(it.options.map((o,k)=>h('option',{value:String(k)},o))));
+    if(saved[i]!==undefined) sel.value=saved[i];
+    sel.addEventListener('change',()=>{ const s=store.get(spec.key,{}); s[i]=sel.value; store.set(spec.key,s); });
+    tb.append(h('tr',{},[h('td',{},it.q),h('td',{},sel),h('td',{id:`${id}-f${i}`},'')])); });
+  const btn=h('button',{class:'btn',type:'button'},spec.button||'Check my answers'), sc=h('span',{class:'small'},'');
+  root.append(h('p',{},[btn,' ',sc]));
+  btn.addEventListener('click',()=>{ let ok=0;
+    spec.items.forEach((it,i)=>{ const v=document.getElementById(`${id}-s${i}`).value, f=document.getElementById(`${id}-f${i}`);
+      if(v===''){ f.textContent='Choose an answer.'; return; }
+      const right=+v===it.answer; if(right) ok++; f.textContent=(right?'Correct. ':'Not quite: '+it.options[it.answer]+'. ')+(it.why||''); });
+    sc.textContent=`${ok} of ${spec.items.length} correct.`; store.set(spec.key+':score',ok); });
+}
+function partNumbers(id, spec){
+  const root=document.getElementById(id); if(!root) return; const row=h('div',{class:'row'});
+  spec.fields.forEach((f,i)=>row.append(h('div',{class:'ctl',style:'min-width:230px'},[h('label',{for:`${id}-n${i}`},f.label),
+    h('input',{type:'number',step:'any',id:`${id}-n${i}`,style:'width:7rem'})])));
+  root.append(row);
+  const btn=h('button',{class:'btn',type:'button'},spec.button||'Check my values'), sc=h('span',{class:'small'},'');
+  root.append(h('p',{},[btn,' ',sc]));
+  btn.addEventListener('click',()=>{ let ok=0; const out=[];
+    spec.fields.forEach((f,i)=>{ const v=parseFloat(document.getElementById(`${id}-n${i}`).value), right=Math.abs(v-f.answer)<=f.tol;
+      if(right) ok++; out.push(`${f.short}: ${isNaN(v)?'missing':(right?'correct':'not yet')}`); });
+    sc.textContent=out.join(', ')+'. '+(spec.explain||''); store.set(spec.key+':score',ok); });
+}
+
+(function(){
+partNumbers('pc', {"key": "dt2:partB", "explain": "Full fan: 2 x 9000 / 14.2. Fan off: 2 x 9000 / 2.2. Order: the error falls by 16, which is 2 to the power 4.", "fields": [{"label": "Stability limit at full fan, in seconds", "short": "full fan", "answer": 1267.6, "tol": 2.0}, {"label": "Stability limit with the fan off, in seconds", "short": "fan off", "answer": 8181.8, "tol": 5.0}, {"label": "A method's error falls from 0.08 to 0.005 when the step is halved. Its order?", "short": "order", "answer": 4.0, "tol": 0.05}]});
+partQuiz('pe', {"key": "dt2:partC", "qhead": "Question", "ahead": "Family", "items": [{"q": "The temperature of a cooling tower over a day.", "options": ["continuous", "discrete-event", "agent-based"], "answer": 0, "why": ""}, {"q": "Waiting times of trucks at a toll plaza.", "options": ["continuous", "discrete-event", "agent-based"], "answer": 1, "why": ""}, {"q": "Commuters who each choose a route by their own habits.", "options": ["continuous", "discrete-event", "agent-based"], "answer": 2, "why": ""}, {"q": "The charge of a battery under a known current.", "options": ["continuous", "discrete-event", "agent-based"], "answer": 0, "why": ""}, {"q": "Jobs that arrive at a machine shop and queue for three machines.", "options": ["continuous", "discrete-event", "agent-based"], "answer": 1, "why": ""}, {"q": "Drones in a delivery fleet that decide when to return for charging.", "options": ["continuous", "discrete-event", "agent-based"], "answer": 2, "why": ""}]});
+})();
+
+
+function TeX(s, ...a){ return String.raw(s, ...a); }
+function scF(x, d){ d = d == null ? 2 : d; if (!isFinite(x)) return String(x); let s = (+x).toFixed(d);
+  if (/^-0(\.0+)?$/.test(s)) s = s.slice(1); return s; }
+function scP(x, d){ const s = scF(x, d); return s[0] === '-' ? '(' + s + ')' : s; }
+function scT(x, d){ return '{' + scF(x, d) + '}'; }
+function scS(x, d){ const s = scF(x, d); return s[0] === '-' ? s : '+' + s; }
+function scR(x, d){ const f = Math.pow(10, d == null ? 2 : d); return Math.round(x * f) / f; }
+function scH(s){ return String(s).replace(/(^|[^\w])-(?=[\d.])/g, '$1−'); }
+function scTeX(tex, display){
+  const M = window.MathJax;
+  if (M && typeof M.tex2svg === 'function') { try { return M.tex2svg(tex, {display: !!display}); } catch (e) {} }
+  return h('code', {class: 'tex'}, tex);
+}
+function scInline(el){
+  const M = window.MathJax; if (!(M && typeof M.tex2svg === 'function')) return;
+  const tw = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), nodes = [];
+  while (tw.nextNode()) if (tw.currentNode.nodeValue.indexOf('\\(') >= 0) nodes.push(tw.currentNode);
+  nodes.forEach(n => { const f = document.createDocumentFragment();
+    n.nodeValue.split(/\\\(([\s\S]+?)\\\)/).forEach((p, i) => f.append(i % 2 ? scTeX(p, false) : document.createTextNode(p)));
+    n.replaceWith(f); });
+}
+var SC_ALL = window.SC_ALL = window.SC_ALL || [];
+function scWhenMJ(f, t){ t = t || 0; const M = window.MathJax;
+  if (M && M.startup && M.startup.promise) { M.startup.promise.then(f); return; }
+  if (t < 300) setTimeout(() => scWhenMJ(f, t + 1), 100); }
+if (!window.__scInit) {
+  window.__scInit = 1;
+  scWhenMJ(() => SC_ALL.forEach(r => r()));
+  let moved = false; ['wheel', 'touchmove', 'keydown', 'mousedown'].forEach(e => window.addEventListener(e, () => { moved = true; }, {passive: true}));
+  const toHash = () => { const id = decodeURIComponent(location.hash.slice(1)), e = id && document.getElementById(id); if (e && !moved) e.scrollIntoView(); };
+  window.addEventListener('load', () => { setTimeout(toHash, 60); scWhenMJ(() => setTimeout(toHash, 60)); });
+}
+/* A calculation revealed one step at a time. spec: inputs [{key, label, min, max, step, value, d} or {key, label,
+   options, value}], presets [{label, values}], calc(v) -> R, steps(v, R) -> [{t, x, m, r, q: {label, ans, tol}}],
+   viz {aspect, label, legend, draw(ctx, w, h, v, R, k, all)} where k is the last step on show. */
+function partSteps(id, spec){
+  const root = document.getElementById(id); if (!root) return;
+  const v = {}, set = {}, shown = {}, prevM = [];
+  spec.inputs.forEach(i => { v[i.key] = i.value; });
+  let k = 0, all = false, timer = null, pend = false, first = true, fresh = -1, right = 0, R = {}, S = [];
+  const compute = () => { R = spec.calc ? spec.calc(v) : {}; S = spec.steps(v, R); if (k > S.length - 1) k = S.length - 1; };
+  compute();
+  const row = h('div', {class: 'row'});
+  spec.inputs.forEach(i => {
+    if (i.options) {
+      const sel = h('select', {'aria-label': i.label}, i.options.map((o, j) => h('option', {value: String(j)}, o)));
+      sel.value = String(i.value);
+      sel.addEventListener('change', () => { v[i.key] = +sel.value; update(); });
+      set[i.key] = x => { sel.value = String(x); };
+      row.append(h('div', {class: 'ctl'}, h('label', {}, i.label), sel));
+    } else {
+      const f = x => scH(scF(x, i.d == null ? 2 : i.d)), out = h('output', {}, f(i.value));
+      const inp = h('input', {type: 'range', min: i.min, max: i.max, step: i.step || 1, value: i.value, 'aria-label': i.label});
+      inp.addEventListener('input', () => { v[i.key] = parseFloat(inp.value); out.textContent = f(v[i.key]); update(); });
+      set[i.key] = x => { inp.value = x; out.textContent = f(x); };
+      row.append(h('div', {class: 'ctl'}, h('label', {}, i.label, ' ', out), inp));
+    }
+  });
+  const bench = h('div', {class: 'bench sc-in'}, row);
+  if (spec.presets) {
+    const pr = h('div', {class: 'sc-presets'}, h('span', {class: 'small'}, 'Start from:'));
+    spec.presets.forEach(p => { const b = h('button', {class: 'btn ghost', type: 'button'}, p.label);
+      b.addEventListener('click', () => { Object.keys(p.values).forEach(key => { v[key] = p.values[key]; if (set[key]) set[key](p.values[key]); }); update(); });
+      pr.append(b); });
+    bench.append(pr);
+  }
+  root.append(bench);
+  let stg = null;
+  if (spec.viz) {
+    const cv = h('canvas', {class: 'paper', role: 'img', 'aria-label': spec.viz.label || 'Figure of the calculation'});
+    root.append(cv);
+    if (spec.viz.legend) legend(root, spec.viz.legend);
+    stg = stage(cv, spec.viz.aspect || 0.4, (ctx, w, hh) => { ctx.clearRect(0, 0, w, hh);
+      spec.viz.draw(ctx, w, hh, v, R, all ? S.length - 1 : k, all); });
+  }
+  const ol = h('ol', {class: 'sc-steps', 'aria-live': 'polite'});
+  const prev = h('button', {class: 'btn ghost', type: 'button'}, '◀ Previous');
+  const next = h('button', {class: 'btn', type: 'button'}, 'Next step ▶');
+  const play = h('button', {class: 'btn ghost', type: 'button'}, 'Play');
+  const allb = h('button', {class: 'btn ghost', type: 'button'}, 'Show all steps');
+  const cnt = h('span', {class: 'sc-count'}), dots = h('div', {class: 'sc-dots', 'aria-hidden': 'true'});
+  const score = h('p', {class: 'small sc-score'});
+  root.append(ol, h('div', {class: 'sc-nav'}, dots, prev, next, play, allb, cnt), score);
+  function render(){
+    compute();
+    ol.textContent = '';
+    const last = all ? S.length - 1 : k;
+    S.forEach((s, i) => {
+      if (i > last) return;
+      const li = h('li', {class: (!all && i === k ? 'cur' : 'done') + (i === fresh ? ' new' : '')});
+      li.append(h('div', {class: 'sc-st'}, h('span', {class: 'sc-n'}, 'Step ' + (i + 1)), ' ', s.t));
+      if (s.x) { const d = h('div', {class: 'sc-x', html: s.x}); li.append(d); scInline(d); }
+      if (s.q && !all && !shown[i]) {
+        const inp = h('input', {type: 'number', step: 'any', 'aria-label': s.q.label});
+        const chk = h('button', {class: 'btn', type: 'button'}, 'Check'), rev = h('button', {class: 'btn ghost', type: 'button'}, 'Show the step');
+        const fb = h('span', {class: 'small', 'aria-live': 'polite'});
+        chk.addEventListener('click', () => { const x = parseFloat(inp.value);
+          if (isNaN(x)) { fb.textContent = 'Type a number first.'; return; }
+          if (Math.abs(x - s.q.ans) <= (s.q.tol == null ? 0.005 : s.q.tol)) { right++; shown[i] = 'ok'; stop(); render(); }
+          else fb.textContent = 'Not yet. Look at the steps above, try again or show the step.'; });
+        inp.addEventListener('keydown', e => { if (e.key === 'Enter') chk.click(); });
+        rev.addEventListener('click', () => { shown[i] = true; render(); });
+        li.append(h('div', {class: 'sc-q'}, h('label', {}, s.q.label), inp, chk, rev, fb));
+      } else {
+        if (s.m) { const m = h('div', {class: 'sc-m'}, scTeX(s.m, true));
+          if (!first && prevM[i] !== undefined && prevM[i] !== s.m) li.classList.add('chg'); li.append(m); }
+        if (s.r) { const d = h('div', {class: 'sc-x', html: s.r}); li.append(d); scInline(d); }
+        if (shown[i] === 'ok') li.append(h('div', {class: 'sc-ok'}, 'Your value was right.'));
+      }
+      prevM[i] = s.m;
+      ol.append(li);
+    });
+    dots.textContent = '';
+    S.forEach((_, i) => dots.append(h('i', {class: i <= last ? 'on' : ''})));
+    cnt.textContent = all ? `All ${S.length} steps on show` : `Step ${k + 1} of ${S.length}`;
+    prev.disabled = all || k === 0; next.disabled = all || k >= S.length - 1;
+    allb.textContent = all ? 'Step by step' : 'Show all steps';
+    const nq = S.filter(s => s.q).length;
+    score.textContent = nq ? `Values you computed right before the step was shown: ${right} of ${nq}.` : '';
+    if (stg) stg.redraw();
+    first = false; fresh = -1;
+  }
+  function update(){ if (pend) return; pend = true; requestAnimationFrame(() => { pend = false; render(); }); }
+  function stop(){ if (timer) { clearInterval(timer); timer = null; play.textContent = 'Play'; } }
+  function go(d){
+    const nk = clamp(k + d, 0, S.length - 1); if (nk === k) return;
+    if (d > 0 && S[k].q && !shown[k]) shown[k] = true;
+    k = nk; fresh = d > 0 ? k : -1; render();
+    if (d > 0) { const li = ol.lastElementChild; if (li) li.scrollIntoView({block: 'nearest', behavior: reduced() ? 'auto' : 'smooth'}); }
+  }
+  prev.addEventListener('click', () => { stop(); go(-1); });
+  next.addEventListener('click', () => { stop(); go(1); });
+  allb.addEventListener('click', () => { stop(); all = !all; render(); });
+  play.addEventListener('click', () => {
+    if (timer) { stop(); return; }
+    if (all || k >= S.length - 1) { all = false; k = 0; render(); }
+    play.textContent = 'Pause';
+    timer = setInterval(() => { if (k >= S.length - 1) { stop(); return; } go(1); if (k >= S.length - 1 || (S[k].q && !shown[k])) stop(); }, spec.ms || 1700);
+  });
+  root.addEventListener('keydown', e => { if (/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); stop(); go(1); } else if (e.key === 'ArrowLeft') { e.preventDefault(); stop(); go(-1); } });
+  root.tabIndex = -1;
+  SC_ALL.push(render);
+  render();
+}
+
+(function(){
+partSteps('pa-calc', {
+  inputs: [
+    {key: 'dt', label: 'Step Δt in s', min: 60, max: 2400, step: 60, value: 600, d: 0},
+    {key: 'T0', label: 'Start temperature in °C', min: 20, max: 70, step: 1, value: 36, d: 0},
+    {key: 'I', label: 'Current I in A', min: 0, max: 60, step: 5, value: 40, d: 0},
+    {key: 'u', label: 'Fan duty u', min: 0, max: 1, step: 0.1, value: 0, d: 1}
+  ],
+  presets: [
+    {label: 'Lecture example', values: {dt: 600, T0: 36, I: 40, u: 0}},
+    {label: 'Shorter step', values: {dt: 300, T0: 36, I: 40, u: 0}},
+    {label: 'Full fan, hot pack', values: {dt: 600, T0: 60, I: 40, u: 1}},
+    {label: 'Step beyond the limit', values: {dt: 1800, T0: 60, I: 40, u: 1}}
+  ],
+  calc: v => {
+    const P = scR(v.I * v.I * 0.045, 3), G1u = scR(12 * v.u, 2), G = scR(2.2 + G1u, 2);
+    const f = T => scR((P - G * (T - 35)) / 9000, 7), pt = x => scR(x, 4), h = v.dt / 2;
+    const s1 = f(v.T0), e1 = pt(v.dt * s1), TE = pt(v.T0 + e1);
+    const hs2 = f(TE), hm = scR((s1 + hs2) / 2, 7), he = pt(v.dt * hm), TH = pt(v.T0 + he);
+    const a2 = pt(h * s1), P2 = pt(v.T0 + a2), k2 = f(P2), a3 = pt(h * k2), P3 = pt(v.T0 + a3), k3 = f(P3);
+    const a4 = pt(v.dt * k3), P4 = pt(v.T0 + a4), k4 = f(P4), sum = scR(s1 + 2 * k2 + 2 * k3 + k4, 7), km = scR(sum / 6, 7);
+    const re = pt(v.dt * km), TR = pt(v.T0 + re), d2 = scR(2 * k2, 7), d3 = scR(2 * k3, 7);
+    const Tinf = 35 + (v.I * v.I * 0.045) / (2.2 + 12 * v.u), tau = 9000 / (2.2 + 12 * v.u);
+    const ex = scR(Tinf + (v.T0 - Tinf) * Math.exp(-v.dt / tau), 4);
+    return {P, G1u, G, s1, e1, TE, hs2, hm, he, TH, a2, P2, k2, a3, P3, k3, a4, P4, k4, sum, km, re, TR, d2, d3, Tinf, tau, ex,
+            eE: pt(TE - ex), eH: pt(TH - ex), eR: pt(TR - ex), f};
+  },
+  steps: (v, R) => {
+    const C = TeX`\ ^{\circ}\text{C}`, s7 = x => scF(x, 7), t4 = x => scF(x, 4);
+    const g = x => { const s = String(+(+x).toFixed(4)); return x < 0 ? '(' + s + ')' : s; };
+    const slope = (T, nm, amp) => amp ? TeX`${nm.replace(' = ', ' &= ')} \\ &= \frac{${g(R.P)} - ${g(R.G)} \times ${g(scR(T - 35, 4))}}{9000} = ${s7(R.f(T))}` :
+      TeX`${nm} = \frac{${g(R.P)} - ${g(R.G)} \times ${g(scR(T - 35, 4))}}{9000} = ${s7(R.f(T))}`;
+    const step = (dt, s, a, T) => TeX`${scF(v.T0, 0)} + ${dt} \times ${scP(s, 7)} = ${scF(v.T0, 0)} ${a < 0 ? '-' : '+'} ${t4(Math.abs(a))} = ${t4(T)}`;
+    return [
+      {t: 'The slope of the model',
+       x: TeX`The heating \(I^2 R\) and the conductance \(hA_0 + hA_1 u\) stay fixed during the step, so the slope depends only on the temperature.`,
+       m: TeX`\begin{aligned} f(t, T) &= \frac{I^2 R - (hA_0 + hA_1 u)\,(T - T_{\mathrm{amb}})}{m c_p} \\ I^2 R &= ${v.I}^2 \times 0.045 = ${g(R.P)}\ \text{W}, \qquad hA_0 + hA_1 u = 2.2 + 12 \times ${scF(v.u, 1)} = ${g(R.G)}\ \text{W/K} \end{aligned}`},
+      {t: 'Euler: the slope at the start',
+       x: TeX`All three methods begin with the slope at the start of the step.`,
+       m: slope(v.T0, TeX`s_1 = f(t_0,\, T_0)`)},
+      {t: 'Euler: one straight step',
+       x: 'Euler walks along the first slope for the whole step.',
+       m: TeX`\begin{aligned} T_{k+1} &= T_k + \Delta t \, f(t_k, T_k) \\ T_1^{\text{Euler}} &= ` + step(v.dt, R.s1, R.e1, R.TE) + C + TeX` \end{aligned}`,
+       q: {label: 'Euler result in °C, four decimals:', ans: R.TE, tol: 0.00015}},
+      {t: 'Heun: the slope at the end point of Euler',
+       x: 'Heun evaluates the slope a second time, at the point that the Euler step has reached.',
+       m: slope(R.TE, TeX`s_2 = f(t_0 + \Delta t,\; T_0 + \Delta t\, s_1)`)},
+      {t: 'Heun: the mean of two slopes',
+       x: 'Heun walks along the mean of the slope at the start and the slope at the end.',
+       m: TeX`\begin{aligned} T_{k+1} &= T_k + \frac{\Delta t}{2}\,(s_1 + s_2) \\ \tfrac{1}{2}\,(s_1 + s_2) &= \tfrac{1}{2}\,(${s7(R.s1)} + ${scP(R.hs2, 7)}) = ${s7(R.hm)} \\ T_1^{\text{Heun}} &= ` + step(v.dt, R.hm, R.he, R.TH) + C + TeX` \end{aligned}`,
+       q: {label: 'Heun result in °C, four decimals:', ans: R.TH, tol: 0.00015}},
+      {t: 'Runge-Kutta: the first slope in the middle',
+       x: TeX`Runge-Kutta goes half a step along \(s_1\) and takes the slope there.`,
+       m: TeX`\begin{aligned} T_0 + \tfrac{\Delta t}{2}\, s_1 &= ` + step(v.dt / 2, R.s1, R.a2, R.P2) + TeX` \\ ` + slope(R.P2, TeX`s_2 = f\left(t_0 + \tfrac{\Delta t}{2},\; T_0 + \tfrac{\Delta t}{2}\, s_1\right)`, 1) + TeX` \end{aligned}`},
+      {t: 'Runge-Kutta: the second slope in the middle',
+       x: TeX`It goes half a step again, now along \(s_2\), and takes the slope there.`,
+       m: TeX`\begin{aligned} T_0 + \tfrac{\Delta t}{2}\, s_2 &= ` + step(v.dt / 2, R.k2, R.a3, R.P3) + TeX` \\ ` + slope(R.P3, TeX`s_3 = f\left(t_0 + \tfrac{\Delta t}{2},\; T_0 + \tfrac{\Delta t}{2}\, s_2\right)`, 1) + TeX` \end{aligned}`},
+      {t: 'Runge-Kutta: the slope at the end',
+       x: TeX`A whole step along \(s_3\) gives the end point of the fourth slope.`,
+       m: TeX`\begin{aligned} T_0 + \Delta t\, s_3 &= ` + step(v.dt, R.k3, R.a4, R.P4) + TeX` \\ ` + slope(R.P4, TeX`s_4 = f(t_0 + \Delta t,\; T_0 + \Delta t\, s_3)`, 1) + TeX` \end{aligned}`},
+      {t: 'Runge-Kutta: the weighted mean',
+       x: 'The two slopes in the middle count twice, and the weights add up to 6.',
+       m: TeX`\begin{aligned} T_{k+1} &= T_k + \frac{\Delta t}{6}\,(s_1 + 2 s_2 + 2 s_3 + s_4) \\ s_1 + 2 s_2 + 2 s_3 + s_4 &= ${s7(R.s1)} + ${scP(R.d2, 7)} + ${scP(R.d3, 7)} + ${scP(R.k4, 7)} \\ &= ${s7(R.sum)} \\ \tfrac{1}{6} \times ${scP(R.sum, 7)} &= ${s7(R.km)} \\ T_1^{\text{RK4}} &= ` + step(v.dt, R.km, R.re, R.TR) + C + TeX` \end{aligned}`,
+       q: {label: 'Runge-Kutta result in °C, four decimals:', ans: R.TR, tol: 0.00015}},
+      {t: 'The exact solution and the errors',
+       x: TeX`With the current and the fan held, the temperature follows the exact solution of the section on time scales. It is computed here without rounding, and its values are shown rounded. Each error is the result of a method minus the exact value.`,
+       m: TeX`\begin{aligned} T_\infty &= T_{\mathrm{amb}} + \frac{I^2 R}{hA_0 + hA_1 u} = 35 + \frac{${g(R.P)}}{${g(R.G)}} = ${scF(R.Tinf, 4)} \\ \tau &= \frac{m c_p}{hA_0 + hA_1 u} = \frac{9000}{${g(R.G)}} = ${scF(R.tau, 1)}\ \text{s} \\ T(t) &= T_\infty + (T_0 - T_\infty)\, e^{-t/\tau} \\ T(${v.dt}) &= ${scF(R.Tinf, 4)} + (${scF(v.T0, 0)} - ${scF(R.Tinf, 4)})\, e^{-${v.dt} / ${scF(R.tau, 1)}} \\ &= ${t4(R.ex)}\ ^{\circ}\text{C} \\ \text{Euler: } ${t4(R.TE)} - ${t4(R.ex)} &= ${t4(R.eE)} \\ \text{Heun: } ${t4(R.TH)} - ${t4(R.ex)} &= ${t4(R.eH)} \\ \text{Runge-Kutta: } ${t4(R.TR)} - ${t4(R.ex)} &= ${t4(R.eR)} \end{aligned}`,
+       r: Math.abs(R.eE) > 1 ? 'The error of Euler exceeds one degree: This step is far too long for Euler.' : 'Runge-Kutta is closest to the exact value, and Euler furthest from it.'}
+    ];
+  },
+  viz: {
+    aspect: 0.42, label: 'One step of each method against the exact curve',
+    legend: [['exact', 'var(--steel)'], ['Euler', 'var(--c3)'], ['Heun', 'var(--c2)'], ['Runge-Kutta', 'var(--accent)']],
+    draw: (ctx, w, hh, v, R, k) => {
+      const C = COL(), m = v.dt / 60, ys = [v.T0, R.TE, R.TH, R.TR, R.ex, R.P2, R.P3, R.P4];
+      let lo = Math.min(...ys), hi = Math.max(...ys); const pad = Math.max(0.5, (hi - lo) * 0.12); lo -= pad; hi += pad;
+      const F = frame(ctx, w, hh, {x0: 0, x1: m, y0: lo, y1: hi, xlabel: 'minutes into the step', ylabel: 'temperature in °C', ticks: 4});
+      const ex = t => R.Tinf + (v.T0 - R.Tinf) * Math.exp(-t * 60 / R.tau), pts = [];
+      for (let i = 0; i <= 80; i++) pts.push([F.X(m * i / 80), F.Y(ex(m * i / 80))]);
+      polyline(ctx, pts, C.steel, 2.2);
+      const seg = (T1, col, wd) => polyline(ctx, [[F.X(0), F.Y(v.T0)], [F.X(m), F.Y(T1)]], col, wd);
+      if (k >= 2) { seg(R.TE, C.c[2], 1.8); dot(ctx, F.X(m), F.Y(R.TE), 4, C.c[2]); }
+      if (k >= 3) dot(ctx, F.X(m), F.Y(R.TE), 6, 'rgba(0,0,0,0)', C.c[1]);
+      if (k >= 4) { seg(R.TH, C.c[1], 1.8); dot(ctx, F.X(m), F.Y(R.TH), 4, C.c[1]); }
+      if (k >= 5) dot(ctx, F.X(m / 2), F.Y(R.P2), 3.5, C.accent);
+      if (k >= 6) dot(ctx, F.X(m / 2), F.Y(R.P3), 3.5, C.accent);
+      if (k >= 7) dot(ctx, F.X(m), F.Y(R.P4), 3.5, C.accent);
+      if (k >= 8) { seg(R.TR, C.accent, 2.4); dot(ctx, F.X(m), F.Y(R.TR), 4.5, C.accent, C.ink); }
+      dot(ctx, F.X(0), F.Y(v.T0), 4.5, C.ink);
+      if (k >= 9) { ctx.fillStyle = C.ink; ctx.font = '12px ' + cssv('--sans'); ctx.textAlign = 'right';
+        ctx.fillText('exact ' + scF(R.ex, 4) + ' °C', F.X(m) - 8, F.Y(R.ex) + (R.ex > R.TR ? -10 : 18)); }
+    }
+  }
+});
+partSteps('pd-calc', {
+  inputs: [
+    {key: 'B', label: 'Bays', min: 1, max: 3, step: 1, value: 2, d: 0},
+    {key: 'Ic', label: 'Charging current in A', min: 30, max: 60, step: 5, value: 45, d: 0},
+    {key: 's', label: 'Spacing of the arrivals', min: 0.5, max: 2, step: 0.1, value: 1, d: 1}
+  ],
+  presets: [
+    {label: 'Two bays', values: {B: 2, Ic: 45, s: 1}},
+    {label: 'One bay', values: {B: 1, Ic: 45, s: 1}},
+    {label: 'Three bays', values: {B: 3, Ic: 45, s: 1}},
+    {label: 'Two bays, rush hour', values: {B: 2, Ic: 45, s: 0.5}}
+  ],
+  calc: v => {
+    const A0 = [0, 0.3, 0.5, 1.1, 1.3, 1.6], S = [0.20, 0.35, 0.10, 0.40, 0.25, 0.30];
+    const arr = A0.map(a => scR(a * v.s, 2)), need = S.map(x => scR(0.9 - x, 2)), ah = need.map(x => scR(x * 60, 1));
+    const tc = ah.map(x => scR(x / v.Ic, 2));
+    const veh = arr.map((a, i) => ({a, tc: tc[i], start: null, end: null, bay: null, wait: null, lane: 0}));
+    const bays = Array(v.B).fill(-1), line = [], ev = [];
+    const cmp = (x, y) => (x.t - y.t) || ((x.kind === 'end' ? 0 : 1) - (y.kind === 'end' ? 0 : 1)) || (x.i - y.i);
+    let pend = arr.map((a, i) => ({t: a, kind: 'arr', i})), maxLine = 0;
+    const begin = (i, t, b) => { const V = veh[i]; bays[b] = i; V.start = t; V.bay = b; V.wait = scR(t - V.a, 2); V.end = scR(t + V.tc, 2);
+      pend.push({t: V.end, kind: 'end', i}); };
+    while (pend.length) {
+      pend.sort(cmp); const e = pend.shift(), rec = {t: e.t, kind: e.kind, i: e.i, startI: null, bay: null};
+      if (e.kind === 'arr') { const b = bays.indexOf(-1);
+        if (b >= 0) { begin(e.i, e.t, b); rec.startI = e.i; rec.bay = b; } else { line.push(e.i); rec.queued = true; } }
+      else { const b = veh[e.i].bay; bays[b] = -1; rec.bay = b;
+        if (line.length) { const j = line.shift(); begin(j, e.t, b); rec.startI = j; } }
+      maxLine = Math.max(maxLine, line.length);
+      rec.line = line.slice(); rec.free = bays.filter(x => x < 0).length; rec.pend = pend.slice().sort(cmp); ev.push(rec);
+    }
+    veh.forEach((V, i) => { V.arrK = ev.findIndex(r => r.kind === 'arr' && r.i === i) + 1; V.startK = ev.findIndex(r => r.startI === i) + 1;
+      V.endK = ev.findIndex(r => r.kind === 'end' && r.i === i) + 1; });
+    const laneEnd = [];
+    veh.forEach(V => { if (V.wait > 0) { let l = laneEnd.findIndex(t => t <= V.a); if (l < 0) { l = laneEnd.length; laneEnd.push(0); } laneEnd[l] = V.start; V.lane = l; } });
+    const sumW = scR(veh.reduce((s, V) => s + V.wait, 0), 2), meanW = scR(sumW / 6, 2), work = scR(tc.reduce((s, x) => s + x, 0), 2);
+    const H = Math.max(...veh.map(V => V.end)), cap = scR(v.B * H, 2), rho = scR(work / cap, 2);
+    return {arr, need, ah, tc, veh, ev, maxLine, lanes: Math.max(1, laneEnd.length), sumW, meanW, work, H, cap, rho,
+            firstWait: ev.findIndex(r => r.kind === 'end' && r.startI !== null)};
+  },
+  steps: (v, R) => {
+    const f = x => scF(x, 2), S = [0.20, 0.35, 0.10, 0.40, 0.25, 0.30];
+    const evList = p => p.length ? 'Event list: ' + p.map(e => `${f(e.t)} h ${e.kind === 'arr' ? 'arrival' : 'end of charge'} of vehicle ${e.i + 1}`).join(', ') + '.' :
+      'The event list is empty, and the simulation ends.';
+    const out = [{t: 'Charging times',
+      x: TeX`A vehicle needs the charge from its state of charge on arrival up to 0.90 of the 60 Ah, and the charger delivers \(I_c\) amperes, so the charge takes \(t_c = (0.9 - \mathrm{SoC}_{\mathrm{in}}) \times 60 / I_c\) hours.`,
+      m: TeX`\begin{aligned} t_c &= \frac{(0.9 - \mathrm{SoC}_{\mathrm{in}})\,Q_0}{I_c} \\ ` + S.map((s, i) => TeX`t_{c,${i + 1}} &= (0.9 - ${scF(s, 2)}) \times 60 / ${v.Ic} = ${scF(R.ah[i], 1)} / ${v.Ic} = ${f(R.tc[i])}\ \text{h}`).join(TeX` \\ `) + TeX` \end{aligned}`,
+      q: {label: 'Charging time of vehicle 3 in hours:', ans: R.tc[2], tol: 0.006}}];
+    R.ev.forEach((e, j) => {
+      const V = R.veh[e.i], st = {t: '', x: '', m: '', r: evList(e.pend)};
+      if (e.kind === 'arr') {
+        st.t = `Clock ${f(e.t)} h: vehicle ${e.i + 1} arrives`;
+        if (e.startI !== null) { st.x = `Bay ${e.bay + 1} is free, so vehicle ${e.i + 1} starts to charge at once and waits 0 h. Its end of charge goes on the event list.`;
+          st.m = TeX`w_${e.i + 1} = t_{\mathrm{start}} - t_{\mathrm{arrive}} = ${f(e.t)} - ${f(V.a)} = ${f(V.wait)}\ \text{h}, \qquad t_{\text{end},${e.i + 1}} = ${f(e.t)} + ${f(V.tc)} = ${f(V.end)}\ \text{h}`; }
+        else { st.x = (v.B === 1 ? 'The bay is busy' : v.B === 2 ? 'Both bays are busy' : `All ${v.B} bays are busy`) + `, so vehicle ${e.i + 1} joins the end of the line.`;
+          st.m = TeX`\text{line} = (` + e.line.map(i => i + 1).join(', ') + ')'; }
+      } else {
+        st.t = `Clock ${f(e.t)} h: vehicle ${e.i + 1} leaves bay ${e.bay + 1}`;
+        if (e.startI !== null) { const W = R.veh[e.startI];
+          st.x = `Vehicle ${e.startI + 1}, first in the line since ${f(W.a)} h, takes the bay. Its wait ends now, and its end of charge goes on the event list.`;
+          st.m = TeX`w_${e.startI + 1} = t_{\mathrm{start}} - t_{\mathrm{arrive}} = ${f(e.t)} - ${f(W.a)} = ${f(W.wait)}\ \text{h}, \qquad t_{\text{end},${e.startI + 1}} = ${f(e.t)} + ${f(W.tc)} = ${f(W.end)}\ \text{h}`;
+          if (j === R.firstWait) st.q = {label: `Wait of vehicle ${e.startI + 1} in hours:`, ans: W.wait, tol: 0.006}; }
+        else { st.x = `The line is empty, so bay ${e.bay + 1} stays free.`; st.m = TeX`\text{free bays} = ${e.free}`; }
+      }
+      out.push(st);
+    });
+    out.push({t: 'Mean wait and utilisation',
+      x: 'The mean wait counts every vehicle, also those that waited 0 h. The utilisation compares the charging work, the sum of the six charging times, with the bay-hours of the run, from time 0 to the last departure.',
+      m: TeX`\begin{aligned} \bar{w} &= \frac{` + R.veh.map(V => f(V.wait)).join(' + ') + TeX`}{6} = \frac{${f(R.sumW)}}{6} = ${f(R.meanW)}\ \text{h} \\ \rho &= \frac{n\,\bar{t}_c}{B\,H} = \frac{${f(R.work)}}{${v.B} \times ${f(R.H)}} = \frac{${f(R.work)}}{${f(R.cap)}} = ${f(R.rho)} \end{aligned}`,
+      r: `The longest line held ${R.maxLine} vehicle${R.maxLine === 1 ? '' : 's'}.`,
+      q: {label: 'Mean wait in hours:', ans: R.meanW, tol: 0.006}});
+    return out;
+  },
+  viz: {
+    aspect: 0.36, label: 'Bays and line of the depot up to the clock of the step',
+    legend: [['charging', 'var(--accent)'], ['charge on the event list', 'var(--grid)'], ['waiting in the line', 'var(--c2)'], ['clock', 'var(--ink)']],
+    draw: (ctx, w, hh, v, R, k) => {
+      const C = COL(), E = R.ev.length, all = k > E, clock = k <= 0 ? 0 : (all ? R.H : R.ev[k - 1].t);
+      const xmax = Math.ceil(R.H * 2 + 0.01) / 2, rows = v.B + 1, L = 58, Rr = 14, T = 16, B = 34, rh = (hh - T - B) / rows;
+      const X = t => L + t / xmax * (w - L - Rr);
+      ctx.font = '12px ' + cssv('--sans');
+      for (let t = 0; t <= xmax + 1e-9; t += 0.5) { ctx.strokeStyle = C.grid; ctx.beginPath(); ctx.moveTo(X(t), T); ctx.lineTo(X(t), hh - B); ctx.stroke();
+        ctx.fillStyle = C.steel; ctx.textAlign = 'center'; ctx.fillText(scF(t, 1), X(t), hh - B + 16); }
+      ctx.fillText('hours', (L + w - Rr) / 2, hh - 4);
+      for (let r = 0; r < rows; r++) { const y = T + r * rh; ctx.fillStyle = C.ink; ctx.textAlign = 'right';
+        ctx.fillText(r < v.B ? 'bay ' + (r + 1) : 'line', L - 8, y + rh / 2 + 4);
+        ctx.strokeStyle = C.line; ctx.beginPath(); ctx.moveTo(L, y + rh); ctx.lineTo(w - Rr, y + rh); ctx.stroke(); }
+      const lh = (rh - 8) / R.lanes;
+      R.veh.forEach((V, i) => {
+        if (!all && V.arrK > k) return;
+        ctx.fillStyle = C.ink; ctx.beginPath(); ctx.moveTo(X(V.a), T + 1); ctx.lineTo(X(V.a) - 4, T - 6); ctx.lineTo(X(V.a) + 4, T - 6); ctx.fill();
+        const started = all || (V.startK > 0 && V.startK <= k);
+        const we = started ? V.start : clock;
+        if (we > V.a + 1e-9) { const y = T + v.B * rh + 4 + V.lane * lh; ctx.fillStyle = C.c[1]; ctx.globalAlpha = 0.85;
+          ctx.fillRect(X(V.a), y, X(we) - X(V.a), lh - 3); ctx.globalAlpha = 1; ctx.fillStyle = C.ink; ctx.textAlign = 'left';
+          if (X(we) - X(V.a) > 14) ctx.fillText(String(i + 1), X(V.a) + 3, y + lh / 2 + 3); }
+        if (started) { const y = T + V.bay * rh + 5, cut = all ? V.end : Math.min(V.end, clock);
+          ctx.fillStyle = C.grid; ctx.fillRect(X(V.start), y, X(V.end) - X(V.start), rh - 10);
+          ctx.fillStyle = C.accent; ctx.globalAlpha = 0.9; ctx.fillRect(X(V.start), y, Math.max(0, X(cut) - X(V.start)), rh - 10); ctx.globalAlpha = 1;
+          ctx.strokeStyle = C.accent; ctx.strokeRect(X(V.start), y, X(V.end) - X(V.start), rh - 10);
+          ctx.fillStyle = C.ink; ctx.textAlign = 'left'; ctx.font = '600 12px ' + cssv('--sans');
+          ctx.fillText((X(V.end) - X(V.start) > 70 ? 'vehicle ' : '') + (i + 1), X(V.start) + 5, y + (rh - 10) / 2 + 4); ctx.font = '12px ' + cssv('--sans'); }
+      });
+      if (k > 0) { ctx.strokeStyle = C.ink; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.moveTo(X(clock), T - 6); ctx.lineTo(X(clock), hh - B); ctx.stroke(); ctx.setLineDash([]); }
+    }
+  }
+});
+})();
+</script>
+</body></html>

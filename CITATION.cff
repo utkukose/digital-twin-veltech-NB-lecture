@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use these course materials, please cite them as below."
+title: "Digital Twin with Python: open course materials"
+type: software
+authors:
+  - family-names: Kose
+    given-names: Utku
+    orcid: "https://orcid.org/0000-0002-9652-6415"
+    affiliation: "Süleyman Demirel University"
+    email: utkukose@sdu.edu.tr
+repository-code: "https://github.com/utkukose/digital-twin-veltech-NB-lecture"
+url: "https://utkukose.github.io/digital-twin-veltech-NB-lecture/"
+license: CC-BY-4.0
+version: "2.0.0"
+date-released: "2026-10-04"
+keywords:
+  - digital twin
+  - simulation
+  - model calibration
+  - surrogate models
+  - physics-informed machine learning
+  - predictive maintenance
+  - verification and validation
+  - Python for beginners
