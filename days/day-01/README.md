@@ -19,7 +19,7 @@ Each material has its own role. Start with the lecture page; the study path belo
 |---|---|---|
 | Lecture page | The concepts of the day, with animations, an interactive scene, knowledge checks, review cards and the references | [Lecture page](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-01/lecture.html) |
 | Colab notebook | Python step 1: Values, variables, lists and decisions, then the hands-on sections with exercises, an application switch and the application challenges | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-01/NB01_concept_and_architecture.ipynb) |
-| Interactive lab | Maturity lab: Five practice parts, a self-assessment and an exportable learning log | [Interactive lab](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-01/lab.html) |
+| Interactive lab | Maturity lab: Six practice parts, a self-assessment and an exportable learning log | [Interactive lab](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-01/lab.html) |
 | PDF lecture notes | The Python step and the lecture in one printable file | [PDF notes](Day01_Lecture_Notes.pdf) |
 
 <table><tr><td width="50%"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-01/NB01_concept_and_architecture.ipynb"><img src="screenshots/nb_1.png" alt="A figure from the notebook of day 1"></a><br><sub>From the Colab notebook</sub></td><td width="50%"><a href="https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-01/lab.html"><img src="screenshots/lab.png" alt="Interactive lab of day 1"></a><br><sub>The interactive lab</sub></td></tr></table>
@@ -34,7 +34,7 @@ By the end of the day, students are expected to define a digital twin by the dat
 |---|---|---|
 | 1 | Read the [lecture page](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-01/lecture.html) and answer its knowledge checks | 1 hour 30 minutes |
 | 2 | Run Python step 1: Values, variables, lists and decisions in the [Colab notebook](https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-01/NB01_concept_and_architecture.ipynb#scrollTo=python-step), right after the setup section | 1 hour |
-| 3 | Work through parts A to E of the [interactive lab](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-01/lab.html) | 1 hour |
+| 3 | Work through parts A to F of the [interactive lab](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-01/lab.html) | 1 hour |
 | 4 | Work through the numbered sections of the notebook and their exercises | 2 hours |
 | 5 | Use the application switch of the notebook and solve the application challenge of your field | 45 minutes |
 | 6 | Take the self-assessment in the [interactive lab](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-01/lab.html) (tab: Check yourself) | 20 minutes |
@@ -47,12 +47,12 @@ The day runs as one synchronous session in class or online, and each material ha
 | Time | Activity |
 |---|---|
 | 0:00 to 0:15 | Opening: Three things called a digital twin, and which of them is one. A tour of the course page, then students open the notebook in Colab, save a copy in Drive and run section 0 |
-| 0:15 to 0:50 | Lecture page, part 1: Definitions, the battery pack, what each arrow buys with the three-counterparts animation; then lab Part A with the whole class |
+| 0:15 to 0:50 | Lecture page, part 1: Definitions with the navigation-app animation, the battery pack, what each arrow buys with the three-counterparts animation; then lab Part A with the whole class |
 | 0:50 to 1:15 | Colab, together: Python step 1, ending with five steps of the thermal model computed by hand |
 | 1:15 to 1:25 | Break |
-| 1:25 to 2:00 | Lecture page, part 2: How often to listen with the synchronisation animation, the reference architecture, testing before hardware exists; then lab Part C, the maturity bench with a biased sensor |
+| 1:25 to 2:00 | Lecture page, part 2: How often to listen with the courier and the synchronisation animations, the reference architecture, testing before hardware exists; then lab Part C, the maturity bench with a biased sensor |
 | 2:00 to 2:40 | Colab, in pairs: Sections 1 to 6 with their exercises, then section 7 with a different asset for each pair |
-| 2:40 to 3:00 | Lab and closing: Part E with the whole class, then the self-assessment; after the session: The PDF notes, the daily task and the optional section 8 |
+| 2:40 to 3:00 | Lab and closing: Part E with the whole class and Part F, the delivery tracker, then the self-assessment; after the session: The PDF notes, the daily task and the optional section 8 |
 
 ## Daily task and submission
 

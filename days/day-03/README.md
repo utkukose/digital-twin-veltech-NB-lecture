@@ -19,7 +19,7 @@ Each material has its own role. Start with the lecture page; the study path belo
 |---|---|---|
 | Lecture page | The concepts of the day, with animations, an interactive scene, knowledge checks, review cards and the references | [Lecture page](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-03/lecture.html) |
 | Colab notebook | Python step 3: pandas data frames and time, then the hands-on sections with exercises, an application switch and the application challenges | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-03/NB03_data_pipelines_and_calibration.ipynb) |
-| Interactive lab | Calibration lab: Six practice parts, a self-assessment and an exportable learning log | [Interactive lab](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-03/lab.html) |
+| Interactive lab | Calibration lab: Seven practice parts, a self-assessment and an exportable learning log | [Interactive lab](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-03/lab.html) |
 | PDF lecture notes | The Python step and the lecture in one printable file | [PDF notes](Day03_Lecture_Notes.pdf) |
 
 <table><tr><td width="50%"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-03/NB03_data_pipelines_and_calibration.ipynb"><img src="screenshots/nb_1.png" alt="A figure from the notebook of day 3"></a><br><sub>From the Colab notebook</sub></td><td width="50%"><a href="https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-03/lab.html"><img src="screenshots/lab.png" alt="Interactive lab of day 3"></a><br><sub>The interactive lab</sub></td></tr></table>
@@ -34,7 +34,7 @@ By the end of the day, students are expected to turn an irregular packet stream 
 |---|---|---|
 | 1 | Read the [lecture page](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-03/lecture.html) and answer its knowledge checks | 1 hour 30 minutes |
 | 2 | Run Python step 3: pandas data frames and time in the [Colab notebook](https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-03/NB03_data_pipelines_and_calibration.ipynb#scrollTo=python-step), right after the setup section | 1 hour |
-| 3 | Work through parts A to F of the [interactive lab](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-03/lab.html) | 1 hour |
+| 3 | Work through parts A to G of the [interactive lab](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-03/lab.html) | 1 hour |
 | 4 | Work through the numbered sections of the notebook and their exercises | 2 hours 30 minutes |
 | 5 | Use the application switch of the notebook and solve the application challenge of your field | 45 minutes |
 | 6 | Take the self-assessment in the [interactive lab](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-03/lab.html) (tab: Check yourself) | 20 minutes |
@@ -47,12 +47,12 @@ The day runs as one synchronous session in class or online, and each material ha
 | Time | Activity |
 |---|---|
 | 0:00 to 0:10 | Opening: Recap of Day 2 and the question of the day: What can the data tell the model? Students open the notebook in Colab, save a copy and run section 0 |
-| 0:10 to 0:45 | Lecture page, part 1: From packets to a time series, spikes, gaps and drift with the pipeline animation; then lab Part A with the whole class |
+| 0:10 to 0:45 | Lecture page, part 1: From packets to a time series, spikes, gaps and drift with the smartwatch and the pipeline animations; then lab Part A with the whole class |
 | 0:45 to 1:10 | Colab, together: Python step 3, ending with a resampled and interpolated series |
 | 1:10 to 1:20 | Break |
-| 1:20 to 2:00 | Lecture page, part 2: Calibration, the hidden symmetry, validation, the Kalman filter with its animation; then lab Part D, the calibration bench with its sum of squared errors and its three ratios |
+| 1:20 to 2:00 | Lecture page, part 2: Calibration, the hidden symmetry, validation, the Kalman filter with the tunnel and the filter animations; then lab Part D, the calibration bench with its sum of squared errors and its three ratios |
 | 2:00 to 2:40 | Colab, in pairs: Sections 1 to 7 with their exercises, then section 8 with a different asset for each pair |
-| 2:40 to 3:00 | Lab and closing: Part F by hand, then the self-assessment; after the session: The PDF notes, the daily task and the optional section 9 |
+| 2:40 to 3:00 | Lab and closing: Part F by hand and Part G, the heart rate of a run, then the self-assessment; after the session: The PDF notes, the daily task and the optional section 9 |
 
 ## Daily task and submission
 

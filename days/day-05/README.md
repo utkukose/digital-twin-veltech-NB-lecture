@@ -19,7 +19,7 @@ Each material has its own role. Start with the lecture page; the study path belo
 |---|---|---|
 | Lecture page | The concepts of the day, with animations, an interactive scene, knowledge checks, review cards and the references | [Lecture page](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-05/lecture.html) |
 | Colab notebook | Python step 5: Classes, records and files, then the hands-on sections with exercises, an application switch and the application challenges | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-05/NB05_visualization_and_capstone.ipynb) |
-| Interactive lab | Operations lab: Five practice parts, a self-assessment and an exportable learning log | [Interactive lab](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-05/lab.html) |
+| Interactive lab | Operations lab: Six practice parts, a self-assessment and an exportable learning log | [Interactive lab](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-05/lab.html) |
 | PDF lecture notes | The Python step and the lecture in one printable file | [PDF notes](Day05_Lecture_Notes.pdf) |
 
 <table><tr><td width="50%"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-05/NB05_visualization_and_capstone.ipynb"><img src="screenshots/nb_1.png" alt="A figure from the notebook of day 5"></a><br><sub>From the Colab notebook</sub></td><td width="50%"><a href="https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-05/lab.html"><img src="screenshots/lab.png" alt="Interactive lab of day 5"></a><br><sub>The interactive lab</sub></td></tr></table>
@@ -34,7 +34,7 @@ By the end of the day, students are expected to build an operator dashboard that
 |---|---|---|
 | 1 | Read the [lecture page](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-05/lecture.html) and answer its knowledge checks | 1 hour 30 minutes |
 | 2 | Run Python step 5: Classes, records and files in the [Colab notebook](https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-05/NB05_visualization_and_capstone.ipynb#scrollTo=python-step), right after the setup section | 1 hour |
-| 3 | Work through parts A to E of the [interactive lab](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-05/lab.html) | 1 hour |
+| 3 | Work through parts A to F of the [interactive lab](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-05/lab.html) | 1 hour |
 | 4 | Work through the numbered sections of the notebook and their exercises | 2 hours 30 minutes |
 | 5 | Use the application switch of the notebook and solve the application challenge of your field | 45 minutes |
 | 6 | Take the self-assessment in the [interactive lab](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-05/lab.html) (tab: Check yourself) | 20 minutes |
@@ -47,12 +47,12 @@ The day runs as one synchronous session in class or online, and each material ha
 | Time | Activity |
 |---|---|
 | 0:00 to 0:10 | Opening: Recap of the week: The parts of the twin and what each one was measured against. Students open the notebook in Colab, save a copy and run section 0 |
-| 0:10 to 0:45 | Lecture page, part 1: The operator's dashboard, maturity computed from the state with its animation, configuration and the event log |
+| 0:10 to 0:45 | Lecture page, part 1: The operator's dashboard, maturity computed from the state with its animation, configuration and the event log with the drone animation |
 | 0:45 to 1:10 | Colab, together: Python step 5, ending with a log read back into a data frame |
 | 1:10 to 1:20 | Break |
-| 1:20 to 1:55 | Lecture page, part 2: Verification and validation with the validation animation, the credibility scorecard, the assembled twin under a fault; then lab Part B with the whole class and Part D by hand |
+| 1:20 to 1:55 | Lecture page, part 2: Verification and validation with the validation and the weather-app animations, the credibility scorecard, the assembled twin under a fault; then lab Part B with the whole class and Part D by hand |
 | 1:55 to 2:30 | Colab, in pairs: Sections 1 to 7 with their exercises, the live dashboard of section 8 with staged faults, then section 9 with a different asset and a worn fan |
-| 2:30 to 3:00 | Lab and closing: Part E, the operations panel with injected faults, section 10 with the final project, questions and the course evaluation |
+| 2:30 to 3:00 | Lab and closing: Part E, the operations panel with injected faults, Part F, the scorecard of a smart thermostat, section 10 with the final project, questions and the course evaluation |
 
 ## Daily task and submission
 

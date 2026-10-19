@@ -112,6 +112,12 @@ details.ans{margin:4px 0 14px}
 .colabbox p{margin:0}
 .colabbox .colabbtn img{display:block;height:22px}
 .colabpart{margin:.8rem 0 0;font-size:.95rem}
+.mail{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:.7rem .9rem;margin:.6rem 0;line-height:2.1;font-size:.98rem}
+.mailw{font:inherit;border:1.5px solid;border-radius:5px;padding:0 .3rem;margin:0 .05rem;cursor:pointer;color:var(--ink)}
+.mailw.off{text-decoration:line-through;opacity:.55}
+.backpart{margin:.9rem 0 0;font-size:.95rem;border-left:4px solid var(--accent);padding:.35rem .7rem;background:var(--panel);border-radius:6px}
+.backpart a{font-weight:600}
+.labbox{scroll-margin-top:12px}
 /* Step-by-step calculators of the lab */
 .labpart{scroll-margin-top:10px}
 h3[id]{scroll-margin-top:10px}
@@ -235,9 +241,9 @@ blockquote{border-left-color:var(--accent);border-radius:0 10px 10px 0}
 :root{--accent:#0369A1;--band:rgba(3,105,161,.08)}@media (prefers-color-scheme:dark){:root{--accent:#7DD3FC;--band:rgba(125,211,252,.13)}}</style><script>window.MathJax={tex:{inlineMath:[["\\(","\\)"]]},svg:{fontCache:"local"}};</script><script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script></head>
 <body><div class="wrap">
 <header class="top"><p class="course">Digital Twin with Python (VTR UGE 21), day 1 of 5</p><h1>Concept and Architecture</h1><p class="who">Prof. Dr. Utku Kose, Süleyman Demirel University</p><nav><a href="../../index.html">Course home</a><a href="https://github.com/utkukose/digital-twin-veltech-NB-lecture/tree/main/days/day-01">Day overview</a><a href="lecture.html">Lecture</a><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-01/NB01_concept_and_architecture.ipynb">Colab notebook</a><a href="Day01_Lecture_Notes.pdf">PDF notes</a></nav></header>
-<h2>Maturity lab</h2><p>Part A classifies six systems as models, shadows or twins. Part B repeats the energy balance of the pack step by step, with sliders for its numbers. Part C runs the pack and a virtual counterpart in the browser, with the maturity level and the sensor of your choice. Part D repeats the root mean square error (RMSE) of the shadow step by step, also with sliders. Part E assigns responsibilities to the parts of the reference architecture. In Parts B and D every intermediate value is rounded, and the next step continues with the rounded value, as in a calculation by hand.</p>
+<h2>Maturity lab</h2><p>Part A classifies six systems as models, shadows or twins. Part B repeats the energy balance of the pack step by step, with sliders for its numbers. Part C runs the pack and a virtual counterpart in the browser, with the maturity level and the sensor of your choice. Part D repeats the root mean square error (RMSE) of the shadow step by step, also with sliders. Part E assigns responsibilities to the parts of the reference architecture. In Parts B and D every intermediate value is rounded, and the next step continues with the rounded value, as in a calculation by hand. Part F follows a courier with a delivery app and asks how often the phone should send its position and how the app should move the marker between two fixes.</p>
 <div class="tabs" role="tablist"><button aria-selected="true">Explore</button><button aria-selected="false">Check yourself</button><button aria-selected="false">Reflect and export</button></div>
-<section class="tabpanel"><h3>Part A: Model, shadow or twin?</h3><p>Classify each system by its data flows.</p><div id="pa"></div><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-01/NB01_concept_and_architecture.ipynb#scrollTo=sec-1" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 1: the pack next to a model built from its datasheet.</a></p><section class="labpart" id="pb"><h3>Part B: The energy balance of the pack, step by step</h3><p>The worked examples of the lecture: the heating of the pack, its cooling by the air and the fan, the rate of change of its temperature, one Euler step, the steady state and the time constant. The sliders set the current, the cell temperature, the fan duty, the temperature of the air and the time step. The parameters are those of the pack: \(R = 0.045\) ohm, \(m c_p = 9000\) J/K, \(hA_0 = 2.2\) W/K and \(hA_1 = 12\) W/K. The left panel compares the two powers, and the right panel follows the temperature from now on, with the current and the fan held.</p><div class="stepcalc" id="pb-calc"></div></section><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-01/NB01_concept_and_architecture.ipynb#scrollTo=sec-1" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 1: the full model of the pack over a trip of two hours.</a></p><h3 id="pc">Part C: The maturity bench</h3>
+<section class="tabpanel"><h3>Part A: Model, shadow or twin?</h3><p>Classify each system by its data flows.</p><div id="pa"></div><p class="backpart"><a href="lecture.html#lab-pa">Back to the lecture: What is a digital twin?</a>, where the text continues after the box of this part.</p><section class="labpart" id="pb"><h3>Part B: The energy balance of the pack, step by step</h3><p>The worked examples of the lecture: the heating of the pack, its cooling by the air and the fan, the rate of change of its temperature, one Euler step, the steady state and the time constant. The sliders set the current, the cell temperature, the fan duty, the temperature of the air and the time step. The parameters are those of the pack: \(R = 0.045\) ohm, \(m c_p = 9000\) J/K, \(hA_0 = 2.2\) W/K and \(hA_1 = 12\) W/K. The left panel compares the two powers, and the right panel follows the temperature from now on, with the current and the fan held.</p><div class="stepcalc" id="pb-calc"></div></section><p class="backpart"><a href="lecture.html#lab-pb">Back to the lecture: The asset of the course</a>. The lecture continues there with Section 1 of the Colab notebook: Open it from the next orange box.</p><h3 id="pc">Part C: The maturity bench</h3>
 <div class="bench">
 <p>Configure the virtual counterpart of the pack and the sensor that feeds it, then press <b>Run and add to scoreboard</b>.
 The plot shows the true temperature of the pack and what the counterpart believes. The twin may switch the fan; the model
@@ -254,10 +260,29 @@ and the shadow only watch. Try a sensor bias of minus five degrees with the twin
 <div class="tablewrap"><table><thead><tr><th>Run</th><th>Level</th><th>Sync</th><th>Bias</th><th>Noise</th><th>Loss</th>
 <th>Belief RMSE</th><th>Peak</th><th>Truly over 46 °C</th><th>Reported over 46 °C</th></tr></thead><tbody id="w-tb"></tbody></table></div>
 </div>
-<p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-01/NB01_concept_and_architecture.ipynb#scrollTo=sec-2" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 2: the same ladder with the full pack model.</a></p><section class="labpart" id="pd"><h3>Part D: The error of the shadow and the synchronisation interval</h3><p>The formula of the lecture for the error of a shadow that overwrites its belief with every reading, term by term: the noise \(\sigma\) and the bias \(b\) of the sensor, the drift rate \(v\) of the model and the synchronisation interval \(\Delta t_{\mathrm{sync}}\). The drift rate is set in degrees per minute. The figure draws the whole curve on a logarithmic axis, as the animation of the lecture does, and marks the chosen interval. Beyond about twenty minutes the formula no longer holds, and the curve is dashed there.</p><div class="stepcalc" id="pd-calc"></div></section><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-01/NB01_concept_and_architecture.ipynb#scrollTo=sec-4" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 4: the measured error of the shadow for eight intervals.</a></p><h3>Part E: Who does what in the architecture?</h3><p>Each responsibility belongs to one of the five parts of the reference architecture.</p><div id="pe"></div><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-01/NB01_concept_and_architecture.ipynb#scrollTo=sec-5" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 5: the five classes of the architecture in code.</a></p></section>
+<p class="backpart"><a href="lecture.html#lab-pc">Back to the lecture: What each arrow buys</a>. The lecture continues there with Section 2 of the Colab notebook: Open it from the next orange box.</p><section class="labpart" id="pd"><h3>Part D: The error of the shadow and the synchronisation interval</h3><p>The formula of the lecture for the error of a shadow that overwrites its belief with every reading, term by term: the noise \(\sigma\) and the bias \(b\) of the sensor, the drift rate \(v\) of the model and the synchronisation interval \(\Delta t_{\mathrm{sync}}\). The drift rate is set in degrees per minute. The figure draws the whole curve on a logarithmic axis, as the animation of the lecture does, and marks the chosen interval. Beyond about twenty minutes the formula no longer holds, and the curve is dashed there.</p><div class="stepcalc" id="pd-calc"></div></section><p class="backpart"><a href="lecture.html#lab-pd">Back to the lecture: How often should the twin listen?</a>. The lecture continues there with Section 4 of the Colab notebook: Open it from the next orange box.</p><h3>Part E: Who does what in the architecture?</h3><p>Each responsibility belongs to one of the five parts of the reference architecture.</p><div id="pe"></div><p class="backpart"><a href="lecture.html#lab-pe">Back to the lecture: A reference architecture</a>. The lecture continues there with Section 5 of the Colab notebook: Open it from the next orange box.</p><h3 id="pf">Part F: The delivery tracker</h3>
+<p>The courier of the lecture rides 3000 metres at 4 metres per second and waits 40 seconds at each of four traffic
+lights. Every fix carries the position, off by about 5 metres, and the speed. Choose the time between two fixes and the
+rule by which the app moves the marker until the next fix, run the trip and compare the runs in the table. For each
+rule, find the longest interval of the list that keeps the RMSE of the marker below 20 metres. Then compute two
+positions by hand, without the error of the fixes.</p>
+<div class="bench"><div class="row" id="df-sl"></div>
+<div class="row"><div class="ctl"><label for="df-rule">Between two fixes the marker</label><select id="df-rule">
+<option value="speed">moves on at the last speed</option><option value="hold">stays at the last fix</option></select></div></div>
+<canvas class="paper" id="df-cv" aria-label="The error of the marker over the trip"></canvas><div id="df-ro"></div>
+<p><button class="btn" id="df-run" type="button">Run the trip and add it to the table</button>
+<button class="btn ghost" id="df-clr" type="button">Clear the table</button></p>
+<div class="tablewrap"><table><thead><tr><th>Run</th><th>Time between fixes</th><th>Rule</th><th>Fixes sent</th>
+<th>RMSE</th><th>Largest error</th></tr></thead><tbody id="df-tb"></tbody></table></div>
+<p>A fix at second 120 puts the courier at 482 metres with a speed of 4 metres per second, and the next fix comes at
+second 150. The fix of second 180 finds the courier waiting at the first light, at 600 metres with a speed of 0, and the
+courier rides on at second 190.</p>
+<div class="row" id="df-in"></div>
+<p><button class="btn" id="df-check" type="button">Check my values</button> <span class="small" id="df-fb" aria-live="polite"></span></p></div>
+<p class="backpart"><a href="lecture.html#lab-pf">Back to the lecture: Your asset</a>. The lecture continues there with Section 7 of the Colab notebook: Open it from the next orange box.</p></section>
 <section class="tabpanel" hidden><p>Answer each question, rate your confidence and check the answer. Results stay in this browser.</p><div id="quiz"></div></section>
 <section class="tabpanel" hidden><p>Write a short answer to each question. The text is saved in this browser and is included when you export the learning log.</p><div id="reflect"></div></section>
-<footer class="sig"><p><strong>Prof. Dr. Utku Kose</strong><br>Full Professor, Department of Computer Engineering, Süleyman Demirel University, Isparta, Türkiye<br>Founding Director, AI Application and Research Center (YAZEM), Süleyman Demirel University<br>Head of the Computer Science Division, Department of Computer Engineering, Süleyman Demirel University<br>Additional affiliations: University of North Dakota (USA), Universidad Panamericana (Mexico City, Mexico), Vel Tech University (Chennai, India)<br>IEEE Senior Member, ACM Professional Member<br><a href="https://orcid.org/0000-0002-9652-6415">ORCID 0000-0002-9652-6415</a> | <a href="https://www.utkukose.com">utkukose.com</a> | <a href="https://github.com/utkukose">github.com/utkukose</a><br><a href="mailto:utkukose@sdu.edu.tr">utkukose@sdu.edu.tr</a> | <a href="mailto:utku.kose@und.edu">utku.kose@und.edu</a> | <a href="mailto:ukose@up.edu.mx">ukose@up.edu.mx</a> | <a href="mailto:utkukose@gmail.com">utkukose@gmail.com</a></p><p>This course is updated in line with current developments in the field. Last update: October 2026. Course materials licensed under CC BY 4.0. Code licensed under MIT.</p></footer></div>
+<footer class="sig"><p><strong>Prof. Dr. Utku Kose</strong><br>Full Professor, Department of Computer Engineering, Süleyman Demirel University, Isparta, Türkiye<br>Founding Director, AI Application and Research Center (YAZEM), Süleyman Demirel University<br>Head of the Computer Science Division, Department of Computer Engineering, Süleyman Demirel University<br>Additional affiliations: University of North Dakota (USA), Universidad Panamericana (Mexico City, Mexico), Vel Tech University (Chennai, India)<br>IEEE Senior Member, ACM Professional Member<br><a href="https://orcid.org/0000-0002-9652-6415">ORCID 0000-0002-9652-6415</a> | <a href="https://www.utkukose.com">utkukose.com</a> | <a href="https://github.com/utkukose">github.com/utkukose</a><br><a href="mailto:utkukose@sdu.edu.tr">utkukose@sdu.edu.tr</a> | <a href="mailto:utku.kose@und.edu">utku.kose@und.edu</a> | <a href="mailto:ukose@up.edu.mx">ukose@up.edu.mx</a> | <a href="mailto:utkukose@gmail.com">utkukose@gmail.com</a></p><p>This course is updated in line with current developments in the field. First version: October 2026. Last update: October 2026. Course materials licensed under CC BY 4.0. Code licensed under MIT.</p></footer></div>
 <script>window.COURSE_PREFIX="vtdt";</script>
 <script>"use strict";
 const $ = (s, r = document) => r.querySelector(s);
@@ -936,6 +961,60 @@ partSteps('pd-calc', {
     }
   }
 });
+
+(function(){ if(!document.getElementById('df-cv')) return;
+const asp=(el,a,b)=>(el.clientWidth||600)<500?b:a;
+
+// MODEL-START
+// A courier rides 3000 m at 4 m/s and waits 40 s at the lights at 600, 1300, 2000 and 2600 m, 910 s in all.
+// Every dt seconds the phone sends a fix: the position with an error of standard deviation 5 m, and the speed.
+// Between two fixes the marker moves on at the last speed ('speed') or stays at the last fix ('hold').
+const CR={v:4,lights:[600,1300,2000,2600],wait:40,len:3000,sig:5};
+function crTruth(){ let s=0,k=0,w=0; const pos=[],spd=[];
+  for(;;){ pos.push(s); if(s>=CR.len){ spd.push(0); break; }
+    if(k<CR.lights.length&&Math.abs(s-CR.lights[k])<1e-9&&w<CR.wait){ spd.push(0); w++; if(w===CR.wait){ k++; w=0; } continue; }
+    spd.push(CR.v); s=Math.min(CR.len,s+CR.v); }
+  return {pos,spd}; }
+function crTrack(dt,rule,seed){ const T=crTruth(), r=RNG(seed==null?7:seed), n=T.pos.length, est=[], err=[];
+  let fs=0,fv=0,tf=0,msgs=0;
+  for(let t=0;t<n;t++){ if(t%dt===0){ fs=T.pos[t]+CR.sig*r.normal(); fv=T.spd[t]; tf=t; msgs++; }
+    const e=fs+(rule==='hold'?0:fv*(t-tf)); est.push(e); err.push(e-T.pos[t]); }
+  let ss=0, mx=0; err.forEach(e=>{ ss+=e*e; mx=Math.max(mx,Math.abs(e)); });
+  return {T,est,err,rmse:Math.sqrt(ss/n),max:mx,msgs,n}; }
+// MODEL-END
+function crPlot(ctx,w,hh,R,k){ const C=COL(), ymax=Math.max(50,Math.ceil(R.max/50)*50);
+  const F=frame(ctx,w,hh,{x0:0,x1:1000,y0:-ymax,y1:ymax,ticks:4,xlabel:'second of the trip',ylabel:'error in m'});
+  ctx.save(); ctx.strokeStyle=C.grid; ctx.beginPath(); ctx.moveTo(F.X(0),F.Y(0)); ctx.lineTo(F.X(1000),F.Y(0)); ctx.stroke(); ctx.restore();
+  const pts=[]; for(let i=0;i<=k;i++) pts.push([F.X(i),F.Y(R.err[i])]); polyline(ctx,pts,C.c[1],1.5); }
+
+const OPTS=[5,10,15,20,30,45,60,90,120]; let j=4, R=null;
+slider($('#df-sl'),{label:'Time between two fixes',min:0,max:OPTS.length-1,step:1,value:j,fmt:v=>OPTS[v]+' s'},v=>{ j=v; run(false); });
+$('#df-rule').addEventListener('change',()=>run(false));
+const ro=readout($('#df-ro'),['fixes sent','RMSE of the trip','largest error']);
+const runs=store.get('d1:partF:runs',[]);
+function run(add){ R=crTrack(OPTS[j],$('#df-rule').value);
+  ro('fixes sent',String(R.msgs)); ro('RMSE of the trip',R.rmse.toFixed(1)+' m'); ro('largest error',R.max.toFixed(0)+' m');
+  if(add){ runs.push([OPTS[j],$('#df-rule').value,R.msgs,R.rmse,R.max]); store.set('d1:partF:runs',runs); table(); }
+  st.redraw(); }
+function table(){ const tb=$('#df-tb'); tb.innerHTML='';
+  runs.forEach((r,i)=>tb.append(h('tr',{},h('td',{},String(i+1)),h('td',{},r[0]+' s'),h('td',{},r[1]==='hold'?'stays at the last fix':'moves on at the last speed'),
+    h('td',{},String(r[2])),h('td',{style:r[3]<20?'color:var(--ok);font-weight:600':''},r[3].toFixed(1)+' m'),h('td',{},r[4].toFixed(0)+' m')))); }
+$('#df-run').addEventListener('click',()=>run(true));
+$('#df-clr').addEventListener('click',()=>{ runs.length=0; store.set('d1:partF:runs',runs); table(); });
+const st=stage($('#df-cv'),asp($('#df-cv'),0.36,0.65),(ctx,w,hh)=>{ ctx.clearRect(0,0,w,hh); if(R) crPlot(ctx,w,hh,R,R.n-1); });
+const FIELDS=[['Marker at second 135, in metres','m135',542,1,'marker'],
+  ['Distance by which the marker trails the courier at second 205, in metres','d205',60,1,'distance'],
+  ['Longest interval of the list with an RMSE below 20 metres when the marker moves on, in seconds','best',30,0.5,'interval']];
+FIELDS.forEach(([lab,id])=>$('#df-in').append(h('div',{class:'ctl',style:'min-width:230px'},h('label',{for:'df-'+id},lab),h('input',{type:'number',step:'any',id:'df-'+id,style:'width:7rem'}))));
+$('#df-check').addEventListener('click',()=>{ let ok=0;
+  const out=FIELDS.map(([lab,id,ans,tol,sh])=>{ const v=parseFloat($('#df-'+id).value), right=Math.abs(v-ans)<=tol; if(right) ok++; return sh+': '+(isNaN(v)?'missing':(right?'correct':'not yet')); });
+  $('#df-fb').textContent=out.join(', ')+'. '+(ok===3
+    ?'The marker moves on for 15 seconds at 4 metres per second: 482 + 4 × 15 = 542 metres. At second 205 it still stands at 600 metres, where the fix of second 180 found the courier, while the courier has ridden 4 × 15 = 60 metres since second 190. With the marker held at the last fix, the longest interval below 20 metres is 10 seconds, with 92 fixes instead of 31.'
+    :'From the last fix the marker moves on at the speed of that fix: position of the fix + speed × time since the fix. The table shows the RMSE of every run.');
+  store.set('d1:partF:score',ok); });
+table(); run(false);
+})();
+
 })();
 </script>
 </body></html>

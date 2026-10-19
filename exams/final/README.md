@@ -1,5 +1,7 @@
 # Final project: A digital twin with a credibility scorecard
 
+**This course is updated in line with current developments in the field. First version: October 2026. Last update: October 2026.**
+
 ## Overview
 
 The final project applies the whole course to one asset chosen by the student. The asset needs at least two coupled states and one controllable input. The twin must have both data-flow arrows, a tested simulation core, calibrated parameters, at least two elements of the intelligence layer, a dashboard and a filled credibility scorecard. The project is done alone or in pairs.

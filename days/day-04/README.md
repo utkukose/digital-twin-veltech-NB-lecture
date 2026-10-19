@@ -19,7 +19,7 @@ Each material has its own role. Start with the lecture page; the study path belo
 |---|---|---|
 | Lecture page | The concepts of the day, with animations, an interactive scene, knowledge checks, review cards and the references | [Lecture page](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-04/lecture.html) |
 | Colab notebook | Python step 4: Plots and the scikit-learn interface, then the hands-on sections with exercises, an application switch and the application challenges | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-04/NB04_intelligence_layer.ipynb) |
-| Interactive lab | Intelligence lab: Six practice parts, a self-assessment and an exportable learning log | [Interactive lab](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-04/lab.html) |
+| Interactive lab | Intelligence lab: Seven practice parts, a self-assessment and an exportable learning log | [Interactive lab](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-04/lab.html) |
 | PDF lecture notes | The Python step and the lecture in one printable file | [PDF notes](Day04_Lecture_Notes.pdf) |
 
 <table><tr><td width="50%"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-04/NB04_intelligence_layer.ipynb"><img src="screenshots/nb_1.png" alt="A figure from the notebook of day 4"></a><br><sub>From the Colab notebook</sub></td><td width="50%"><a href="https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-04/lab.html"><img src="screenshots/lab.png" alt="Interactive lab of day 4"></a><br><sub>The interactive lab</sub></td></tr></table>
@@ -34,7 +34,7 @@ By the end of the day, students are expected to train a surrogate on a designed 
 |---|---|---|
 | 1 | Read the [lecture page](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-04/lecture.html) and answer its knowledge checks | 1 hour 30 minutes |
 | 2 | Run Python step 4: Plots and the scikit-learn interface in the [Colab notebook](https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-04/NB04_intelligence_layer.ipynb#scrollTo=python-step), right after the setup section | 1 hour |
-| 3 | Work through parts A to F of the [interactive lab](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-04/lab.html) | 1 hour |
+| 3 | Work through parts A to G of the [interactive lab](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-04/lab.html) | 1 hour |
 | 4 | Work through the numbered sections of the notebook and their exercises | 2 hours 30 minutes |
 | 5 | Use the application switch of the notebook and solve the application challenge of your field | 45 minutes |
 | 6 | Take the self-assessment in the [interactive lab](https://utkukose.github.io/digital-twin-veltech-NB-lecture/days/day-04/lab.html) (tab: Check yourself) | 20 minutes |
@@ -50,9 +50,9 @@ The day runs as one synchronous session in class or online, and each material ha
 | 0:10 to 0:45 | Lecture page, part 1: The calibrated core, surrogates and their training box with the Gaussian-process animation, hybrid models |
 | 0:45 to 1:10 | Colab, together: Python step 4, ending with a physics-informed feature |
 | 1:10 to 1:20 | Break |
-| 1:20 to 1:55 | Lecture page, part 2: Fault detection with the cumulative-sum animation, remaining useful life, what-if scenarios and control; then lab Part A with the whole class and Part C by hand |
+| 1:20 to 1:55 | Lecture page, part 2: Fault detection with the cumulative-sum and the fridge animations, remaining useful life with the phone-battery animation, what-if scenarios and control; then lab Part A with the whole class and Part C by hand |
 | 1:55 to 2:35 | Colab, in pairs: Sections 1 to 7 with their exercises, then section 8 with a different asset for each pair |
-| 2:35 to 3:00 | Lab and closing: Part F, the control room in which the students set the weights of the objective for four fan controllers, then the self-assessment; after the session: The PDF notes, the daily task and the optional section 9 |
+| 2:35 to 3:00 | Lab and closing: Part F, the control room in which the students set the weights of the objective for four fan controllers, and Part G, a home cooled for the least money, then the self-assessment; after the session: The PDF notes, the daily task and the optional section 9 |
 
 ## Daily task and submission
 

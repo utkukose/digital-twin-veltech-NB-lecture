@@ -112,6 +112,12 @@ details.ans{margin:4px 0 14px}
 .colabbox p{margin:0}
 .colabbox .colabbtn img{display:block;height:22px}
 .colabpart{margin:.8rem 0 0;font-size:.95rem}
+.mail{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:.7rem .9rem;margin:.6rem 0;line-height:2.1;font-size:.98rem}
+.mailw{font:inherit;border:1.5px solid;border-radius:5px;padding:0 .3rem;margin:0 .05rem;cursor:pointer;color:var(--ink)}
+.mailw.off{text-decoration:line-through;opacity:.55}
+.backpart{margin:.9rem 0 0;font-size:.95rem;border-left:4px solid var(--accent);padding:.35rem .7rem;background:var(--panel);border-radius:6px}
+.backpart a{font-weight:600}
+.labbox{scroll-margin-top:12px}
 /* Step-by-step calculators of the lab */
 .labpart{scroll-margin-top:10px}
 h3[id]{scroll-margin-top:10px}
@@ -235,9 +241,9 @@ blockquote{border-left-color:var(--accent);border-radius:0 10px 10px 0}
 :root{--accent:#0369A1;--band:rgba(3,105,161,.08)}@media (prefers-color-scheme:dark){:root{--accent:#7DD3FC;--band:rgba(125,211,252,.13)}}</style><script>window.MathJax={tex:{inlineMath:[["\\(","\\)"]]},svg:{fontCache:"local"}};</script><script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script></head>
 <body><div class="wrap">
 <header class="top"><p class="course">Digital Twin with Python (VTR UGE 21), day 2 of 5</p><h1>Simulation Foundations in Python</h1><p class="who">Prof. Dr. Utku Kose, Süleyman Demirel University</p><nav><a href="../../index.html">Course home</a><a href="https://github.com/utkukose/digital-twin-veltech-NB-lecture/tree/main/days/day-02">Day overview</a><a href="lecture.html">Lecture</a><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-02/NB02_simulation_foundations.ipynb">Colab notebook</a><a href="Day02_Lecture_Notes.pdf">PDF notes</a></nav></header>
-<h2>Simulation lab</h2><p>Part A repeats one step of the three methods of the lecture, slope by slope, with sliders for its numbers. Part B integrates the thermal model of the pack with three methods and collects every run in a diagram of error against cost. Part C computes a stability limit and an order by hand. Part D runs the event list of a small charging depot, event by event, also with sliders. Part E chooses the kind of simulation for six systems. In Parts A and D every intermediate value is rounded, and the next step continues with the rounded value, as in a calculation by hand.</p>
+<h2>Simulation lab</h2><p>Part A repeats one step of the three methods of the lecture, slope by slope, with sliders for its numbers. Part B integrates the thermal model of the pack with three methods and collects every run in a diagram of error against cost. Part C computes a stability limit and an order by hand. Part D runs the event list of a small charging depot, event by event, also with sliders. Part E chooses the kind of simulation for six systems. In Parts A and D every intermediate value is rounded, and the next step continues with the rounded value, as in a calculation by hand. Part F computes three Euler steps of a cooling cup of tea by hand, once with a stable and once with an unstable step.</p>
 <div class="tabs" role="tablist"><button aria-selected="true">Explore</button><button aria-selected="false">Check yourself</button><button aria-selected="false">Reflect and export</button></div>
-<section class="tabpanel"><section class="labpart" id="pa"><h3>Part A: One step with Euler, Heun and Runge-Kutta</h3><p>The worked example of the lecture: one step of the thermal model of the pack with each of the three methods, compared with the exact solution. The slope at a temperature \(T\) is \(f(T)\)​\({} = (I^2 R - (hA_0 + hA_1 u)(T - 35))\)​\({} / 9000\) degrees per second, with \(R = 0.045\) ohm, \(hA_0 = 2.2\) W/K, \(hA_1 = 12\) W/K and air at 35 °C. The sliders set the step, the start temperature, the current and the fan duty. The figure draws the exact curve and the straight line along which each method moves through the step.</p><div class="stepcalc" id="pa-calc"></div></section><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-02/NB02_simulation_foundations.ipynb#scrollTo=sec-2" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 2: the three methods over one hour and their measured orders.</a></p><h3 id="pb">Part B: The integrator workbench</h3>
+<section class="tabpanel"><section class="labpart" id="pa"><h3>Part A: One step with Euler, Heun and Runge-Kutta</h3><p>The worked example of the lecture: one step of the thermal model of the pack with each of the three methods, compared with the exact solution. The slope at a temperature \(T\) is \(f(T)\)​\({} = (I^2 R - (hA_0 + hA_1 u)(T - 35))\)​\({} / 9000\) degrees per second, with \(R = 0.045\) ohm, \(hA_0 = 2.2\) W/K, \(hA_1 = 12\) W/K and air at 35 °C. The sliders set the step, the start temperature, the current and the fan duty. The figure draws the exact curve and the straight line along which each method moves through the step.</p><div class="stepcalc" id="pa-calc"></div></section><p class="backpart"><a href="lecture.html#lab-pa">Back to the lecture: Integration and its accuracy</a>, where the text continues after the box of this part.</p><h3 id="pb">Part B: The integrator workbench</h3>
 <div class="bench">
 <p>Choose an integration method, a step size and a fan duty, from 0 for off to 1 for full power, and integrate the
 thermal model of the pack over two hours. The reference is the classical Runge-Kutta method of order 4, abbreviated RK4,
@@ -255,10 +261,20 @@ evaluations, the work-precision diagram of the lecture, shows which method buys 
 <div class="tablewrap"><table><thead><tr><th>Run</th><th>Method</th><th>Step</th><th>Fan duty</th><th>Evaluations</th>
 <th>Final error</th></tr></thead><tbody id="i-tb"></tbody></table></div>
 </div>
-<p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-02/NB02_simulation_foundations.ipynb#scrollTo=sec-2" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 2: measure the orders of the three methods.</a></p><h3>Part C: Accuracy and stability by hand</h3><p>The pack has a heat capacity of 9000 J/K, a passive cooling conductance of 2.2 W/K and an extra 12 W/K at full fan. The stability limit of explicit Euler is twice the heat capacity divided by the total conductance.</p><div id="pc"></div><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-02/NB02_simulation_foundations.ipynb#scrollTo=sec-3" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 3: watch Euler fail beyond its stability limit.</a></p><section class="labpart" id="pd"><h3>Part D: The event list of a small depot, event by event</h3><p>A discrete-event simulation of the charging depot of the lecture, small enough to follow by hand: six vehicles arrive with the states of charge 0.20, 0.35, 0.10, 0.40, 0.25 and 0.30 and are charged to 0.90 with a current \(I_c\), so that a charge takes \(t_c\)​\({} = (0.9 - \mathrm{SoC}_{\mathrm{in}}) \times 60 / I_c\) hours. Each step takes the earliest event from the list, moves the clock to its time and carries it out. At equal times an end of charge goes first. The sliders set the number of bays, the charging current and the spacing of the arrivals, a factor on the arrival times 0, 0.3, 0.5, 1.1, 1.3 and 1.6 hours. The chart shows the bays and the line up to the clock of the current step.</p><div class="stepcalc" id="pd-calc"></div></section><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-02/NB02_simulation_foundations.ipynb#scrollTo=sec-5" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 5: the depot with 60 vehicles a day and its event list in code.</a></p><h3>Part E: Which kind of simulation?</h3><p>Choose the family that fits each system best.</p><div id="pe"></div><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-02/NB02_simulation_foundations.ipynb#scrollTo=sec-6" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 6: the fleet as an agent-based simulation.</a></p></section>
+<p class="backpart"><a href="lecture.html#lab-pb">Back to the lecture: Integration and its accuracy</a>. The lecture continues there with Section 2 of the Colab notebook: Open it from the next orange box.</p><h3>Part C: Accuracy and stability by hand</h3><p>The pack has a heat capacity of 9000 J/K, a passive cooling conductance of 2.2 W/K and an extra 12 W/K at full fan. The stability limit of explicit Euler is twice the heat capacity divided by the total conductance.</p><div id="pc"></div><p class="backpart"><a href="lecture.html#lab-pc">Back to the lecture: The stability limit</a>. The lecture continues there with Section 3 of the Colab notebook: Open it from the next orange box.</p><section class="labpart" id="pd"><h3>Part D: The event list of a small depot, event by event</h3><p>A discrete-event simulation of the charging depot of the lecture, small enough to follow by hand: six vehicles arrive with the states of charge 0.20, 0.35, 0.10, 0.40, 0.25 and 0.30 and are charged to 0.90 with a current \(I_c\), so that a charge takes \(t_c\)​\({} = (0.9 - \mathrm{SoC}_{\mathrm{in}}) \times 60 / I_c\) hours. Each step takes the earliest event from the list, moves the clock to its time and carries it out. At equal times an end of charge goes first. The sliders set the number of bays, the charging current and the spacing of the arrivals, a factor on the arrival times 0, 0.3, 0.5, 1.1, 1.3 and 1.6 hours. The chart shows the bays and the line up to the clock of the current step.</p><div class="stepcalc" id="pd-calc"></div></section><p class="backpart"><a href="lecture.html#lab-pd">Back to the lecture: A depot and a fleet</a>. The lecture continues there with Section 5 of the Colab notebook: Open it from the next orange box.</p><h3>Part E: Which kind of simulation?</h3><p>Choose the family that fits each system best.</p><div id="pe"></div><p class="backpart"><a href="lecture.html#lab-pe">Back to the lecture: A depot and a fleet</a>, where the text continues after the box of this part.</p><h3 id="pf">Part F: The tea by hand</h3>
+<p>Tea at 90 °C cools in a room at 20 °C with a time constant of \(\tau = 10\) minutes. One step of explicit Euler
+multiplies the distance from the room temperature by \(g = 1 - \Delta t / \tau\). Compute three steps by hand, first with
+a step of 5 minutes and then with a step of 25 minutes, and type the temperatures. The chart draws your values next to
+the true curve as you type. Then give the longest step that keeps the method stable.</p>
+<div class="bench"><canvas class="paper" id="tf-cv" aria-label="The true tea and the values typed for the two steps"></canvas>
+<div class="legend" id="tf-leg"></div>
+<div id="tf-in"><p class="small"><strong>Step of 5 minutes</strong></p><div class="row" id="tf-r5"></div>
+<p class="small"><strong>Step of 25 minutes</strong></p><div class="row" id="tf-r25"></div><div class="row" id="tf-r0"></div></div>
+<p><button class="btn" id="tf-check" type="button">Check my values</button> <span class="small" id="tf-fb" aria-live="polite"></span></p></div>
+<p class="backpart"><a href="lecture.html#lab-pf">Back to the lecture: Your asset</a>. The lecture continues there with Section 7 of the Colab notebook: Open it from the next orange box.</p></section>
 <section class="tabpanel" hidden><p>Answer each question, rate your confidence and check the answer. Results stay in this browser.</p><div id="quiz"></div></section>
 <section class="tabpanel" hidden><p>Write a short answer to each question. The text is saved in this browser and is included when you export the learning log.</p><div id="reflect"></div></section>
-<footer class="sig"><p><strong>Prof. Dr. Utku Kose</strong><br>Full Professor, Department of Computer Engineering, Süleyman Demirel University, Isparta, Türkiye<br>Founding Director, AI Application and Research Center (YAZEM), Süleyman Demirel University<br>Head of the Computer Science Division, Department of Computer Engineering, Süleyman Demirel University<br>Additional affiliations: University of North Dakota (USA), Universidad Panamericana (Mexico City, Mexico), Vel Tech University (Chennai, India)<br>IEEE Senior Member, ACM Professional Member<br><a href="https://orcid.org/0000-0002-9652-6415">ORCID 0000-0002-9652-6415</a> | <a href="https://www.utkukose.com">utkukose.com</a> | <a href="https://github.com/utkukose">github.com/utkukose</a><br><a href="mailto:utkukose@sdu.edu.tr">utkukose@sdu.edu.tr</a> | <a href="mailto:utku.kose@und.edu">utku.kose@und.edu</a> | <a href="mailto:ukose@up.edu.mx">ukose@up.edu.mx</a> | <a href="mailto:utkukose@gmail.com">utkukose@gmail.com</a></p><p>This course is updated in line with current developments in the field. Last update: October 2026. Course materials licensed under CC BY 4.0. Code licensed under MIT.</p></footer></div>
+<footer class="sig"><p><strong>Prof. Dr. Utku Kose</strong><br>Full Professor, Department of Computer Engineering, Süleyman Demirel University, Isparta, Türkiye<br>Founding Director, AI Application and Research Center (YAZEM), Süleyman Demirel University<br>Head of the Computer Science Division, Department of Computer Engineering, Süleyman Demirel University<br>Additional affiliations: University of North Dakota (USA), Universidad Panamericana (Mexico City, Mexico), Vel Tech University (Chennai, India)<br>IEEE Senior Member, ACM Professional Member<br><a href="https://orcid.org/0000-0002-9652-6415">ORCID 0000-0002-9652-6415</a> | <a href="https://www.utkukose.com">utkukose.com</a> | <a href="https://github.com/utkukose">github.com/utkukose</a><br><a href="mailto:utkukose@sdu.edu.tr">utkukose@sdu.edu.tr</a> | <a href="mailto:utku.kose@und.edu">utku.kose@und.edu</a> | <a href="mailto:ukose@up.edu.mx">ukose@up.edu.mx</a> | <a href="mailto:utkukose@gmail.com">utkukose@gmail.com</a></p><p>This course is updated in line with current developments in the field. First version: October 2026. Last update: October 2026. Course materials licensed under CC BY 4.0. Code licensed under MIT.</p></footer></div>
 <script>window.COURSE_PREFIX="vtdt";</script>
 <script>"use strict";
 const $ = (s, r = document) => r.querySelector(s);
@@ -924,6 +940,55 @@ partSteps('pd-calc', {
     }
   }
 });
+
+(function(){ if(!document.getElementById('tf-cv')) return;
+const asp=(el,a,b)=>(el.clientWidth||600)<500?b:a;
+
+// MODEL-START
+// Tea at 90 degrees cools in a room at 20 degrees with a time constant of 10 minutes: dT/dt = -(T - 20) / 10.
+// Every method multiplies the distance from 20 degrees by its own factor g in every step, with z = -dt / 10.
+const TEA={T0:90,Tr:20,tau:10};
+function teaG(m,dt){ const z=-dt/TEA.tau;
+  if(m==='euler') return 1+z;
+  if(m==='heun') return 1+z+z*z/2;
+  if(m==='rk4') return 1+z+z*z/2+z*z*z/6+z*z*z*z/24;
+  return 1/(1-z); }
+function teaRun(m,dt,tend){ const g=teaG(m,dt), pts=[[0,TEA.T0]]; let d=TEA.T0-TEA.Tr, t=0;
+  while(t<tend-1e-9){ t+=dt; d*=g; pts.push([t,TEA.Tr+d]); }
+  return {g,pts}; }
+function teaTrue(t){ return TEA.Tr+(TEA.T0-TEA.Tr)*Math.exp(-t/TEA.tau); }
+// MODEL-END
+function teaPlot(ctx,w,hh,x1,y0,y1,series){ const C=COL();
+  const F=frame(ctx,w,hh,{x0:0,x1,y0,y1,ticks:6,xlabel:'minute',ylabel:'tea in °C'});
+  ctx.save(); ctx.beginPath(); ctx.rect(F.p.l,F.p.t,w-F.p.l-F.p.r,hh-F.p.t-F.p.b); ctx.clip();
+  ctx.strokeStyle=C.grid; ctx.setLineDash([4,4]); ctx.beginPath(); ctx.moveTo(F.X(0),F.Y(TEA.Tr)); ctx.lineTo(F.X(x1),F.Y(TEA.Tr)); ctx.stroke(); ctx.setLineDash([]);
+  const tr=[]; for(let i=0;i<=200;i++){ const t=x1*i/200; tr.push([F.X(t),F.Y(teaTrue(t))]); } polyline(ctx,tr,C.c[0],2);
+  series.forEach(([pts,col])=>{ polyline(ctx,pts.map(([t,T])=>[F.X(t),F.Y(T)]),col,1.5); pts.forEach(([t,T])=>dot(ctx,F.X(t),F.Y(T),3.5,col,C.ink)); });
+  ctx.restore(); return F; }
+
+const FIELDS=[['Tea after 5 minutes, in °C','a1',55,0.1,5],['Tea after 10 minutes, in °C','a2',37.5,0.1,5],
+  ['Tea after 15 minutes, in °C','a3',28.75,0.1,5],['Tea after 25 minutes, in °C','b1',-85,0.1,25],
+  ['Tea after 50 minutes, in °C','b2',177.5,0.1,25],['Tea after 75 minutes, in °C','b3',-216.25,0.1,25],
+  ['Longest stable step, in minutes','lim',20,0.01,0]];
+FIELDS.forEach(([lab,id,ans,tol,dt])=>$(dt===5?'#tf-r5':dt===25?'#tf-r25':'#tf-r0').append(h('div',{class:'ctl',style:'min-width:170px'},
+  h('label',{for:'tf-'+id},lab),h('input',{type:'number',step:'any',id:'tf-'+id,style:'width:7rem'}))));
+legend($('#tf-leg'),[['true tea',0],['your values, step 5 min',1],['your values, step 25 min',4]]);
+const val=id=>{ const v=parseFloat($('#tf-'+id).value); return isNaN(v)?null:v; };
+const st=stage($('#tf-cv'),asp($('#tf-cv'),0.5,0.8),(ctx,w,hh)=>{ ctx.clearRect(0,0,w,hh); const C=COL();
+  const s5=[[0,90]], s25=[[0,90]]; ['a1','a2','a3'].forEach((id,j)=>{ const v=val(id); if(v!=null) s5.push([5*(j+1),v]); });
+  ['b1','b2','b3'].forEach((id,j)=>{ const v=val(id); if(v!=null) s25.push([25*(j+1),v]); });
+  teaPlot(ctx,w,hh,90,-300,300,[[s5,C.c[1]],[s25,C.c[4]]]); });
+$('#tf-in').addEventListener('input',()=>st.redraw());
+$('#tf-check').addEventListener('click',()=>{ let ok=0;
+  const out=FIELDS.map(([lab,id,ans,tol])=>{ const v=val(id), right=v!=null&&Math.abs(v-ans)<=tol; if(right) ok++;
+    return lab.split(',')[0].replace('Tea after ','after ')+': '+(v==null?'missing':(right?'correct':'not yet')); });
+  $('#tf-fb').textContent=out.join(', ')+'. '+(ok===FIELDS.length
+    ?'With a step of 5 minutes, g = 1 − 5 / 10 = 0.5: The distance from 20 °C runs 70, 35, 17.5 and 8.75 degrees, so the tea shows 55, 37.5 and 28.75 °C, where the true tea has 62.5, 45.7 and 35.6 °C. With a step of 25 minutes, g = 1 − 25 / 10 = −1.5: The distance runs 70, −105, 157.5 and −236.25 degrees, so the tea shows −85, 177.5 and −216.25 °C. The limit is 2τ = 20 minutes, where g = −1.'
+    :'The tea after a step is 20 + g × (the tea before the step − 20), with g = 1 − Δt / 10.');
+  store.set('d2:partF:score',ok); });
+st.redraw();
+})();
+
 })();
 </script>
 </body></html>

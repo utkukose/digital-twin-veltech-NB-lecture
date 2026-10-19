@@ -11,8 +11,8 @@ authors:
 repository-code: "https://github.com/utkukose/digital-twin-veltech-NB-lecture"
 url: "https://utkukose.github.io/digital-twin-veltech-NB-lecture/"
 license: CC-BY-4.0
-version: "2.0.0"
-date-released: "2026-10-04"
+version: "2.1.0"
+date-released: "2026-10-19"
 keywords:
   - digital twin
   - simulation

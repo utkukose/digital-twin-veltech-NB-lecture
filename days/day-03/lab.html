@@ -112,6 +112,12 @@ details.ans{margin:4px 0 14px}
 .colabbox p{margin:0}
 .colabbox .colabbtn img{display:block;height:22px}
 .colabpart{margin:.8rem 0 0;font-size:.95rem}
+.mail{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:.7rem .9rem;margin:.6rem 0;line-height:2.1;font-size:.98rem}
+.mailw{font:inherit;border:1.5px solid;border-radius:5px;padding:0 .3rem;margin:0 .05rem;cursor:pointer;color:var(--ink)}
+.mailw.off{text-decoration:line-through;opacity:.55}
+.backpart{margin:.9rem 0 0;font-size:.95rem;border-left:4px solid var(--accent);padding:.35rem .7rem;background:var(--panel);border-radius:6px}
+.backpart a{font-weight:600}
+.labbox{scroll-margin-top:12px}
 /* Step-by-step calculators of the lab */
 .labpart{scroll-margin-top:10px}
 h3[id]{scroll-margin-top:10px}
@@ -235,9 +241,9 @@ blockquote{border-left-color:var(--accent);border-radius:0 10px 10px 0}
 :root{--accent:#0369A1;--band:rgba(3,105,161,.08)}@media (prefers-color-scheme:dark){:root{--accent:#7DD3FC;--band:rgba(125,211,252,.13)}}</style><script>window.MathJax={tex:{inlineMath:[["\\(","\\)"]]},svg:{fontCache:"local"}};</script><script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script></head>
 <body><div class="wrap">
 <header class="top"><p class="course">Digital Twin with Python (VTR UGE 21), day 3 of 5</p><h1>Data Pipelines and Model Calibration</h1><p class="who">Prof. Dr. Utku Kose, Süleyman Demirel University</p><nav><a href="../../index.html">Course home</a><a href="https://github.com/utkukose/digital-twin-veltech-NB-lecture/tree/main/days/day-03">Day overview</a><a href="lecture.html">Lecture</a><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-03/NB03_data_pipelines_and_calibration.ipynb">Colab notebook</a><a href="Day03_Lecture_Notes.pdf">PDF notes</a></nav></header>
-<h2>Calibration lab</h2><p>Part A matches symptoms with faults of the data. Parts B and C repeat two methods of the lecture step by step, with sliders for their numbers: the Hampel test against the mean test, and least squares by Gauss-Newton steps. Part D fits the thermal model to synthetic readings in the browser by hand and shows the sum of squared errors and the three ratios that the data determine. Part E repeats the Kalman filter over eight readings step by step, also with sliders, and Part F computes one step of a Kalman filter by hand. In Parts B, C and E every intermediate value is rounded, and the next step continues with the rounded value, as in a calculation by hand.</p>
+<h2>Calibration lab</h2><p>Part A matches symptoms with faults of the data. Parts B and C repeat two methods of the lecture step by step, with sliders for their numbers: the Hampel test against the mean test, and least squares by Gauss-Newton steps. Part D fits the thermal model to synthetic readings in the browser by hand and shows the sum of squared errors and the three ratios that the data determine. Part E repeats the Kalman filter over eight readings step by step, also with sliders, and Part F computes one step of a Kalman filter by hand. In Parts B, C and E every intermediate value is rounded, and the next step continues with the rounded value, as in a calculation by hand. Part G cleans two minutes of heart-rate readings from a run by hand, with one window of the Hampel filter.</p>
 <div class="tabs" role="tablist"><button aria-selected="true">Explore</button><button aria-selected="false">Check yourself</button><button aria-selected="false">Reflect and export</button></div>
-<section class="tabpanel"><h3>Part A: Which data problem?</h3><p>Match each symptom with the fault of the data that causes it.</p><div id="pa"></div><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-03/NB03_data_pipelines_and_calibration.ipynb#scrollTo=sec-2" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 2: inject spikes, a gap and a drift, and apply the three rules.</a></p><section class="labpart" id="pb"><h3>Part B: The Hampel test against the mean test</h3><p>The worked example of the lecture: seven readings with the value under test in the middle. The Hampel test compares its distance from the median with a limit built from the median absolute deviation (MAD), and the classical test compares its distance from the mean with a limit built from the standard deviation. The sliders set the value under test, a second value of the window and the factor of both limits, 3 in the lecture.</p><div class="stepcalc" id="pb-calc"></div></section><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-03/NB03_data_pipelines_and_calibration.ipynb#scrollTo=sec-2" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 2: the Hampel filter on two hours of telemetry with twelve spikes.</a></p><section class="labpart" id="pc"><h3>Part C: Calibrating a time constant, round by round</h3><p>Least squares with one parameter, solved by Gauss-Newton steps as in the lecture. Four readings follow the heating of the pack at 40 A with the fan off, and the model is \(\hat{y}(t; \theta)\)​\({} = 36 + 31.73\,(1 - e^{-t/\theta})\), whose only parameter is the time constant \(\theta\) in seconds. Each round computes the model values and the residuals, the change of the model values when \(\theta\) grows by \(h = 100\) s, and the step. As in the optimiser of SciPy, a trust region limits every step: It may change \(\theta\) by at most half of its value. The sliders set the true time constant behind the readings, the noise added to them and the starting guess of the fit.</p><div class="stepcalc" id="pc-calc"></div></section><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-03/NB03_data_pipelines_and_calibration.ipynb#scrollTo=sec-3" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 3: least squares with all four parameters of the pack.</a></p><h3 id="pd">Part D: The calibration bench</h3>
+<section class="tabpanel"><h3>Part A: Which data problem?</h3><p>Match each symptom with the fault of the data that causes it.</p><div id="pa"></div><p class="backpart"><a href="lecture.html#lab-pa">Back to the lecture: Spikes, gaps and drift</a>, where the text continues after the box of this part.</p><section class="labpart" id="pb"><h3>Part B: The Hampel test against the mean test</h3><p>The worked example of the lecture: seven readings with the value under test in the middle. The Hampel test compares its distance from the median with a limit built from the median absolute deviation (MAD), and the classical test compares its distance from the mean with a limit built from the standard deviation. The sliders set the value under test, a second value of the window and the factor of both limits, 3 in the lecture.</p><div class="stepcalc" id="pb-calc"></div></section><p class="backpart"><a href="lecture.html#lab-pb">Back to the lecture: Spikes, gaps and drift</a>. The lecture continues there with Section 2 of the Colab notebook: Open it from the next orange box.</p><section class="labpart" id="pc"><h3>Part C: Calibrating a time constant, round by round</h3><p>Least squares with one parameter, solved by Gauss-Newton steps as in the lecture. Four readings follow the heating of the pack at 40 A with the fan off, and the model is \(\hat{y}(t; \theta)\)​\({} = 36 + 31.73\,(1 - e^{-t/\theta})\), whose only parameter is the time constant \(\theta\) in seconds. Each round computes the model values and the residuals, the change of the model values when \(\theta\) grows by \(h = 100\) s, and the step. As in the optimiser of SciPy, a trust region limits every step: It may change \(\theta\) by at most half of its value. The sliders set the true time constant behind the readings, the noise added to them and the starting guess of the fit.</p><div class="stepcalc" id="pc-calc"></div></section><p class="backpart"><a href="lecture.html#lab-pc">Back to the lecture: Calibration</a>. The lecture continues there with Section 3 of the Colab notebook: Open it from the next orange box.</p><h3 id="pd">Part D: The calibration bench</h3>
 <div class="bench">
 <p>The dots are noisy temperature measurements of the pack over ninety minutes. Fit the model by hand with the four
 parameter sliders and watch the sum of squared errors, the sum of the squared differences between the dots and the
@@ -255,10 +261,22 @@ Switch the experiment to <b>fan never on</b> and try to find the value of hA1.</
 <p class="small">The sliders move along the four parameters. The readout of the three ratios shows what the data actually
 determine: Equal ratios give an identical curve, whatever the four values are.</p>
 </div>
-<p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-03/NB03_data_pipelines_and_calibration.ipynb#scrollTo=sec-4" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 4: the hidden symmetry, verified down to the rounding error of the computer.</a></p><section class="labpart" id="pe"><h3>Part E: The Kalman filter, reading by reading</h3><p>The scalar filter of the lecture on eight readings of a pack that warms by 0.05 °C per step, from 41.00 to 41.35 °C. The belief starts at 40.00 °C with the variance \(P_0 = 1\), a very uncertain guess. Each step predicts with the model, a rise of 0.05 °C, and corrects with the reading. The first reading has no prediction before it. The sliders set the process noise variance \(Q\) and the standard deviation of the sensor noise that the filter assumes, \(R = \sigma^2\). The gain is rounded to four decimals and the belief to three.</p><div class="stepcalc" id="pe-calc"></div></section><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-03/NB03_data_pipelines_and_calibration.ipynb#scrollTo=sec-7" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 7: the same filter on 541 readings of the calibration experiment.</a></p><h3>Part F: One step of a Kalman filter by hand</h3><p>The model predicts 40.0 C with a variance of 0.5. The sensor reads 41.5 C with a noise variance of 0.25. The Kalman gain is the prior variance divided by the sum of the prior and the noise variances.</p><div id="pf"></div><p class="colabpart"><a href="https://colab.research.google.com/github/utkukose/digital-twin-veltech-NB-lecture/blob/main/days/day-03/NB03_data_pipelines_and_calibration.ipynb#scrollTo=sec-7" target="_blank" rel="noopener"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">Continue in Colab, section 7: the Kalman filter on the pack over ninety minutes.</a></p></section>
+<p class="backpart"><a href="lecture.html#lab-pd">Back to the lecture: A hidden symmetry</a>. The lecture continues there with Section 4 of the Colab notebook: Open it from the next orange box.</p><section class="labpart" id="pe"><h3>Part E: The Kalman filter, reading by reading</h3><p>The scalar filter of the lecture on eight readings of a pack that warms by 0.05 °C per step, from 41.00 to 41.35 °C. The belief starts at 40.00 °C with the variance \(P_0 = 1\), a very uncertain guess. Each step predicts with the model, a rise of 0.05 °C, and corrects with the reading. The first reading has no prediction before it. The sliders set the process noise variance \(Q\) and the standard deviation of the sensor noise that the filter assumes, \(R = \sigma^2\). The gain is rounded to four decimals and the belief to three.</p><div class="stepcalc" id="pe-calc"></div></section><p class="backpart"><a href="lecture.html#lab-pe">Back to the lecture: A Kalman filter instead of overwriting</a>, where the text continues after the box of this part.</p><h3>Part F: One step of a Kalman filter by hand</h3><p>The model predicts 40.0 C with a variance of 0.5. The sensor reads 41.5 C with a noise variance of 0.25. The Kalman gain is the prior variance divided by the sum of the prior and the noise variances.</p><div id="pf"></div><p class="backpart"><a href="lecture.html#lab-pf">Back to the lecture: A Kalman filter instead of overwriting</a>. The lecture continues there with Section 7 of the Colab notebook: Open it from the next orange box.</p><h3 id="pg">Part G: The heart rate of a run, cleaned by hand</h3>
+<p>Two minutes of a run, one reading every 5 seconds. Three readings are missing, and some readings are spikes from the
+cadence of the steps. Click every reading that you take for a spike, and click it again to take the mark back. Then test
+the reading at 35 seconds by hand with the Hampel filter. Its window of seven readings holds 148, 151, 149, 196, 150, 152
+and 147 beats per minute (bpm). Compute the median, the MAD and the limit 3 × 1.4826 × MAD, and compare your marks with the
+filter.</p>
+<div class="bench"><canvas class="paper" id="hg-cv" aria-label="Two minutes of heart-rate readings; a click marks a reading as a spike"></canvas>
+<div class="legend" id="hg-leg"></div><p class="small" id="hg-marks" aria-live="polite"></p>
+<div class="row" id="hg-in"></div>
+<p><button class="btn" id="hg-check" type="button">Check my marks and values</button>
+<button class="btn ghost" id="hg-show" type="button">Show the Hampel filter</button>
+<span class="small" id="hg-fb" aria-live="polite"></span></p></div>
+<p class="backpart"><a href="lecture.html#lab-pg">Back to the lecture: Your asset</a>. The lecture continues there with Section 8 of the Colab notebook: Open it from the next orange box.</p></section>
 <section class="tabpanel" hidden><p>Answer each question, rate your confidence and check the answer. Results stay in this browser.</p><div id="quiz"></div></section>
 <section class="tabpanel" hidden><p>Write a short answer to each question. The text is saved in this browser and is included when you export the learning log.</p><div id="reflect"></div></section>
-<footer class="sig"><p><strong>Prof. Dr. Utku Kose</strong><br>Full Professor, Department of Computer Engineering, Süleyman Demirel University, Isparta, Türkiye<br>Founding Director, AI Application and Research Center (YAZEM), Süleyman Demirel University<br>Head of the Computer Science Division, Department of Computer Engineering, Süleyman Demirel University<br>Additional affiliations: University of North Dakota (USA), Universidad Panamericana (Mexico City, Mexico), Vel Tech University (Chennai, India)<br>IEEE Senior Member, ACM Professional Member<br><a href="https://orcid.org/0000-0002-9652-6415">ORCID 0000-0002-9652-6415</a> | <a href="https://www.utkukose.com">utkukose.com</a> | <a href="https://github.com/utkukose">github.com/utkukose</a><br><a href="mailto:utkukose@sdu.edu.tr">utkukose@sdu.edu.tr</a> | <a href="mailto:utku.kose@und.edu">utku.kose@und.edu</a> | <a href="mailto:ukose@up.edu.mx">ukose@up.edu.mx</a> | <a href="mailto:utkukose@gmail.com">utkukose@gmail.com</a></p><p>This course is updated in line with current developments in the field. Last update: October 2026. Course materials licensed under CC BY 4.0. Code licensed under MIT.</p></footer></div>
+<footer class="sig"><p><strong>Prof. Dr. Utku Kose</strong><br>Full Professor, Department of Computer Engineering, Süleyman Demirel University, Isparta, Türkiye<br>Founding Director, AI Application and Research Center (YAZEM), Süleyman Demirel University<br>Head of the Computer Science Division, Department of Computer Engineering, Süleyman Demirel University<br>Additional affiliations: University of North Dakota (USA), Universidad Panamericana (Mexico City, Mexico), Vel Tech University (Chennai, India)<br>IEEE Senior Member, ACM Professional Member<br><a href="https://orcid.org/0000-0002-9652-6415">ORCID 0000-0002-9652-6415</a> | <a href="https://www.utkukose.com">utkukose.com</a> | <a href="https://github.com/utkukose">github.com/utkukose</a><br><a href="mailto:utkukose@sdu.edu.tr">utkukose@sdu.edu.tr</a> | <a href="mailto:utku.kose@und.edu">utku.kose@und.edu</a> | <a href="mailto:ukose@up.edu.mx">ukose@up.edu.mx</a> | <a href="mailto:utkukose@gmail.com">utkukose@gmail.com</a></p><p>This course is updated in line with current developments in the field. First version: October 2026. Last update: October 2026. Course materials licensed under CC BY 4.0. Code licensed under MIT.</p></footer></div>
 <script>window.COURSE_PREFIX="vtdt";</script>
 <script>"use strict";
 const $ = (s, r = document) => r.querySelector(s);
@@ -933,6 +951,66 @@ partSteps('pb-calc', {
     }
   }
 });
+
+(function(){ if(!document.getElementById('hg-cv')) return;
+const asp=(el,a,b)=>(el.clientWidth||600)<500?b:a;
+
+// MODEL-START
+// A run of 30 minutes, one reading every 5 seconds. The readings scatter by 2 beats per minute around the true heart
+// rate. At ten moments the sensor locks onto the cadence of the steps and reports about 174, and between 1300 and
+// 1355 seconds the watch loses contact, so these twelve readings are missing.
+const HR={spikes:[400,405,410,760,765,1240,1245,1250,1500,1505], gap:[1300,1355]};
+function hrTrue(t){ let v=150-55*Math.exp(-t/80); if(t>=900&&t<=1080) v+=18*Math.sin(Math.PI*(t-900)/180);
+  if(t>1620) v-=35*(t-1620)/180; return v; }
+function hrData(seed){ const r=RNG(seed==null?11:seed), ts=[], ys=[], tr=[], sp=[];
+  for(let k=0;k<=360;k++){ const t=5*k, n=2*r.normal(), c=174+2*r.normal();
+    if(t>=HR.gap[0]&&t<=HR.gap[1]) continue;
+    const s=HR.spikes.includes(t); ts.push(t); tr.push(hrTrue(t)); sp.push(s); ys.push(s?c:hrTrue(t)+n); }
+  return {ts,ys,tr,sp}; }
+function hrMedian(v){ const s=v.slice().sort((a,b)=>a-b), n=s.length; return n%2?s[(n-1)/2]:0.5*(s[n/2-1]+s[n/2]); }
+function hrClean(ys,method,half,factor){ const out=ys.slice(), flag=ys.map(()=>false); factor=factor||3;
+  for(let k=0;k<ys.length;k++){ const w=ys.slice(Math.max(0,k-half),k+half+1);
+    if(method==='hampel'){ const m=hrMedian(w), mad=hrMedian(w.map(x=>Math.abs(x-m)));
+      if(Math.abs(ys[k]-m)>factor*1.4826*mad){ out[k]=m; flag[k]=true; } }
+    else if(method==='mean'){ const mu=w.reduce((a,b)=>a+b,0)/w.length, sd=Math.sqrt(w.reduce((a,b)=>a+(b-mu)*(b-mu),0)/w.length);
+      if(Math.abs(ys[k]-mu)>factor*sd){ out[k]=mu; flag[k]=true; } } }
+  return {out,flag}; }
+// MODEL-END
+
+const Y=[146,148,147,149,148,151,149,196,150,152,147,150,null,null,null,153,151,189,192,152,154,153,155,154];
+const idx=Y.map((y,k)=>y==null?null:k).filter(k=>k!=null), ys=idx.map(k=>Y[k]), F7=hrClean(ys,'hampel',3);
+const filt=idx.filter((k,j)=>F7.flag[j]), marks=new Set(); let show=false, F=null;
+legend($('#hg-leg'),[['reading',COL().steel],['your mark',1],['marked by the filter',4]]);
+const FIELDS=[['Median of the window, in bpm','med',150,0.01,'median'],['MAD, in bpm','mad',2,0.01,'MAD'],['Limit, in bpm','lim',8.9,0.01,'limit']];
+FIELDS.forEach(([lab,id])=>$('#hg-in').append(h('div',{class:'ctl',style:'min-width:170px'},h('label',{for:'hg-'+id},lab),
+  h('input',{type:'number',step:'any',id:'hg-'+id,style:'width:7rem'}))));
+const cv=$('#hg-cv');
+const st=stage(cv,asp(cv,0.42,0.75),(ctx,w,hh)=>{ const C=COL(); ctx.clearRect(0,0,w,hh);
+  F=frame(ctx,w,hh,{x0:0,x1:120,y0:130,y1:210,ticks:4,xlabel:'second',ylabel:'beats per minute'});
+  ctx.fillStyle=mix(C.steel,cssv('--panel'),0.18); ctx.fillRect(F.X(57.5),F.p.t,F.X(72.5)-F.X(57.5),hh-F.p.t-F.p.b);
+  ctx.fillStyle=C.steel; ctx.font='11px '+cssv('--sans'); ctx.textAlign='center'; ctx.fillText('missing',F.X(65),F.p.t+12);
+  if(show){ const pts=idx.map((k,j)=>[F.X(5*k),F.Y(F7.out[j])]); polyline(ctx,pts.slice(0,12),C.c[4],1.4,[4,3]); polyline(ctx,pts.slice(12),C.c[4],1.4,[4,3]); }
+  idx.forEach(k=>{ const x=F.X(5*k), y=F.Y(Y[k]); dot(ctx,x,y,4,C.steel,C.ink);
+    if(marks.has(k)){ ctx.beginPath(); ctx.arc(x,y,8,0,7); ctx.strokeStyle=C.c[1]; ctx.lineWidth=2.5; ctx.stroke(); ctx.lineWidth=1; }
+    if(show&&filt.includes(k)){ ctx.beginPath(); ctx.arc(x,y,12,0,7); ctx.strokeStyle=C.c[4]; ctx.lineWidth=2; ctx.stroke(); ctx.lineWidth=1; } });
+  $('#hg-marks').textContent=marks.size?'Marked: '+[...marks].sort((a,b)=>a-b).map(k=>(5*k)+' s').join(', ')+'.':'No reading marked yet.'; });
+cv.addEventListener('click',ev=>{ if(!F) return; const b=cv.getBoundingClientRect(), mx=ev.clientX-b.left, my=ev.clientY-b.top;
+  let best=null, bd=14; idx.forEach(k=>{ const d=Math.hypot(F.X(5*k)-mx,F.Y(Y[k])-my); if(d<bd){ bd=d; best=k; } });
+  if(best!=null){ if(marks.has(best)) marks.delete(best); else marks.add(best); st.redraw(); } });
+$('#hg-show').addEventListener('click',()=>{ show=!show; $('#hg-show').textContent=show?'Hide the Hampel filter':'Show the Hampel filter'; st.redraw(); });
+$('#hg-check').addEventListener('click',()=>{ let ok=0; const out=[];
+  const miss=filt.filter(k=>!marks.has(k)).length, extra=[...marks].filter(k=>!filt.includes(k)).length, mk=miss===0&&extra===0;
+  out.push('marks: '+(mk?'correct':(miss?miss+' spike'+(miss>1?'s':'')+' not marked':'')+(miss&&extra?', ':'')+(extra?extra+' good reading'+(extra>1?'s':'')+' marked':'')));
+  if(mk) ok++;
+  FIELDS.forEach(([lab,id,ans,tol,sh])=>{ const v=parseFloat($('#hg-'+id).value), right=Math.abs(v-ans)<=tol+0.005; if(right) ok++;
+    out.push(sh+': '+(isNaN(v)?'missing':(right?'correct':'not yet'))); });
+  $('#hg-fb').textContent=out.join(', ')+'. '+(ok===4
+    ?'Sorted, the window is 147, 148, 149, 150, 151, 152 and 196, so the median is 150. The distances from 150 are 2, 1, 1, 46, 0, 2 and 3, sorted 0, 1, 1, 2, 2, 3 and 46, so the MAD is 2 and the limit is 3 × 1.4826 × 2 = 8.9 bpm. The reading lies 46 bpm from the median and is a spike. The filter also marks the pair at 85 and 90 seconds, which the mean test misses: There, two high readings raise the mean of the window to 163 and its standard deviation to about 17.5, and the limit of 52 bpm hides them.'
+    :'A spike lies far from the median of its neighbours. The window around a reading holds the three readings before it, the reading and the three after it, without the missing ones.');
+  store.set('d3:partG:score',ok); });
+st.redraw();
+})();
+
 })();
 </script>
 </body></html>
